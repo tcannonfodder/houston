@@ -97,11 +97,17 @@ function velocityVectorInPQWFrame(semiMajorAxis, eccentricity, trueAnomaly, grav
   return vector
 }
 
-function transformPQWVectorToIJKFrame(vector, inclination, longitudeOfAscendingNode, argumentOfPeriapsis){
+// Thank god for: https://en.wikipedia.org/wiki/Perifocal_coordinate_system
+function transformPositionPQWVectorToIJKFrame(vector, inclination, longitudeOfAscendingNode, argumentOfPeriapsis){
   var vectorIJK = {}
-  vectorIJK.i = Math.cos(-inclination) * vector.p
-  vectorIJK.j = Math.cos(-longitudeOfAscendingNode) * Math.cos(-inclination) * Math.cos(-argumentOfPeriapsis) * vector.q
-  vectorIJK.k = Math.cos(-argumentOfPeriapsis) * Math.cos(-longitudeOfAscendingNode) * vector.w
+  var omega = longitudeOfAscendingNode
+  var w = argumentOfPeriapsis
+  var i = inclination
+
+  vectorIJK.i = Math.cos(omega) * Math.cos(w) - Math.sin(omega) * Math.cos(i) * Math.sin(w)
+  vectorIJK.j = Math.sin(omega) * Math.cos(w) + Math.cos(omega) * Math.cos(i) * Math.sin(w)
+  vectorIJK.k = Math.sin(i) * Math.sin(w)
+
   return vectorIJK
 }
 
@@ -127,7 +133,7 @@ var estimatedV = trueAnomalyFromEccentricAnomalyAndEccentricity(E, eccentricity)
 
 
 var positionVectorInPQW = positionVectorInPQWFrame(semiMajorAxis, eccentricity, trueAnomalyInRadians)
-var positionVectorInIJK = transformPQWVectorToIJKFrame(positionVectorInPQW, inclination, longitudeOfAscendingNode, argumentOfPeriapsis)
+var positionVectorInIJK = transformPositionPQWVectorToIJKFrame(positionVectorInPQW, inclination, longitudeOfAscendingNode, argumentOfPeriapsis)
 var latitude = findLatitudeOfPositionUnitVector(positionVectorInIJK)
 
 
