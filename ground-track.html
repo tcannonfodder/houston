@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title></title>
+</head>
+<body>
+
+<script>
+Math.toDegrees = function(angleInRadians){
+  return angleInRadians * (180/Math.PI)
+}
+
+Math.toRadians = function(angleInDegrees){
+  return angleInDegrees * (Math.PI/180)
+}
+
+var eccentricity = 0.242182098626716
+var trueAnomalyInDegrees = 184.16414821475
+var trueAnomalyInRadians = Math.toRadians(trueAnomalyInDegrees)
+var gravitationalParameter = 3531600000000
+var semiMajorAxis = 899986.651024729
+var startTime = 0 //seconds
+var endTime = 10 //seconds
+var inclination = 0.243476627449444
+var longitudeOfAscendingNode = 100.67415946311
+var argumentOfPeriapsis = 91.2133786538191
+
+
+function eccentricAnomalyFromTrueAnomalyAndEcentricity(trueAnomaly, eccentricity){
+  var cosineE = (eccentricity + Math.cos(trueAnomaly))/(1 + (eccentricity* Math.cos(trueAnomaly)))
+  return Math.acos(cosineE)
+}
+
+function meanMotion(semiMajorAxis, gravitationalParameter){
+  return Math.sqrt(gravitationalParameter/Math.pow(semiMajorAxis, 3))
+}
+
+function meanAnomalyFromEccentricAnomalyAndEccentricity(eccentricAnomaly, eccentricity){
+  return eccentricAnomaly - eccentricity * Math.sin(eccentricAnomaly)
+}
+
+function meanAnomalyAtTimeAndMeanMotion(meanMotion, time, originalMeanAnomaly){
+  var deltaT = time - startTime
+  return originalMeanAnomaly + meanMotion * deltaT
+}
+
+function estimateEccentricAnomalyFromMeanAnomalyAndEccentricity(meanAnomaly, eccentricity){
+  var error = 100
+  var eccentricAnomaly1 = meanAnomaly
+  // var i = 10
+
+  while(error > 0.00000000001){
+    var newEccentricAnomaly = meanAnomaly + (eccentricity * Math.sin(eccentricAnomaly1))
+    error = Math.abs(newEccentricAnomaly - eccentricAnomaly1)
+    // console.log("newEccentricAnomaly: " + newEccentricAnomaly)
+    // console.log("error: " + error)
+    // i--
+    // debugger
+    eccentricAnomaly1 = newEccentricAnomaly
+  }
+  return eccentricAnomaly1
+}
+
+function trueAnomalyFromEccentricAnomalyAndEccentricity(eccentricAnomaly, eccentricity){
+  var factor1 = Math.sqrt(1.0 - Math.pow(eccentricity, 2)) * Math.sin(eccentricAnomaly)
+  var factor2 = Math.cos(eccentricAnomaly) - eccentricity
+
+  return Math.atan2(factor1, factor2)
+}
+
+function findSemiLatusRectum(semiMajorAxis, eccentricity){
+  return semiMajorAxis * (1 - Math.pow(eccentricity, 2))
+}
+
+function findPolarEquationOfConic(semiMajorAxis, eccentricity, trueAnomaly){
+  var p = findSemiLatusRectum(semiMajorAxis, eccentricity)
+
+  return p/(1 + eccentricity * Math.cos(trueAnomaly))
+}
+
+function positionVectorInPQWFrame(semiMajorAxis, eccentricity, trueAnomaly){
+  var r = findPolarEquationOfConic(semiMajorAxis, eccentricity, trueAnomaly)
+  var vector = {}
+  vector.p = r * Math.cos(trueAnomaly)
+  vector.q = r * Math.sin(trueAnomaly)
+  vector.w = 0
+  return vector
+}
+
+function velocityVectorInPQWFrame(semiMajorAxis, eccentricity, trueAnomaly, gravitationalParameter){
+  var p = findSemiLatusRectum(semiMajorAxis, eccentricity)
+  var factor = Math.sqrt(gravitationalParameter/p)
+  var vector = {}
+  vector.p = -Math.sin(trueAnomaly)
+  vector.q = eccentricity + Math.cos(trueAnomaly)
+  vector.w = 0
+  return vector
+}
+
+function transformPQWVectorToIJKFrame(vector, inclination, longitudeOfAscendingNode, argumentOfPeriapsis){
+  var vectorIJK = {}
+  vectorIJK.i = Math.cos(-inclination) * vector.p
+  vectorIJK.j = Math.cos(-longitudeOfAscendingNode) * Math.cos(-inclination) * Math.cos(-argumentOfPeriapsis) * vector.q
+  vectorIJK.k = Math.cos(-argumentOfPeriapsis) * Math.cos(-longitudeOfAscendingNode) * vector.w
+  return vectorIJK
+}
+
+function findLatitudeOfPositionUnitVector(vector){
+  var x = Math.sqrt(Math.pow(vector.i, 2) + Math.pow(vector.j, 2))
+  var z = vector.k
+  debugger
+  return Math.atan(z/x)
+}
+
+function findLongitudeOfPositonUnitVector(vector, angularVelocityOfPlanet, time){
+  var deltaT = time - startTime
+  var quadrant = vector.j > 0 ? 1 : -1
+  var theta = Math.atan(vector.i/vector.j)
+  return theta - 0 - angularVelocityOfPlanet * deltaT
+}
+
+var E = eccentricAnomalyFromTrueAnomalyAndEcentricity(trueAnomalyInRadians, eccentricity)
+var n = meanMotion(semiMajorAxis, gravitationalParameter)
+var meanAnomaly = meanAnomalyFromEccentricAnomalyAndEccentricity(E, eccentricity)
+var estimatedE = estimateEccentricAnomalyFromMeanAnomalyAndEccentricity(meanAnomaly, eccentricity)
+var estimatedV = trueAnomalyFromEccentricAnomalyAndEccentricity(E, eccentricity)
+
+
+var positionVectorInPQW = positionVectorInPQWFrame(semiMajorAxis, eccentricity, trueAnomalyInRadians)
+var positionVectorInIJK = transformPQWVectorToIJKFrame(positionVectorInPQW, inclination, longitudeOfAscendingNode, argumentOfPeriapsis)
+var latitude = findLatitudeOfPositionUnitVector(positionVectorInIJK)
+
+
+var meanAnomalyAtTime1 = meanAnomalyAtTimeAndMeanMotion(n, endTime, meanAnomaly)
+var eccentricAnomalyAtTime1 = estimateEccentricAnomalyFromMeanAnomalyAndEccentricity(meanAnomalyAtTime1, eccentricity)
+var trueAnomalyAtTime1 = trueAnomalyFromEccentricAnomalyAndEccentricity(eccentricAnomalyAtTime1, eccentricity)
+
+console.log("***** t0 *****")
+
+console.log("eccentricity: " + eccentricity)
+console.log("v: " + trueAnomalyInRadians)
+console.log("E: " + E)
+console.log("n: " + n)
+console.log("meanAnomaly: "  + meanAnomaly)
+console.log("estimated E: " + estimatedE)
+console.log("estimated v: " + estimatedV)
+console.log("positionVector (PQW):" + JSON.stringify(positionVectorInPQW))
+console.log("positionVector (IJK):" + JSON.stringify(positionVectorInIJK))
+console.log("latitude: " + latitude)
+
+console.log("***** t1 *****")
+
+console.log("meanAnomalyAtTime1: " + meanAnomalyAtTime1)
+console.log("eccentricAnomalyAtTime1: " + eccentricAnomalyAtTime1)
+console.log("trueAnomalyAtTime1: " + trueAnomalyAtTime1)
+
+</script>
+</body>
+</html>
