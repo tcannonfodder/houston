@@ -132,7 +132,7 @@ function transformPositionPQWVectorToIJKFrame(vector, inclination, longitudeOfAs
 function findLatitudeOfPositionUnitVector(vector){
   var x = Math.sqrt(Math.pow(vector.i, 2) + Math.pow(vector.j, 2))
   var z = vector.k
-  debugger
+// 
   return Math.atan(z/x)
 }
 
