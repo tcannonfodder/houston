@@ -151,7 +151,7 @@ var estimatedV = trueAnomalyFromEccentricAnomalyAndEccentricity(E, eccentricity)
 
 
 var positionVectorInPQW = positionVectorInPQWFrame(semiMajorAxis, eccentricity, trueAnomalyInRadians)
-var positionVectorInIJK = transformPositionPQWVectorToIJKFrame(positionVectorInPQW, inclination, longitudeOfAscendingNode, argumentOfPeriapsis)
+var positionVectorInIJK = transformPositionPQWVectorToIJKFrame(positionVectorInPQW, inclinationInRadians, longitudeOfAscendingNodeInRadians, argumentOfPeriapsisInRadians)
 var latitude = findLatitudeOfPositionUnitVector(positionVectorInIJK)
 
 
