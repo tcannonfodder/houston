@@ -132,9 +132,61 @@ function transformPositionPQWVectorToIJKFrame(vector, inclination, longitudeOfAs
   var w = argumentOfPeriapsis
   var i = inclination
 
-  vectorIJK.i = Math.cos(omega) * Math.cos(w) - Math.sin(omega) * Math.cos(i) * Math.sin(w)
-  vectorIJK.j = Math.sin(omega) * Math.cos(w) + Math.cos(omega) * Math.cos(i) * Math.sin(w)
-  vectorIJK.k = Math.sin(i) * Math.sin(w)
+  //Column, row order. First level is columns, each column has N rows
+  var transformationMatrix = [
+    [
+      // 1 1
+      Math.cos(omega) * Math.cos(w) - Math.sin(omega) * Math.sin(w) * Math.cos(i),
+      // 1 2
+      -Math.cos(omega) * Math.sin(w) - Math.sin(omega)* Math.cos(w) * Math.cos(i),
+      // 1 2
+      Math.sin(omega) * Math.sin(i)
+    ],
+    [
+      // 2 1
+      Math.sin(omega) * Math.cos(w) + Math.cos(omega) * Math.sin(w) * Math.cos(i),
+      // 2 2
+      -Math.sin(omega) * Math.sin(w) + Math.cos(omega) * Math.cos(w) * Math.cos(i),
+      // 2 3
+      -Math.cos(omega) * Math.sin(i),
+    ],
+    [
+      // 3 1
+      Math.sin(w) * Math.sin(i),
+      // 3 2
+      Math.cos(w) * Math.sin(i),
+      // 3 3
+      Math.cos(i)
+    ]
+  ]
+
+  function transformVector(matrix, vector){
+    var vectorKeys = Object.keys(vector)
+    var newVector = {}
+    //iterate through the rows of the matrix
+    for (var i = 0; i < matrix.length; i++) {
+      var row = matrix[i]
+      var derivativeVector = vectorKeys[i]
+      //iterate through the columns
+      for (var j = 0; j < vectorKeys.length; j++) {
+        var currentKey = vectorKeys[j]
+        if(!newVector[derivativeVector]){ newVector[derivativeVector] = 0 }
+        newVector[derivativeVector] += vector[currentKey] * row[j]
+      }
+    }
+    return newVector
+  }
+  // var test = [[1,2,3],[3,2,1],[2,1,3]]
+  // var testVec = {x: 1, y: 1, z: 1}
+  // debugger
+  // console.log(multiplyMatrixesByVector(test, testVec))
+  var transformedPQW = transformVector(transformationMatrix, vector)
+  console.log(transformedPQW)
+  debugger
+  vectorIJK.i = transformedPQW.p
+  vectorIJK.j = transformedPQW.q
+  vectorIJK.k = transformedPQW.w
+
 
   return vectorIJK
 }
