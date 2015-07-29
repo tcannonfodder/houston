@@ -14,16 +14,19 @@ Math.toRadians = function(angleInDegrees){
   return angleInDegrees * (Math.PI/180)
 }
 
-var eccentricity = 0.242096777813849
-var trueAnomalyInDegrees = 247.472289773132
-var trueAnomalyInRadians = Math.toRadians(trueAnomalyInDegrees)
-var gravitationalParameter = 3531600000000
-var semiMajorAxis = 899889.562768349
+var eccentricity = 0.242096777813849 //no unit
+var trueAnomalyInDegrees = 247.472289773132 //degrees
+var trueAnomalyInRadians = Math.toRadians(trueAnomalyInDegrees) //radians
+var gravitationalParameter = 3531600000000 // Gm/s^2
+var semiMajorAxis = 899889.562768349 //meters
 var startTime = 0 //seconds
 var endTime = 10 //seconds
-var inclination = 0.243481327320852
-var longitudeOfAscendingNode = 100.674061982484
-var argumentOfPeriapsis = 91.2098800067069
+var inclinationInDegrees = 0.243481327320852 // degrees
+var inclinationInRadians = Math.toRadians(inclinationInDegrees) // radians
+var longitudeOfAscendingNodeInDegrees = 100.674061982484 //degrees
+var longitudeOfAscendingNodeInRadians = Math.toRadians(longitudeOfAscendingNodeInDegrees) //radians
+var argumentOfPeriapsisInDegrees = 91.2098800067069 //degrees
+var argumentOfPeriapsisInRadians = Math.toRadians(argumentOfPeriapsisInDegrees) //radians
 
 
 function eccentricAnomalyFromTrueAnomalyAndEcentricity(trueAnomaly, eccentricity){
