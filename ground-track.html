@@ -87,7 +87,13 @@ function trueAnomalyFromEccentricAnomalyAndEccentricity(eccentricAnomaly, eccent
   var factor1 = Math.sqrt(1.0 - Math.pow(eccentricity, 2)) * Math.sin(eccentricAnomaly)
   var factor2 = Math.cos(eccentricAnomaly) - eccentricity
 
-  return Math.atan2(factor1, factor2)
+  if(longitudeOfAscendingNodeInDegrees > 90 && longitudeOfAscendingNodeInDegrees <= 360){
+    var inversion = Math.toRadians(360)
+  } else{
+    var inversion = 0
+  }
+
+  return inversion - Math.atan2(factor1, factor2)
 }
 
 function findSemiLatusRectum(semiMajorAxis, eccentricity){
