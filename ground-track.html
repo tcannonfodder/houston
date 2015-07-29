@@ -14,19 +14,33 @@ Math.toRadians = function(angleInDegrees){
   return angleInDegrees * (Math.PI/180)
 }
 
-var eccentricity = 0.242096777813849 //no unit
-var trueAnomalyInDegrees = 247.472289773132 //degrees
+var data = {
+  "v": 151.806255900008,
+  "sma": 899911.928651005,
+  "maae": 1.7749060288653,
+  "e": 0.242167758093289,
+  "inclination": 0.24348190174888,
+  "lan": 100.674172066912,
+  "aop": 91.2138947641148,
+  "latitude": -0.216976830204803,
+  "longitude": -59.4272098680466,
+  "orbitalPeriod": 2854.26391610543
+}
+
+var eccentricity = data["e"] //no unit
+var trueAnomalyInDegrees = data["v"] //degrees
 var trueAnomalyInRadians = Math.toRadians(trueAnomalyInDegrees) //radians
 var gravitationalParameter = 3531600000000 // Gm/s^2
-var semiMajorAxis = 899889.562768349 //meters
+var semiMajorAxis = data["sma"] //meters
 var startTime = 0 //seconds
 var endTime = 10 //seconds
-var inclinationInDegrees = 0.243481327320852 // degrees
+var inclinationInDegrees = data["inclination"] // degrees
 var inclinationInRadians = Math.toRadians(inclinationInDegrees) // radians
-var longitudeOfAscendingNodeInDegrees = 100.674061982484 //degrees
+var longitudeOfAscendingNodeInDegrees = data["lan"] //degrees
 var longitudeOfAscendingNodeInRadians = Math.toRadians(longitudeOfAscendingNodeInDegrees) //radians
-var argumentOfPeriapsisInDegrees = 91.2098800067069 //degrees
+var argumentOfPeriapsisInDegrees = data["aop"] //degrees
 var argumentOfPeriapsisInRadians = Math.toRadians(argumentOfPeriapsisInDegrees) //radians
+var orbitalPeriod = data["orbitalPeriod"] // seconds
 
 
 function eccentricAnomalyFromTrueAnomalyAndEcentricity(trueAnomaly, eccentricity){
