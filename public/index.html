@@ -4,6 +4,7 @@
   <title></title>
   <script src="prototype.js"></script>
   <script src="leaflet.ksp.js"></script>
+  <script src="L.Graticule.js"></script>
   <link rel="stylesheet" type="text/css" href="leafletksp.css" />
 
   <script src="telemachus.js"></script>
@@ -329,6 +330,8 @@ $(document).observe("dom:loaded", function() {
   });
   map.fitWorld();
   rawData = [[0]];
+
+  L.graticule().addTo(map)
 
   var estimationIcon = L.icon({
       iconUrl: 'markers-anomaly.png',
