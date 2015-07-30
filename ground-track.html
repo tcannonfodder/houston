@@ -2,6 +2,7 @@
 <html>
 <head>
   <title></title>
+  <script src="numeric.js"></script>
 </head>
 <body>
 
@@ -15,17 +16,18 @@ Math.toRadians = function(angleInDegrees){
 }
 
 var data = {
-  "v": 327.790863885601,
-  "sma": 899865.909004628,
-  "maae": 1.71700514682077,
-  "e": 0.242086099014791,
-  "inclination": 0.243482974210391,
-  "lan": 100.67407197386,
-  "aop": 91.1833452819551,
-  "latitude": 0.208644159455845,
-  "longitude": 41.9663712098415,
-  "orbitalPeriod": 2854.04497711937,
-  "angV": 0.0002155695
+  "v": 59.8761840933223,
+  "sma": 899855.465026337,
+  "maae": 1.70362768597857,
+  "e": 0.242189638699104,
+  "inclination": 0.243490600808742,
+  "lan": -259.325668369445,
+  "aop": 91.194023114056,
+  "latitude": 0.117802451877007,
+  "longitude": -111.371201095214,
+  "orbitalPeriod": 2853.99529055441,
+  "angV": 2.290456e-05,
+  "time": 361985.26333122
 }
 
 var eccentricity = data["e"] //no unit
@@ -34,7 +36,7 @@ var trueAnomalyInRadians = Math.toRadians(trueAnomalyInDegrees) //radians
 var gravitationalParameter = 3531600000000 // Gm/s^2
 var semiMajorAxis = data["sma"] //meters
 var startTime = 0 //seconds
-var endTime = 0 //seconds
+var endTime = 10 //seconds
 var inclinationInDegrees = data["inclination"] // degrees
 var inclinationInRadians = Math.toRadians(inclinationInDegrees) // radians
 var longitudeOfAscendingNodeInDegrees = data["lan"] //degrees
@@ -45,7 +47,34 @@ var orbitalPeriod = data["orbitalPeriod"] // seconds
 var angularVelocityOfVessel = data["anvV"] // meters/second
 var universalGravitationalParameter = 6.673999953095288e-11
 var rotationalPeriodOfKerbin = 21599.9120145401 //seconds
+var universalDateTime = data["time"] //seconds
 
+function partsOfUniversalDateTime(time){
+  var parts = {}
+  if (time == null) {
+    time = 0;
+  }
+  parts.year = ((time / (365 * 24 * 3600)) | 0) + 1;
+  time %= 365 * 24 * 3600;
+  parts.day = ((time / (24 * 3600)) | 0) + 1;
+  time %= 24 * 3600;
+  parts.universalTime = time
+
+  parts.hour = (time / 3600) | 0;
+  time %= 3600;
+  parts.minutes = (time / 60) | 0;
+  parts.seconds = (time % 60 | 0).toFixed();
+
+  return parts
+}
+
+function calculateGMSTInDegrees(universalDateTime){
+  var timeParts = partsOfUniversalDateTime(universalDateTime)
+  var G = 6.697374558
+  var dayFactor = 0.06570982441908
+  var timeFactor = 1.00273790935
+  return G + (dayFactor * timeParts.day) + (timeFactor * timeParts.hour)
+}
 
 function eccentricAnomalyFromTrueAnomalyAndEcentricity(trueAnomaly, eccentricity){
   var cosineE = (eccentricity + Math.cos(trueAnomaly))/(1 + (eccentricity* Math.cos(trueAnomaly)))
@@ -87,13 +116,13 @@ function trueAnomalyFromEccentricAnomalyAndEccentricity(eccentricAnomaly, eccent
   var factor1 = Math.sqrt(1.0 - Math.pow(eccentricity, 2)) * Math.sin(eccentricAnomaly)
   var factor2 = Math.cos(eccentricAnomaly) - eccentricity
 
-  if(longitudeOfAscendingNodeInDegrees > 90 && longitudeOfAscendingNodeInDegrees <= 360){
-    var inversion = Math.toRadians(360)
-  } else{
+  // if(longitudeOfAscendingNodeInDegrees > 90 && longitudeOfAscendingNodeInDegrees <= 360){
+  //   var inversion = Math.toRadians(360)
+  // } else{
     var inversion = 0
-  }
+  // }
 
-  return inversion - Math.atan2(factor1, factor2)
+  return Math.atan2(factor1, factor2)
 }
 
 function findSemiLatusRectum(semiMajorAxis, eccentricity){
@@ -123,6 +152,23 @@ function velocityVectorInPQWFrame(semiMajorAxis, eccentricity, trueAnomaly, grav
   vector.q = eccentricity + Math.cos(trueAnomaly)
   vector.w = 0
   return vector
+}
+
+function transformVector(matrix, vector){
+  var vectorKeys = Object.keys(vector)
+  var newVector = {}
+  //iterate through the rows of the matrix
+  for (var i = 0; i < matrix.length; i++) {
+    var row = matrix[i]
+    var derivativeVector = vectorKeys[i]
+    //iterate through the columns
+    for (var j = 0; j < vectorKeys.length; j++) {
+      var currentKey = vectorKeys[j]
+      if(!newVector[derivativeVector]){ newVector[derivativeVector] = 0 }
+      newVector[derivativeVector] += vector[currentKey] * row[j]
+    }
+  }
+  return newVector
 }
 
 // Thank god for: https://en.wikipedia.org/wiki/Perifocal_coordinate_system
@@ -160,29 +206,12 @@ function transformPositionPQWVectorToIJKFrame(vector, inclination, longitudeOfAs
     ]
   ]
 
-  function transformVector(matrix, vector){
-    var vectorKeys = Object.keys(vector)
-    var newVector = {}
-    //iterate through the rows of the matrix
-    for (var i = 0; i < matrix.length; i++) {
-      var row = matrix[i]
-      var derivativeVector = vectorKeys[i]
-      //iterate through the columns
-      for (var j = 0; j < vectorKeys.length; j++) {
-        var currentKey = vectorKeys[j]
-        if(!newVector[derivativeVector]){ newVector[derivativeVector] = 0 }
-        newVector[derivativeVector] += vector[currentKey] * row[j]
-      }
-    }
-    return newVector
-  }
   // var test = [[1,2,3],[3,2,1],[2,1,3]]
   // var testVec = {x: 1, y: 1, z: 1}
   // debugger
   // console.log(multiplyMatrixesByVector(test, testVec))
   var transformedPQW = transformVector(transformationMatrix, vector)
   console.log(transformedPQW)
-  debugger
   vectorIJK.i = transformedPQW.p
   vectorIJK.j = transformedPQW.q
   vectorIJK.k = transformedPQW.w
@@ -194,15 +223,22 @@ function transformPositionPQWVectorToIJKFrame(vector, inclination, longitudeOfAs
 function findLatitudeOfPositionUnitVector(vector){
   var x = Math.sqrt(Math.pow(vector.i, 2) + Math.pow(vector.j, 2))
   var z = vector.k
-// 
+
   return Math.atan(z/x)
 }
 
-function findLongitudeOfPositonUnitVector(vector, angularVelocityOfPlanet, time){
+function angularFrequencyOfBody(period){
+  return (2 * Math.PI)/period
+}
+
+function findLongitudeOfPositonUnitVector(vector, angularVelocityOfPlanet, time, universalDateTime){
   var deltaT = time - startTime
   var quadrant = vector.j > 0 ? 1 : -1
-  var theta = Math.atan(vector.i/vector.j)
-  return theta - 0 - angularVelocityOfPlanet * deltaT
+  var GMSTInDegrees = calculateGMSTInDegrees(universalDateTime)
+  var GMSTInRadians = Math.toRadians(GMSTInDegrees)
+  var theta = Math.atan2(vector.j,vector.i)
+
+  return theta - GMSTInRadians - (angularVelocityOfPlanet * deltaT)
 }
 
 var E = eccentricAnomalyFromTrueAnomalyAndEcentricity(trueAnomalyInRadians, eccentricity)
@@ -216,6 +252,9 @@ var positionVectorInPQW = positionVectorInPQWFrame(semiMajorAxis, eccentricity, 
 var positionVectorInIJK = transformPositionPQWVectorToIJKFrame(positionVectorInPQW, inclinationInRadians, longitudeOfAscendingNodeInRadians, argumentOfPeriapsisInRadians)
 var latitude = findLatitudeOfPositionUnitVector(positionVectorInIJK)
 
+var rotationalVelocityOfKerbin = angularFrequencyOfBody(rotationalPeriodOfKerbin)
+var longitude = findLongitudeOfPositonUnitVector(positionVectorInIJK, rotationalVelocityOfKerbin, endTime, universalDateTime)
+
 
 var meanAnomalyAtTime1 = meanAnomalyAtTimeAndMeanMotion(n, endTime, meanAnomaly)
 var eccentricAnomalyAtTime1 = estimateEccentricAnomalyFromMeanAnomalyAndEccentricity(meanAnomalyAtTime1, eccentricity)
@@ -225,14 +264,20 @@ console.log("***** t0 *****")
 
 console.log("eccentricity: " + eccentricity)
 console.log("v: " + trueAnomalyInRadians)
+console.log("v (degrees): " + Math.toDegrees(trueAnomalyInRadians))
 console.log("E: " + E)
 console.log("n: " + n)
 console.log("meanAnomaly: "  + meanAnomaly)
+console.log("meanAnomaly (degrees): "  +  Math.toDegrees(meanAnomaly))
 console.log("estimated E: " + estimatedE)
 console.log("estimated v: " + estimatedV)
+console.log("estimated v (degrees): " + Math.toDegrees(estimatedV))
 console.log("positionVector (PQW):" + JSON.stringify(positionVectorInPQW))
 console.log("positionVector (IJK):" + JSON.stringify(positionVectorInIJK))
 console.log("latitude: " + latitude)
+console.log("longitude: " + longitude)
+console.log("latitude (degrees): " +  Math.toDegrees(latitude))
+console.log("longitude (degrees): " +  Math.toDegrees(longitude))
 
 console.log("***** t1 *****")
 
