@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title></title>
+  <script src="prototype.js"></script>
+  <script src="leaflet.ksp.js"></script>
+  <link rel="stylesheet" type="text/css" href="leafletksp.css" />
+
+  <script src="telemachus.js"></script>
+  <script src="numeric.js"></script>
+</head>
+<body>
+
+<div id="map" class="map" style="padding: 0; margin: 0; height: 100%"></div>
+
+<script>
+Math.toDegrees = function(angleInRadians){
+  return angleInRadians * (180/Math.PI)
+}
+
+Math.toRadians = function(angleInDegrees){
+  return angleInDegrees * (Math.PI/180)
+}
+
+// var data = {
+//   "v": 59.8761840933223,
+//   "sma": 899855.465026337,
+//   "maae": 1.70362768597857,
+//   "e": 0.242189638699104,
+//   "inclination": 0.243490600808742,
+//   "lan": -259.325668369445,
+//   "aop": 91.194023114056,
+//   "latitude": 0.117802451877007,
+//   "longitude": -111.371201095214,
+//   "orbitalPeriod": 2853.99529055441,
+//   "angV": 2.290456e-05,
+//   "time": 361985.26333122
+// }
+
+function partsOfUniversalDateTime(time){
+  var parts = {}
+  if (time == null) {
+    time = 0;
+  }
+  parts.year = ((time / (365 * 24 * 3600)) | 0) + 1;
+  time %= 365 * 24 * 3600;
+  parts.day = ((time / (24 * 3600)) | 0) + 1;
+  time %= 24 * 3600;
+  parts.universalTime = time
+
+  parts.hour = (time / 3600) | 0;
+  time %= 3600;
+  parts.minutes = (time / 60) | 0;
+  parts.seconds = (time % 60 | 0).toFixed();
+
+  return parts
+}
+
+function calculateGMSTInDegrees(universalDateTime){
+  var timeParts = partsOfUniversalDateTime(universalDateTime)
+  var G = 6.697374558
+  var dayFactor = 0.06570982441908
+  var timeFactor = 1.00273790935
+  return G + (dayFactor * timeParts.day) + (timeFactor * timeParts.hour)
+}
+
+function eccentricAnomalyFromTrueAnomalyAndEcentricity(trueAnomaly, eccentricity){
+  var cosineE = (eccentricity + Math.cos(trueAnomaly))/(1 + (eccentricity* Math.cos(trueAnomaly)))
+  return Math.acos(cosineE)
+}
+
+// function meanMotion(semiMajorAxis, gravitationalParameter){
+//   return (2 * Math.PI)/(orbitalPeriod)
+//   // return Math.sqrt(gravitationalParameter/Math.pow(semiMajorAxis, 3))
+// }
+
+function meanAnomalyFromEccentricAnomalyAndEccentricity(eccentricAnomaly, eccentricity){
+  return eccentricAnomaly - eccentricity * Math.sin(eccentricAnomaly)
+}
+
+function meanAnomalyAtTimeAndMeanMotion(meanMotion, startTime, endTime, originalMeanAnomaly){
+  var deltaT = endTime - startTime
+  return originalMeanAnomaly + meanMotion * deltaT
+}
+
+function estimateEccentricAnomalyFromMeanAnomalyAndEccentricity(meanAnomaly, eccentricity){
+  var error = 100
+  var eccentricAnomaly1 = meanAnomaly
+  // var i = 10
+
+  while(error > 0.00000000001){
+    var newEccentricAnomaly = meanAnomaly + (eccentricity * Math.sin(eccentricAnomaly1))
+    error = Math.abs(newEccentricAnomaly - eccentricAnomaly1)
+    // console.log("newEccentricAnomaly: " + newEccentricAnomaly)
+    // console.log("error: " + error)
+    // i--
+    // debugger
+    eccentricAnomaly1 = newEccentricAnomaly
+  }
+  return eccentricAnomaly1
+}
+
+function trueAnomalyFromEccentricAnomalyAndEccentricity(eccentricAnomaly, eccentricity){
+  var factor1 = Math.sqrt(1.0 - Math.pow(eccentricity, 2)) * Math.sin(eccentricAnomaly)
+  var factor2 = Math.cos(eccentricAnomaly) - eccentricity
+
+  // if(longitudeOfAscendingNodeInDegrees > 90 && longitudeOfAscendingNodeInDegrees <= 360){
+  //   var inversion = Math.toRadians(360)
+  // } else{
+    var inversion = 0
+  // }
+
+  return Math.atan2(factor1, factor2)
+}
+
+function findSemiLatusRectum(semiMajorAxis, eccentricity){
+  return semiMajorAxis * (1 - Math.pow(eccentricity, 2))
+}
+
+function findPolarEquationOfConic(semiMajorAxis, eccentricity, trueAnomaly){
+  var p = findSemiLatusRectum(semiMajorAxis, eccentricity)
+
+  return p/(1 + eccentricity * Math.cos(trueAnomaly))
+}
+
+function positionVectorInPQWFrame(semiMajorAxis, eccentricity, trueAnomaly){
+  var r = findPolarEquationOfConic(semiMajorAxis, eccentricity, trueAnomaly)
+  var vector = {}
+  vector.p = r * Math.cos(trueAnomaly)
+  vector.q = r * Math.sin(trueAnomaly)
+  vector.w = 0
+  return vector
+}
+
+function velocityVectorInPQWFrame(semiMajorAxis, eccentricity, trueAnomaly, gravitationalParameter){
+  var p = findSemiLatusRectum(semiMajorAxis, eccentricity)
+  var factor = Math.sqrt(gravitationalParameter/p)
+  var vector = {}
+  vector.p = -Math.sin(trueAnomaly)
+  vector.q = eccentricity + Math.cos(trueAnomaly)
+  vector.w = 0
+  return vector
+}
+
+function transformVector(matrix, vector){
+  var vectorKeys = Object.keys(vector)
+  var newVector = {}
+  //iterate through the rows of the matrix
+  for (var i = 0; i < matrix.length; i++) {
+    var row = matrix[i]
+    var derivativeVector = vectorKeys[i]
+    //iterate through the columns
+    for (var j = 0; j < vectorKeys.length; j++) {
+      var currentKey = vectorKeys[j]
+      if(!newVector[derivativeVector]){ newVector[derivativeVector] = 0 }
+      newVector[derivativeVector] += vector[currentKey] * row[j]
+    }
+  }
+  return newVector
+}
+
+// Thank god for: https://en.wikipedia.org/wiki/Perifocal_coordinate_system
+function transformPositionPQWVectorToIJKFrame(vector, inclination, longitudeOfAscendingNode, argumentOfPeriapsis){
+  var vectorIJK = {}
+  var omega = longitudeOfAscendingNode
+  var w = argumentOfPeriapsis
+  var i = inclination
+
+  //Column, row order. First level is columns, each column has N rows
+  var transformationMatrix = [
+    [
+      // 1 1
+      Math.cos(omega) * Math.cos(w) - Math.sin(omega) * Math.sin(w) * Math.cos(i),
+      // 1 2
+      -Math.cos(omega) * Math.sin(w) - Math.sin(omega)* Math.cos(w) * Math.cos(i),
+      // 1 2
+      Math.sin(omega) * Math.sin(i)
+    ],
+    [
+      // 2 1
+      Math.sin(omega) * Math.cos(w) + Math.cos(omega) * Math.sin(w) * Math.cos(i),
+      // 2 2
+      -Math.sin(omega) * Math.sin(w) + Math.cos(omega) * Math.cos(w) * Math.cos(i),
+      // 2 3
+      -Math.cos(omega) * Math.sin(i),
+    ],
+    [
+      // 3 1
+      Math.sin(w) * Math.sin(i),
+      // 3 2
+      Math.cos(w) * Math.sin(i),
+      // 3 3
+      Math.cos(i)
+    ]
+  ]
+
+  // var test = [[1,2,3],[3,2,1],[2,1,3]]
+  // var testVec = {x: 1, y: 1, z: 1}
+  // debugger
+  // console.log(multiplyMatrixesByVector(test, testVec))
+  var transformedPQW = transformVector(transformationMatrix, vector)
+  console.log(transformedPQW)
+  vectorIJK.i = transformedPQW.p
+  vectorIJK.j = transformedPQW.q
+  vectorIJK.k = transformedPQW.w
+
+
+  return vectorIJK
+}
+
+function findLatitudeOfPositionUnitVector(vector){
+  var x = Math.sqrt(Math.pow(vector.i, 2) + Math.pow(vector.j, 2))
+  var z = vector.k
+
+  return Math.atan(z/x)
+}
+
+function angularFrequencyOfBody(period){
+  return (2 * Math.PI)/period
+}
+
+function calculateGMSTInRadiansForOrigin(vector, longitude){
+  var theta = Math.atan(vector.j/vector.i)
+  return theta - longitude
+}
+
+function findLongitudeOfPositonUnitVector(vector, angularVelocityOfPlanet, startTime, endTime, GMSTInRadians){
+  var deltaT = endTime - startTime
+  var quadrant = vector.j > 0 ? 1 : -1
+  var theta = Math.atan(vector.j/vector.i)
+  return theta - GMSTInRadians - (angularVelocityOfPlanet * deltaT)
+}
+
+
+window.recalculate = function recalculate(data){
+  var eccentricity = data["o.eccentricity"] //no unit
+  var trueAnomalyInDegrees = data["o.trueAnomaly"] //degrees
+  var trueAnomalyInRadians = Math.toRadians(trueAnomalyInDegrees) //radians
+  var gravitationalParameter = 3531600000000 // Gm/s^2
+  var semiMajorAxis = data["o.sma"] //meters
+  var startTime = 0 //seconds
+  var endTime = 10 //seconds
+  var inclinationInDegrees = data["o.inclination"] // degrees
+  var inclinationInRadians = Math.toRadians(inclinationInDegrees) // radians
+  var longitudeOfAscendingNodeInDegrees = data["o.lan"] //degrees
+  var longitudeOfAscendingNodeInRadians = Math.toRadians(longitudeOfAscendingNodeInDegrees) //radians
+  var argumentOfPeriapsisInDegrees = data["o.argumentOfPeriapsis"] //degrees
+  var argumentOfPeriapsisInRadians = Math.toRadians(argumentOfPeriapsisInDegrees) //radians
+  var orbitalPeriod = data["o.period"] // seconds
+  var angularVelocityOfVessel = data["v.angularVelocity"] // meters/second
+  var universalGravitationalParameter = 6.673999953095288e-11
+  var rotationalPeriodOfKerbin = 21599.9120145401 //seconds
+  var universalDateTime = data["t.universalTime"] //seconds
+
+  var telemachusLatitudeInDegrees = data["v.lat"] //degrees
+  var telemachusLatitudeInRadians = Math.toRadians(telemachusLatitudeInDegrees) //radians
+
+  var telemachusLongitudeInDegrees = data["v.long"] //degrees
+  var telemachusLongitudeInRadians = Math.toRadians(telemachusLongitudeInDegrees) //radians
+
+  var E = eccentricAnomalyFromTrueAnomalyAndEcentricity(trueAnomalyInRadians, eccentricity)
+  var n = angularFrequencyOfBody(orbitalPeriod)
+  var meanAnomaly = meanAnomalyFromEccentricAnomalyAndEccentricity(E, eccentricity)
+  var estimatedE = estimateEccentricAnomalyFromMeanAnomalyAndEccentricity(meanAnomaly, eccentricity)
+  var estimatedV = trueAnomalyFromEccentricAnomalyAndEccentricity(E, eccentricity)
+
+
+  var positionVectorInPQW = positionVectorInPQWFrame(semiMajorAxis, eccentricity, trueAnomalyInRadians)
+  var positionVectorInIJK = transformPositionPQWVectorToIJKFrame(positionVectorInPQW, inclinationInRadians, longitudeOfAscendingNodeInRadians, argumentOfPeriapsisInRadians)
+  var latitude = findLatitudeOfPositionUnitVector(positionVectorInIJK)
+
+  var rotationalVelocityOfKerbin = angularFrequencyOfBody(rotationalPeriodOfKerbin)
+
+  var GMSTInRadians = calculateGMSTInRadiansForOrigin(positionVectorInIJK, telemachusLongitudeInRadians)
+  var GMSTInDegrees = Math.toDegrees(GMSTInRadians)
+
+  var longitude = findLongitudeOfPositonUnitVector(positionVectorInIJK, rotationalVelocityOfKerbin, startTime, endTime, GMSTInRadians)
+
+
+  var meanAnomalyAtTime1 = meanAnomalyAtTimeAndMeanMotion(n, startTime, endTime, meanAnomaly)
+  var eccentricAnomalyAtTime1 = estimateEccentricAnomalyFromMeanAnomalyAndEccentricity(meanAnomalyAtTime1, eccentricity)
+  var trueAnomalyAtTime1 = trueAnomalyFromEccentricAnomalyAndEccentricity(eccentricAnomalyAtTime1, eccentricity)
+
+  console.log("***** t0 *****")
+  console.log(data)
+  console.log("eccentricity: " + eccentricity)
+  console.log("v: " + trueAnomalyInRadians)
+  console.log("v (degrees): " + Math.toDegrees(trueAnomalyInRadians))
+  console.log("E: " + E)
+  console.log("n: " + n)
+  console.log("meanAnomaly: "  + meanAnomaly)
+  console.log("meanAnomaly (degrees): "  +  Math.toDegrees(meanAnomaly))
+  console.log("estimated E: " + estimatedE)
+  console.log("estimated v: " + estimatedV)
+  console.log("estimated v (degrees): " + Math.toDegrees(estimatedV))
+  console.log("positionVector (PQW):" + JSON.stringify(positionVectorInPQW))
+  console.log("positionVector (IJK):" + JSON.stringify(positionVectorInIJK))
+  console.log("latitude: " + latitude)
+  console.log("longitude: " + longitude)
+  console.log("latitude (degrees): " +  Math.toDegrees(latitude))
+  console.log("longitude (degrees): " +  Math.toDegrees(longitude))
+
+  console.log("***** t1 *****")
+
+  console.log("meanAnomalyAtTime1: " + meanAnomalyAtTime1)
+  console.log("eccentricAnomalyAtTime1: " + eccentricAnomalyAtTime1)
+  console.log("trueAnomalyAtTime1: " + trueAnomalyAtTime1)
+
+  updateMapMarkers(window.markers, telemachusLatitudeInDegrees, telemachusLongitudeInDegrees, latitude, longitude)
+}
+
+function setMapMarkerCoordinates(marker, latitude, longitude){
+  marker.setLatLng([latitude, longitude > 180 ? longitude - 360 : longitude])
+}
+
+function updateMapMarkers(markers, telemachusLatitudeInDegrees, telemachusLongitudeInDegrees, latitude, longitude){
+  setMapMarkerCoordinates(markers["actualCoordinates"], telemachusLatitudeInDegrees, telemachusLongitudeInDegrees)
+  setMapMarkerCoordinates(markers["estimatedCoordinates"], Math.toDegrees(latitude), Math.toDegrees(longitude))
+}
+
+$(document).observe("dom:loaded", function() {
+  map = new L.KSP.Map('map', {
+      layers: [L.KSP.CelestialBody.KERBIN],
+      zoom: L.KSP.CelestialBody.KERBIN.defaultLayer.options.maxZoom,
+      center: [-0.1027, -74.5754],
+      bodyControl: false,
+      layerControl: true,
+      scaleControl: true
+  });
+  map.fitWorld();
+  rawData = [[0]];
+
+  var estimationIcon = L.icon({
+      iconUrl: 'markers-anomaly.png',
+      shadowUrl: 'marker-shadow.png',
+      iconSize:     [25, 41], // size of the icon
+      shadowSize:   [41, 41], // size of the shadow
+      iconAnchor:   [12, 41], // point of the icon which will correspond to marker's location
+      popupAnchor:  [-1, -34] // point from which the popup should open relative to the iconAnchor
+  });
+
+  window.markers = {
+    "actualCoordinates" : L.marker([0, 0]),
+    "estimatedCoordinates" : L.marker([0,0], {icon: estimationIcon})
+  }
+
+  markers["actualCoordinates"].addTo(map)
+  markers["estimatedCoordinates"].addTo(map)
+
+  // updateMapMarkers(markers, telemachusLatitudeInDegrees, telemachusLongitudeInDegrees, latitude, longitude)
+
+  window.datalink = new Telemachus("192.168.1.41", "8085")
+  window.datalink.subscribeToData([
+    'o.trueAnomaly', 'o.sma', 'o.maae', 'o.eccentricity',
+    'o.inclination', 'o.lan', 'o.argumentOfPeriapsis', 'v.lat', 'v.long',
+    'o.period', 'v.angularVelocity', 't.universalTime', "b.o.gravParameter[1]"
+  ])
+
+  window.datalink.addReceiverFunction(window.recalculate)
+
+  // var actualCoordinatesMarker = L.marker([0, 0]);
+  // setMapMarkerCoordinates(actualCoordinatesMarker, telemachusLatitudeInDegrees, telemachusLongitudeInDegrees)
+  // actualCoordinatesMarker.addTo(map);
+
+  // var estimateCoordinatesMarker = L.marker([0,0], {icon: estimationIcon})
+  // setMapMarkerCoordinates(estimateCoordinatesMarker, Math.toDegrees(latitude), Math.toDegrees(longitude))
+  // estimateCoordinatesMarker.addTo(map)
+
+  // jQuery('#map').html("derp")
+})
+
+</script>
+</body>
+</html>
