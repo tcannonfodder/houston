@@ -28,8 +28,6 @@ var Telemachus = Class.create({
         console.error(e)
       }
     };
-
-    console.log(data)
   },
 
   send: function(message){
