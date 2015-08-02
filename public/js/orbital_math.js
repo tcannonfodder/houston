@@ -27,8 +27,12 @@ var OrbitalMath = {
   },
 
   eccentricAnomalyFromTrueAnomalyAndEcentricity: function(trueAnomaly, eccentricity){
-    var cosineE = (eccentricity + Math.cos(trueAnomaly))/(1 + (eccentricity* Math.cos(trueAnomaly)))
-    return Math.acos(cosineE)
+    // var cosineE = (eccentricity + Math.cos(trueAnomaly))/(1 + (eccentricity* Math.cos(trueAnomaly)))
+    // return Math.acos(cosineE)
+    var factor1 = Math.sqrt(1 - Math.pow(eccentricity, 2)) * Math.sin(trueAnomaly)
+    var factor2 = eccentricity + Math.cos(trueAnomaly)
+
+    return Math.atan2(factor2, factor1)
   },
 
   meanMotionFromGravitationalParametersAndSemimajorAxis: function(gravitationalParameter, semiMajorAxis, orbitalPeriod){
