@@ -63,17 +63,22 @@ var GroundTrack = Class.create({
 
     this.orbitalPredictionCoordinates = []
 
-    var startTime = 0
+    var startTime = Math.sqrt(Math.pow(semiMajorAxis,3)/gravitationalParameter) * (E - eccentricity * Math.sin(E))
+    var endOfPlot = Math.toDegrees(E) + 180
 
-    var endOfPlot = Math.toDegrees(E) + 360
+    var lastLatitude = null
+    var lastLongitude = null
 
     for(var degree = Math.toDegrees(E); degree <= endOfPlot; degree++){
       var eccentricAnomalyInRadians = Math.toRadians(degree)
       // var eccentricAnomalyInRadians = 2 * Math.atan(Math.sqrt((1-eccentricity)/(1+eccentricity)) * Math.tan(trueAnomalyInRadians/2))
+      var meanMotion = eccentricAnomalyInRadians - (eccentricity * Math.sin(eccentricAnomalyInRadians))
+
 
       if(eccentricAnomalyInRadians == E){
         // console.log("E: " + Math.toDegrees(E))
-        console.log("abs(E): " + Math.abs(Math.toDegrees(E)))
+        // console.log("abs(E): " + Math.abs(Math.toDegrees(E)))
+        // console.log("M:" + Math.toDegrees(meanMotion))
         // console.log("E_0 : " + Math.toDegrees(eccentricAnomalyInRadians))
       }
 
@@ -82,12 +87,12 @@ var GroundTrack = Class.create({
       // var Vy = Math.sqrt(1+ eccentricity) * Math.sin(E/2)
       // var estimatedTrueAnomaly = 2 * Math.atan2(Vy,Vx)
 
-      if(eccentricAnomalyInRadians == E){
+      // if(eccentricAnomalyInRadians == E){
         // console.log("act true anomaly: " + Math.toDegrees(trueAnomalyInRadians) % 360)
         // console.log("est true anomaly: " + Math.toDegrees(estimatedTrueAnomaly) % 360)
-      }
+      // }
 
-      var estimatedTime =  0 //Math.sqrt(Math.pow(semiMajorAxis,3)/gravitationalParameter) * (eccentricAnomalyInRadians - eccentricity * Math.sin(eccentricAnomalyInRadians))
+      var endTime =  Math.sqrt(Math.pow(semiMajorAxis,3)/gravitationalParameter) * (eccentricAnomalyInRadians - eccentricity * Math.sin(eccentricAnomalyInRadians))
       // console.log("estimated Time: " + estimatedTime)
 
 
@@ -96,21 +101,53 @@ var GroundTrack = Class.create({
       // var estimatedPositionVectorInPQW = estimatePositionVectorInPQW(gravitationalParameter, semiMajorAxis, eccentricity, eccentricAnomalyInRadians)
       var estimatedPositionVectorInIJK = OrbitalMath.transformPositionPQWVectorToIJKFrame(estimatedPositionVectorInPQW, inclinationInRadians, longitudeOfAscendingNodeInRadians, argumentOfPeriapsisInRadians)
       var latitudeInDegrees = Math.toDegrees(OrbitalMath.findLatitudeOfPositionUnitVector(estimatedPositionVectorInIJK))
-      var longitudeInDegrees = Math.toDegrees(OrbitalMath.findLongitudeOfPositonUnitVector(estimatedPositionVectorInIJK, this.rotationalVelocityOfKerbin, startTime, estimatedTime, this.GMSTInRadians))
+      var longitudeInDegrees = Math.toDegrees(OrbitalMath.findLongitudeOfPositonUnitVector(estimatedPositionVectorInIJK, this.rotationalVelocityOfKerbin, startTime, endTime, this.GMSTInRadians))
 
+      // try to correct for when the position vector switches over
+      // debugger
+      if(lastLatitude && (Math.abs(lastLatitude - latitudeInDegrees) % 360 > 100 )){
+        if(degree >= (endOfPlot - 7)){
+          // debugger
+        }
+        // debugger
+        latitudeInDegrees = 180 + latitudeInDegrees
+      }
 
-      if(eccentricAnomalyInRadians == E){
+      if(lastLongitude && (Math.abs(lastLongitude - longitudeInDegrees) % 360 > 100 )){
+        var old = longitudeInDegrees
+        longitudeInDegrees = 180 + longitudeInDegrees
+        if(degree >= (endOfPlot - 4)){
+          // debugger
+        }
+        // console.log("old: " + old + " ; new: " + longitudeInDegrees)
+      }
+
+      if(Math.abs(lastLongitude - longitudeInDegrees) > 100){
+        // debugger
+        // console.log("act: (" + this.actualLatitudeInDegrees.toFixed(0) + "," + this.actualLongitudeInDegrees.toFixed(0) + ")")
+        // console.log("est: (" + latitudeInDegrees.toFixed(0) + "," + longitudeInDegrees.toFixed(0) + ")")
+      }
+
+      // Now that we've finished correcting this current latitude and longitude, set it as the "last"
+      lastLatitude = latitudeInDegrees
+      lastLongitude = longitudeInDegrees
+
+      // if(eccentricAnomalyInRadians == E){
         // console.log("Act PQW:" + JSON.stringify(this.actualPositionVectorInPQW))
         // console.log("Est PQW:" + JSON.stringify(estimatedPositionVectorInPQW))
 
         // console.log("Act IJK:" + JSON.stringify(this.actualPositionVectorInIJK))
         // console.log("Est IJK:" + JSON.stringify(estimatedPositionVectorInIJK))
+        // console.log("act: (" + this.actualLatitudeInDegrees.toFixed(0) + "," + this.actualLongitudeInDegrees.toFixed(0) + ")")
+        // console.log("est: (" + latitudeInDegrees.toFixed(0) + "," + longitudeInDegrees.toFixed(0) + ")")
+        // console.log("----")
+      // }
 
-      }
+      // debugger
 
-      if(estimatedPositionVectorInPQW.p > 0){
-        longitudeInDegrees = longitudeInDegrees
-      }
+      // if(estimatedPositionVectorInPQW.p > 0){
+      //   longitudeInDegrees = longitudeInDegrees
+      // }
 
       // console.log("(" +latitudeInDegrees + "," + longitudeInDegrees + ")")
 
@@ -168,13 +205,13 @@ var GroundTrack = Class.create({
     this.setCoordinatesForMapObject(this.markers.actualCoordinates, this.actualLatitudeInDegrees, this.actualLongitudeInDegrees)
     this.setCoordinatesForMapObject(this.markers.convertedActualCoordinates, Math.toDegrees(this.estimatedLatitude), Math.toDegrees(this.estimatedLongitude))
 
-    // for (var i = this.orbitalPredictionCoordinates.length - 1; i >= 0; i--) {
-    //   var coordinates = this.orbitalPredictionCoordinates[i]
-    //   var latitude = coordinates[0]
-    //   var longitude = coordinates[1]
+    for (var i = this.orbitalPredictionCoordinates.length - 1; i >= 0; i--) {
+      var coordinates = this.orbitalPredictionCoordinates[i]
+      var latitude = coordinates[0]
+      var longitude = coordinates[1]
 
-    //   this.orbitalPredictionCoordinates[i] = this.convertCoordinatesToMap(latitude, longitude)
-    // }
+      this.orbitalPredictionCoordinates[i] = this.convertCoordinatesToMap(latitude, longitude)
+    }
 
     var estimatedCoordinates = this.orbitalPredictionCoordinates[0]
     this.setCoordinatesForMapObject(this.markers.estimatedCoordinates, estimatedCoordinates[0], estimatedCoordinates[1])

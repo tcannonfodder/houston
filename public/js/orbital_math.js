@@ -58,8 +58,8 @@ var OrbitalMath = {
   },
 
   trueAnomalyFromEccentricAnomalyAndEccentricity: function(eccentricAnomaly, eccentricity, meanAnomaly){
-    var factor1 = Math.sqrt(1.0 - Math.pow(eccentricity, 2)) * Math.sin(eccentricAnomaly)
-    var factor2 = 1 - eccentricity * Math.cos(eccentricAnomaly)
+    // var factor1 = Math.sqrt(1.0 - Math.pow(eccentricity, 2)) * Math.sin(eccentricAnomaly)
+    // var factor2 = 1 - eccentricity * Math.cos(eccentricAnomaly)
 
     // if(longitudeOfAscendingNodeInDegrees > 90 && longitudeOfAscendingNodeInDegrees <= 360){
     //   var inversion = Math.toRadians(360)
@@ -67,16 +67,29 @@ var OrbitalMath = {
       // var inversion = 0
     // }
 
-    return Math.asin(factor1/factor2)
+    var x = Math.sqrt(1 - eccentricity) * Math.cos(eccentricAnomaly/2)
+    var y = Math.sqrt(1 + eccentricity) * Math.sin(eccentricAnomaly/2)
+
+    return 2 * Math.atan2(y,x)
+
+    // return Math.asin(factor1/factor2)
   },
 
   findSemiLatusRectum: function(semiMajorAxis, eccentricity){
-    return semiMajorAxis * (1 - Math.pow(eccentricity, 2))
+    // var x = semiMajorAxis * (1 - Math.pow(eccentricity, 2))
+    // console.log("semi latus rectum: " + x)
+
+    var apoapsis = 320565.458678732
+    var periapsis = 102454.341836878
+
+    return (2 * apoapsis * periapsis ) / (apoapsis + periapsis)
+    // return x
   },
 
   findPolarEquationOfConic: function(semiMajorAxis, eccentricity, trueAnomaly){
     var p = this.findSemiLatusRectum(semiMajorAxis, eccentricity)
-
+    // console.log("p: " + p)
+    // console.log("factor: " + (1 + eccentricity * Math.cos(trueAnomaly)))
     return p/(1 + eccentricity * Math.cos(trueAnomaly))
   },
 
@@ -86,6 +99,10 @@ var OrbitalMath = {
     vector.p = r * Math.cos(trueAnomaly)
     vector.q = r * Math.sin(trueAnomaly)
     vector.w = 0
+    // console.log("trueAnomaly: " + trueAnomaly)
+    // console.log("r: " + r)
+    // console.log(JSON.stringify(vector))
+    // debugger
     return vector
   },
 
@@ -156,6 +173,7 @@ var OrbitalMath = {
     vectorIJK.j = transformedPQW.q
     vectorIJK.k = transformedPQW.w
 
+    // debugger
 
     return vectorIJK
   },
@@ -180,6 +198,7 @@ var OrbitalMath = {
     var deltaT = endTime - startTime
     var quadrant = vector.j > 0 ? 1 : -1
     var theta = Math.atan(vector.j/vector.i)
+    // debugger
     return theta - GMSTInRadians - (angularVelocityOfPlanet * deltaT)
   }
 }

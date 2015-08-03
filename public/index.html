@@ -24,6 +24,37 @@
 $(document).observe("dom:loaded", function() {
   window.datalink = new Telemachus("192.168.1.41", "8085")
   window.groundTrack = new GroundTrack(datalink, 'map')
+
+  // var semiMajorAxis = 811509.900257805
+  // var eccentricity = 0.134385986401745
+  // var actualTrueAnomaly = -2.259069787517336
+  // var estimatedTrueAnomaly = -2.2429454259028354
+
+  // var apoapsis = 320565.458678732
+  // var periapsis = 102454.341836878
+  // var inclinationInRadians = Math.toRadians(48.7159269982956)
+  // var longitudeOfAscendingNodeInRadians = Math.toRadians(233.624811493994)
+  // var argumentOfPeriapsisInRadians = Math.toRadians(357.579829353199)
+
+  // var semiLatusRectum = (2 * apoapsis * periapsis ) / (apoapsis + periapsis)
+
+  // console.log("semiLatusRectum: " + semiLatusRectum)
+
+  // var t0VectorInPQW = OrbitalMath.positionVectorInPQWFrame(semiMajorAxis, eccentricity, actualTrueAnomaly)
+  // var t1VectorInPQW = OrbitalMath.positionVectorInPQWFrame(semiMajorAxis, eccentricity, estimatedTrueAnomaly)
+
+  // var t0IJK = OrbitalMath.transformPositionPQWVectorToIJKFrame(t0VectorInPQW, inclinationInRadians, longitudeOfAscendingNodeInRadians, argumentOfPeriapsisInRadians)
+  // var t1IJK = OrbitalMath.transformPositionPQWVectorToIJKFrame(t1VectorInPQW, inclinationInRadians, longitudeOfAscendingNodeInRadians, argumentOfPeriapsisInRadians)
+
+
+  // // console.log('{"p":-553405.7492129491,"q":-672884.7787890362,"w":0}')
+  // console.log(JSON.stringify(t0VectorInPQW))
+  // console.log(JSON.stringify(t1VectorInPQW))
+
+  // console.log("IJK")
+  // console.log(JSON.stringify(t0IJK))
+  // console.log(JSON.stringify(t1IJK))
+  // debugger
 })
 
 </script>

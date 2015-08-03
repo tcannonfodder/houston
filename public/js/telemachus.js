@@ -21,6 +21,10 @@ var Telemachus = Class.create({
   },
 
   dispatchMessages: function(data){
+    // var data = JSON.parse('{"b.o.gravParameter[1]":3531600000000,"t.universalTime":3581870.82772113,"v.angularVelocity":0,"o.period":2444.1893534157,"v.long":61.801426478683,"v.lat":-33.9585175016608,"o.argumentOfPeriapsis":357.579829353199,"o.lan":233.624811493994,"o.inclination":48.7159269982956,"o.eccentricity":0.134385986401745,"o.maae":1.33174069297012,"o.sma":811509.900257805,"o.trueAnomaly":230.564835549741}')
+    // var data = JSON.parse('{"b.o.gravParameter[1]":3531600000000,"t.universalTime":3676217.82772113,"v.angularVelocity":0,"o.period":2444.1893534157,"v.long":-165.90632282676,"v.lat":44.3064867638228,"o.argumentOfPeriapsis":357.579829353199,"o.lan":233.624811493994,"o.inclination":48.7159269982956,"o.eccentricity":0.134385986401745,"o.maae":1.33174069297012,"o.sma":811509.900257805,"o.trueAnomaly":114.057337680348}')
+    // var data = JSON.parse('{"b.o.gravParameter[1]":3531600000000,"t.universalTime":3976443.82772113,"v.angularVelocity":0,"o.period":2444.1893534157,"v.long":-214.641429986697,"v.lat":33.842717029972,"o.argumentOfPeriapsis":357.579829353199,"o.lan":233.624811493994,"o.inclination":48.7159269982956,"o.eccentricity":0.134385986401745,"o.maae":1.33174069297012,"o.sma":811509.900257805,"o.trueAnomaly":50.2472793085986}')
+    // var data = JSON.parse('{"b.o.gravParameter[1]":3531600000000,"t.universalTime":4034854.82772113,"v.angularVelocity":0,"o.period":2444.1893534157,"v.long":-143.849104451046,"v.lat":0.414308005647656,"o.argumentOfPeriapsis":357.579829353199,"o.lan":233.624811493994,"o.inclination":48.7159269982956,"o.eccentricity":0.134385986401745,"o.maae":1.33174069297012,"o.sma":811509.900257805,"o.trueAnomaly":3.16662876396108}')
     for (var i = this.receiverFunctions.length - 1; i >= 0; i--) {
       try{
         this.receiverFunctions[i](data)
