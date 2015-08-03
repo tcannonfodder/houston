@@ -27,12 +27,7 @@ var OrbitalMath = {
   },
 
   eccentricAnomalyFromTrueAnomalyAndEcentricity: function(trueAnomaly, eccentricity){
-    // var cosineE = (eccentricity + Math.cos(trueAnomaly))/(1 + (eccentricity* Math.cos(trueAnomaly)))
-    // return Math.acos(cosineE)
-    var factor1 = Math.sqrt(1 - Math.pow(eccentricity, 2)) * Math.sin(trueAnomaly)
-    var factor2 = eccentricity + Math.cos(trueAnomaly)
-
-    return Math.atan2(factor2, factor1)
+    return 2 * Math.atan(Math.sqrt((1-eccentricity)/(1+eccentricity)) * Math.tan(trueAnomaly/2))
   },
 
   meanMotionFromGravitationalParametersAndSemimajorAxis: function(gravitationalParameter, semiMajorAxis, orbitalPeriod){
@@ -63,19 +58,16 @@ var OrbitalMath = {
   },
 
   trueAnomalyFromEccentricAnomalyAndEccentricity: function(eccentricAnomaly, eccentricity, meanAnomaly){
-    var factor1 = eccentricity - Math.cos(eccentricAnomaly)
-    var factor2 = (eccentricity * Math.cos(eccentricAnomaly)) - 1
+    var factor1 = Math.sqrt(1.0 - Math.pow(eccentricity, 2)) * Math.sin(eccentricAnomaly)
+    var factor2 = 1 - eccentricity * Math.cos(eccentricAnomaly)
 
-    var cosV = factor1/factor2
-    var V = Math.acos(cosV)
+    // if(longitudeOfAscendingNodeInDegrees > 90 && longitudeOfAscendingNodeInDegrees <= 360){
+    //   var inversion = Math.toRadians(360)
+    // } else{
+      // var inversion = 0
+    // }
 
-    var meanAnomalyUnitCircle = Math.toDegrees(meanAnomaly) % 360
-
-    if(meanAnomalyUnitCircle >= 0 &&  meanAnomalyUnitCircle <= 180){
-      return Math.toRadians(360) - V
-    } else{
-      return V
-    }
+    return Math.asin(factor1/factor2)
   },
 
   findSemiLatusRectum: function(semiMajorAxis, eccentricity){

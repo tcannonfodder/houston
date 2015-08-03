@@ -65,29 +65,52 @@ var GroundTrack = Class.create({
 
     var startTime = 0
 
-    var endOfPlot = Math.toDegrees(E)
+    var endOfPlot = Math.toDegrees(E) + 360
 
     for(var degree = Math.toDegrees(E); degree <= endOfPlot; degree++){
       var eccentricAnomalyInRadians = Math.toRadians(degree)
+      // var eccentricAnomalyInRadians = 2 * Math.atan(Math.sqrt((1-eccentricity)/(1+eccentricity)) * Math.tan(trueAnomalyInRadians/2))
 
-      console.log("E: " + E)
-      console.log("E_0 : " + eccentricAnomalyInRadians )
+      if(eccentricAnomalyInRadians == E){
+        // console.log("E: " + Math.toDegrees(E))
+        console.log("abs(E): " + Math.abs(Math.toDegrees(E)))
+        // console.log("E_0 : " + Math.toDegrees(eccentricAnomalyInRadians))
+      }
 
-      var estimatedTime = Math.sqrt(Math.pow(semiMajorAxis,3)/gravitationalParameter) * (eccentricAnomalyInRadians - eccentricity * Math.sin(eccentricAnomalyInRadians))
+      var estimatedTrueAnomaly = OrbitalMath.trueAnomalyFromEccentricAnomalyAndEccentricity(eccentricAnomalyInRadians, eccentricity, longitudeOfAscendingNodeInDegrees)
+      // var Vx = Math.sqrt(1- eccentricity) * Math.cos(E/2)
+      // var Vy = Math.sqrt(1+ eccentricity) * Math.sin(E/2)
+      // var estimatedTrueAnomaly = 2 * Math.atan2(Vy,Vx)
+
+      if(eccentricAnomalyInRadians == E){
+        // console.log("act true anomaly: " + Math.toDegrees(trueAnomalyInRadians) % 360)
+        // console.log("est true anomaly: " + Math.toDegrees(estimatedTrueAnomaly) % 360)
+      }
+
+      var estimatedTime =  0 //Math.sqrt(Math.pow(semiMajorAxis,3)/gravitationalParameter) * (eccentricAnomalyInRadians - eccentricity * Math.sin(eccentricAnomalyInRadians))
       // console.log("estimated Time: " + estimatedTime)
 
 
-      var estimatedPositionVectorInPQW = estimatePositionVectorInPQW(gravitationalParameter, semiMajorAxis, eccentricity, eccentricAnomalyInRadians)
+      var estimatedPositionVectorInPQW = OrbitalMath.positionVectorInPQWFrame(semiMajorAxis, eccentricity, estimatedTrueAnomaly)
+
+      // var estimatedPositionVectorInPQW = estimatePositionVectorInPQW(gravitationalParameter, semiMajorAxis, eccentricity, eccentricAnomalyInRadians)
       var estimatedPositionVectorInIJK = OrbitalMath.transformPositionPQWVectorToIJKFrame(estimatedPositionVectorInPQW, inclinationInRadians, longitudeOfAscendingNodeInRadians, argumentOfPeriapsisInRadians)
       var latitudeInDegrees = Math.toDegrees(OrbitalMath.findLatitudeOfPositionUnitVector(estimatedPositionVectorInIJK))
       var longitudeInDegrees = Math.toDegrees(OrbitalMath.findLongitudeOfPositonUnitVector(estimatedPositionVectorInIJK, this.rotationalVelocityOfKerbin, startTime, estimatedTime, this.GMSTInRadians))
 
 
-      console.log("Act PQW:" + JSON.stringify(this.actualPositionVectorInPQW))
-      console.log("Est PQW:" + JSON.stringify(estimatedPositionVectorInPQW))
+      if(eccentricAnomalyInRadians == E){
+        // console.log("Act PQW:" + JSON.stringify(this.actualPositionVectorInPQW))
+        // console.log("Est PQW:" + JSON.stringify(estimatedPositionVectorInPQW))
 
-      console.log("Act IJK:" + JSON.stringify(this.actualPositionVectorInIJK))
-      console.log("Est IJK:" + JSON.stringify(estimatedPositionVectorInIJK))
+        // console.log("Act IJK:" + JSON.stringify(this.actualPositionVectorInIJK))
+        // console.log("Est IJK:" + JSON.stringify(estimatedPositionVectorInIJK))
+
+      }
+
+      if(estimatedPositionVectorInPQW.p > 0){
+        longitudeInDegrees = longitudeInDegrees
+      }
 
       // console.log("(" +latitudeInDegrees + "," + longitudeInDegrees + ")")
 
@@ -125,9 +148,9 @@ var GroundTrack = Class.create({
     // this.estimatedLongitude = OrbitalMath.findLongitudeOfPositonUnitVector(this.actualPositionVectorInIJK, this.rotationalVelocityOfKerbin, startTime, endTime, this.GMSTInRadians)
 
 
-    // var meanAnomalyAtTime1 = OrbitalMath.meanAnomalyAtTimeAndMeanMotion(n, startTime, endTime, meanAnomaly)
-    // var eccentricAnomalyAtTime1 = OrbitalMath.estimateEccentricAnomalyFromMeanAnomalyAndEccentricity(meanAnomalyAtTime1, eccentricity)
-    // var trueAnomalyAtTime1 = OrbitalMath.trueAnomalyFromEccentricAnomalyAndEccentricity(eccentricAnomalyAtTime1, eccentricity)
+    //var meanAnomalyAtTime1 = OrbitalMath.meanAnomalyAtTimeAndMeanMotion(n, startTime, endTime, meanAnomaly)
+    //var eccentricAnomalyAtTime1 = OrbitalMath.estimateEccentricAnomalyFromMeanAnomalyAndEccentricity(meanAnomalyAtTime1, eccentricity)
+    //var trueAnomalyAtTime1 = OrbitalMath.trueAnomalyFromEccentricAnomalyAndEccentricity(eccentricAnomalyAtTime1, eccentricity)
 
     this.updateMap()
   },
@@ -153,9 +176,9 @@ var GroundTrack = Class.create({
     //   this.orbitalPredictionCoordinates[i] = this.convertCoordinatesToMap(latitude, longitude)
     // }
 
-    // this.markers.orbitalPath.setLatLngs(this.orbitalPredictionCoordinates)
     var estimatedCoordinates = this.orbitalPredictionCoordinates[0]
     this.setCoordinatesForMapObject(this.markers.estimatedCoordinates, estimatedCoordinates[0], estimatedCoordinates[1])
+    this.markers.orbitalPath.setLatLngs(this.orbitalPredictionCoordinates)
   },
 
   initializeDatalink: function(){
