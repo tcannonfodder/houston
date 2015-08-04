@@ -64,7 +64,7 @@ var GroundTrack = Class.create({
     this.orbitalPredictionCoordinates = []
 
     var startTime = Math.sqrt(Math.pow(semiMajorAxis,3)/gravitationalParameter) * (E - eccentricity * Math.sin(E))
-    var endOfPlot = Math.toDegrees(E) + 180
+    var endOfPlot = Math.toDegrees(E) + 900
 
     var lastLatitude = null
     var lastLongitude = null
@@ -104,18 +104,33 @@ var GroundTrack = Class.create({
       var longitudeInDegrees = Math.toDegrees(OrbitalMath.findLongitudeOfPositonUnitVector(estimatedPositionVectorInIJK, this.rotationalVelocityOfKerbin, startTime, endTime, this.GMSTInRadians))
 
       // try to correct for when the position vector switches over
-      // debugger
       if(lastLatitude && (Math.abs(lastLatitude - latitudeInDegrees) % 360 > 100 )){
-        if(degree >= (endOfPlot - 7)){
-          // debugger
-        }
         // debugger
-        latitudeInDegrees = 180 + latitudeInDegrees
+        latitudeInDegrees = 180 + latitudeInDegrees % 360
+      }
+
+      if(degree >= (endOfPlot - 1)){
+        // debugger
+      }
+      if(lastLongitude){
+        // Handle when the difference is greater than 180
+        var old = longitudeInDegrees
+        var longitudeDistance = lastLongitude - longitudeInDegrees % 360
+        // if(longitudeDistance > 360){
+        //   longitudeInDegrees = 540 + longitudeInDegrees % 360
+        // } else if(longitudeDistance > 180){
+        //   longitudeInDegrees = 360 + longitudeInDegrees % 360
+        if(longitudeDistance > 100){
+          var revolutions =  Math.ceil(longitudeDistance/180)
+          longitudeInDegrees = (revolutions  * 180) + (longitudeInDegrees % 360)
+        }
+
+        console.log("old: " + old + " ; new: " + longitudeInDegrees)
       }
 
       if(lastLongitude && (Math.abs(lastLongitude - longitudeInDegrees) % 360 > 100 )){
         var old = longitudeInDegrees
-        longitudeInDegrees = 180 + longitudeInDegrees
+        // longitudeInDegrees = 180 + longitudeInDegrees % 360
         if(degree >= (endOfPlot - 4)){
           // debugger
         }
