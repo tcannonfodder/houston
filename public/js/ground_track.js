@@ -64,7 +64,7 @@ var GroundTrack = Class.create({
     this.orbitalPredictionCoordinates = []
 
     var startTime = Math.sqrt(Math.pow(semiMajorAxis,3)/gravitationalParameter) * (E - eccentricity * Math.sin(E))
-    var endOfPlot = Math.toDegrees(E) + 900
+    var endOfPlot = Math.toDegrees(E) + 720
 
     var lastLatitude = null
     var lastLongitude = null
@@ -109,9 +109,6 @@ var GroundTrack = Class.create({
         latitudeInDegrees = 180 + latitudeInDegrees % 360
       }
 
-      if(degree >= (endOfPlot - 1)){
-        // debugger
-      }
       if(lastLongitude){
         // Handle when the difference is greater than 180
         var old = longitudeInDegrees
@@ -220,17 +217,48 @@ var GroundTrack = Class.create({
     this.setCoordinatesForMapObject(this.markers.actualCoordinates, this.actualLatitudeInDegrees, this.actualLongitudeInDegrees)
     this.setCoordinatesForMapObject(this.markers.convertedActualCoordinates, Math.toDegrees(this.estimatedLatitude), Math.toDegrees(this.estimatedLongitude))
 
-    for (var i = this.orbitalPredictionCoordinates.length - 1; i >= 0; i--) {
+    for (var i = this.markers.orbitalPaths.length - 1; i >= 0; i--) {
+      this.markers.orbitalPaths[i].setLatLngs([])
+    };
+
+    var orbitalPredictionSets = []
+
+    var previousCoordinates = null
+    for (var i = 0 ; i < this.orbitalPredictionCoordinates.length; i++) {
       var coordinates = this.orbitalPredictionCoordinates[i]
       var latitude = coordinates[0]
       var longitude = coordinates[1]
 
-      this.orbitalPredictionCoordinates[i] = this.convertCoordinatesToMap(latitude, longitude)
+      //If the current coordinate's longitude is greater than 180, then it will be wrapped.
+      //Therefore, make it the start of a new orbital path set
+      if(previousCoordinates && longitude > 180 && !(previousCoordinates[1] > 180)){
+        currentOrbitalPathSet = null
+      }
+
+      previousCoordinates = coordinates
+
+      var convertedCoordinates = this.convertCoordinatesToMap(latitude, longitude)
+
+      if(currentOrbitalPathSet == null){
+        var currentOrbitalPathSet = []
+        orbitalPredictionSets.push(currentOrbitalPathSet)
+      }
+
+      currentOrbitalPathSet.push(convertedCoordinates)
     }
+
+    for (var i = 0; i < orbitalPredictionSets.length; i++) {
+      var coordinateSet = orbitalPredictionSets[i]
+      if(!this.markers.orbitalPaths[i]){
+        this.markers.orbitalPaths[i] = L.polyline([], {color: 'red'})
+        this.markers.orbitalPaths[i].addTo(this.map)
+      }
+
+      this.markers.orbitalPaths[i].setLatLngs(coordinateSet)
+    };
 
     var estimatedCoordinates = this.orbitalPredictionCoordinates[0]
     this.setCoordinatesForMapObject(this.markers.estimatedCoordinates, estimatedCoordinates[0], estimatedCoordinates[1])
-    this.markers.orbitalPath.setLatLngs(this.orbitalPredictionCoordinates)
   },
 
   initializeDatalink: function(){
@@ -280,12 +308,11 @@ var GroundTrack = Class.create({
       actualCoordinates : L.marker([0, 0]),
       estimatedCoordinates : L.marker([0,0], {icon: estimationIcon}),
       convertedActualCoordinates : L.marker([0,0], {icon: conversionIcon}),
-      orbitalPath : L.polyline([], {color: 'red'})
+      orbitalPaths : []
     }
 
     this.markers.actualCoordinates.addTo(this.map)
     this.markers.estimatedCoordinates.addTo(this.map)
     this.markers.convertedActualCoordinates.addTo(this.map)
-    this.markers.orbitalPath.addTo(this.map)
   }
 })
