@@ -121,8 +121,6 @@ var GroundTrack = Class.create({
           var revolutions =  Math.ceil(longitudeDistance/180)
           longitudeInDegrees = (revolutions  * 180) + (longitudeInDegrees % 360)
         }
-
-        console.log("old: " + old + " ; new: " + longitudeInDegrees)
       }
 
       if(lastLongitude && (Math.abs(lastLongitude - longitudeInDegrees) % 360 > 100 )){
