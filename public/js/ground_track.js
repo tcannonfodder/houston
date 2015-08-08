@@ -45,7 +45,7 @@ var GroundTrack = Class.create({
 
     var E = OrbitalMath.eccentricAnomalyFromTrueAnomalyAndEcentricity(trueAnomalyInRadians, eccentricity)
 
-    this.orbitalPredictionCoordinates = []
+    this.orbitalPredictionValues = []
 
     var startTime = Math.sqrt(Math.pow(semiMajorAxis,3)/gravitationalParameter) * (E - eccentricity * Math.sin(E))
     var endOfPlot = Math.toDegrees(E) + 720
@@ -67,6 +67,8 @@ var GroundTrack = Class.create({
       var estimatedPositionVectorInIJK = OrbitalMath.transformPositionPQWVectorToIJKFrame(estimatedPositionVectorInPQW, inclinationInRadians, longitudeOfAscendingNodeInRadians, argumentOfPeriapsisInRadians)
       var latitudeInDegrees = Math.toDegrees(OrbitalMath.findLatitudeOfPositionUnitVector(estimatedPositionVectorInIJK))
       var longitudeInDegrees = Math.toDegrees(OrbitalMath.findLongitudeOfPositonUnitVector(estimatedPositionVectorInIJK, this.rotationalVelocityOfKerbin, startTime, endTime, this.GMSTInRadians))
+      var altitude = Math.sqrt(Math.pow(estimatedPositionVectorInPQW.p,2) + Math.pow(estimatedPositionVectorInPQW.q,2) + Math.pow(estimatedPositionVectorInPQW.w,2))
+
 
       // try to correct for when the position vector switches over
       if(lastLatitude && (Math.abs(lastLatitude - latitudeInDegrees) % 360 > 100 )){
@@ -87,7 +89,11 @@ var GroundTrack = Class.create({
       lastLatitude = latitudeInDegrees
       lastLongitude = longitudeInDegrees
 
-      this.orbitalPredictionCoordinates.push([latitudeInDegrees, longitudeInDegrees])
+      this.orbitalPredictionValues.push({
+        altitude: altitude,
+        latitude: latitudeInDegrees,
+        longitude: longitudeInDegrees
+      })
     }
 
     this.updateMap()
@@ -112,19 +118,19 @@ var GroundTrack = Class.create({
 
     var orbitalPredictionSets = []
 
-    var previousCoordinates = null
-    for (var i = 0 ; i < this.orbitalPredictionCoordinates.length; i++) {
-      var coordinates = this.orbitalPredictionCoordinates[i]
-      var latitude = coordinates[0]
-      var longitude = coordinates[1]
+    var previousOrbitalPredictionValue = null
+    for (var i = 0 ; i < this.orbitalPredictionValues.length; i++) {
+      var orbitalPredictionValue = this.orbitalPredictionValues[i]
+      var latitude = orbitalPredictionValue.latitude
+      var longitude = orbitalPredictionValue.longitude
 
       //If the current coordinate's longitude is greater than 180, then it will be wrapped.
       //Therefore, make it the start of a new orbital path set
-      if(previousCoordinates && longitude > 180 && !(previousCoordinates[1] > 180)){
+      if(previousOrbitalPredictionValue && longitude > 180 && !(previousOrbitalPredictionValue.longitude > 180)){
         currentOrbitalPathSet = null
       }
 
-      previousCoordinates = coordinates
+      previousOrbitalPredictionValue = orbitalPredictionValue
 
       var convertedCoordinates = this.convertCoordinatesToMap(latitude, longitude)
 
@@ -146,15 +152,16 @@ var GroundTrack = Class.create({
       this.markers.orbitalPaths[i].setLatLngs(coordinateSet)
     };
 
-    var estimatedCoordinates = this.orbitalPredictionCoordinates[0]
-    this.setCoordinatesForMapObject(this.markers.estimatedCoordinates, estimatedCoordinates[0], estimatedCoordinates[1])
+    var estimatedCoordinates = this.orbitalPredictionValues[0]
+    this.setCoordinatesForMapObject(this.markers.estimatedCoordinates, estimatedCoordinates.latitude, estimatedCoordinates.longitude)
   },
 
   initializeDatalink: function(){
     this.datalink.subscribeToData([
       'o.trueAnomaly', 'o.sma', 'o.maae', 'o.eccentricity',
       'o.inclination', 'o.lan', 'o.argumentOfPeriapsis', 'v.lat', 'v.long',
-      'o.period', 'v.angularVelocity', 't.universalTime', "b.o.gravParameter[1]"
+      'o.period', 'v.angularVelocity', 't.universalTime', "b.o.gravParameter[1]",
+      'v.altitude'
     ])
 
     this.datalink.addReceiverFunction(this.recalculate.bind(this))
