@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title></title>
+  <script src="/assets/js/math_polyfill.js"></script>
+  <script src="/assets/js/numeric.js"></script>
+  <script src="/assets/js/chartist.min.js"></script>
+  <script src="/assets/js/time_formatters.js"></script>
+  <script src="/assets/js/prototype.js"></script>
+  <script src="/assets/js/leaflet.ksp.js"></script>
+  <script src="/assets/js/L.Graticule.js"></script>
+
+  <script src="/assets/js/telemachus.js"></script>
+  <script src="/assets/js/orbital_math.js"></script>
+  <script src="/assets/js/button_indicator.js"></script>
+  <script src="/assets/js/readout_table.js"></script>
+  <script src="/assets/js/resource_monitor.js"></script>
+  <script src="/assets/js/ground_track.js"></script>
+  <script src="/assets/js/title_bar.js"></script>
+
+  <link rel="stylesheet" type="text/css" href="/assets/stylesheets/chartist.min.css" />
+  <link rel="stylesheet" type="text/css" href="/assets/stylesheets/leafletksp.css" />
+  <link rel="stylesheet" type="text/css" href="/assets/stylesheets/application.css" />
+  <link rel="stylesheet" type="text/css" href="/assets/stylesheets/ground-track.css" />
+</head>
+<body>
+  <header id="title-bar">
+    <div id="mission-time-warp-indicator" class="readout-display">
+      <span id="mission-time">T+12:34:14 MET</span>
+    </div>
+
+    <h1>Ground Track</h1>
+
+    <div id="world-clock" class="readout-display">
+      Year 1, Day 1 00:23:13 UT
+    </div>
+  </header>
+
+  <div id="content">
+    <!DOCTYPE html>
+<html>
+<head>
+  <title>Ascension Module</title>
+  <script src="js/math_polyfill.js"></script>
+  <script src="js/prototype.js"></script>
+  <script src="js/three.min.js"></script>
+  <script src="js/tween.min.js"></script>
+
+  <script src="js/telemachus.js"></script>
+  <script src="js/navball.js"></script>
+  <script src="js/atmospheric_density_gauge.js"></script>
+  <script src="js/throttle_gauge.js"></script>
+
+  <link rel="stylesheet" type="text/css" href="stylesheets/chartist.min.css" />
+  <link rel="stylesheet" type="text/css" href="stylesheets/leafletksp.css" />
+  <link rel="stylesheet" type="text/css" href="stylesheets/application.css" />
+  <link rel="stylesheet" type="text/css" href="stylesheets/ascension.css" />
+</head>
+<body>
+
+  <div class="navigation-wrapper gauge">
+    <div id="navball"></div>
+  </div>
+
+  <div class="atmospheric-density-wrapper gauge">
+    <progress id="atmospheric-density" class="atmospheric_density"></progress>
+    <p>Atmosphere</p>
+  </div>
+
+  <div class="throttle-wrapper gauge">
+    <span class="min">0</span>
+    <span class="max">100</span>
+    <progress id="throttle" class="throttle"></progress>
+    <p>Throttle</p>
+  </div>
+
+  <script>
+    $(document).observe("dom:loaded", function() {
+      window.datalink = new Telemachus("192.168.1.10", "8085")
+      window.datalink.rate = 1000
+
+      window.navball = new Navball(window.datalink, 'navball')
+      window.atmosphericDensityGauge = new AtmosphericDensityGauge(window.datalink, 'atmospheric-density')
+      window.throttleGauge = new ThrottleGauge(window.datalink, 'throttle')
+    })
+  </script>
+</body>
+</html>
+  </div>
+
+
+  <script>
+
+  $(document).observe("dom:loaded", function() {
+    window.datalink = new Telemachus("192.168.1.10", "8085")
+    
+  })
+
+  </script>
+</body>
+</html>

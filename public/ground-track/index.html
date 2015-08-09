@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title></title>
+  <script src="/assets/js/math_polyfill.js"></script>
+  <script src="/assets/js/numeric.js"></script>
+  <script src="/assets/js/chartist.min.js"></script>
+  <script src="/assets/js/time_formatters.js"></script>
+  <script src="/assets/js/prototype.js"></script>
+  <script src="/assets/js/leaflet.ksp.js"></script>
+  <script src="/assets/js/L.Graticule.js"></script>
+
+  <script src="/assets/js/telemachus.js"></script>
+  <script src="/assets/js/orbital_math.js"></script>
+  <script src="/assets/js/button_indicator.js"></script>
+  <script src="/assets/js/readout_table.js"></script>
+  <script src="/assets/js/resource_monitor.js"></script>
+  <script src="/assets/js/ground_track.js"></script>
+  <script src="/assets/js/title_bar.js"></script>
+
+  <link rel="stylesheet" type="text/css" href="/assets/stylesheets/chartist.min.css" />
+  <link rel="stylesheet" type="text/css" href="/assets/stylesheets/leafletksp.css" />
+  <link rel="stylesheet" type="text/css" href="/assets/stylesheets/application.css" />
+  <link rel="stylesheet" type="text/css" href="/assets/stylesheets/ground-track.css" />
+</head>
+<body>
+  <header id="title-bar">
+    <div id="mission-time-warp-indicator" class="readout-display">
+      <span id="mission-time">T+12:34:14 MET</span>
+    </div>
+
+    <h1>Ground Track</h1>
+
+    <div id="world-clock" class="readout-display">
+      Year 1, Day 1 00:23:13 UT
+    </div>
+  </header>
+
+  <div id="content">
+    <div id="top-panel">
+  <div id="resources" class="readout-display">
+    <div class="resource-grid">
+      <div id="liquid-fuel" class="resource-readout">
+        <p>Liquid Fuel</p>
+        <div>
+          <span>Current Stage</span><br>
+          <progress id="liquid-fuel-current" value="30" max="100">30%</progress>
+        </div>
+
+        <div>
+          <span>Total</span><br>
+          <progress id="liquid-fuel-total" value="70" max="100">70%</progress>
+        </div>
+      </div>
+
+      <div id="oxidizer" class="resource-readout">
+        <p>Oxidizer</p>
+        <div>
+          <span>Current Stage</span><br>
+          <progress id="oxidizer-current" value="30" max="100">30%</progress>
+        </div>
+
+        <div>
+          <span>Total</span><br>
+          <progress id="oxidizer-total" value="70" max="100">70%</progress>
+        </div>
+      </div>
+
+      <div id="electric-charge" class="resource-readout">
+        <p>Electric Charge</p>
+        <div>
+          <span>Current Stage</span><br>
+          <progress id="electric-charge-current" value="30" max="100">30%</progress>
+        </div>
+
+        <div>
+          <span>Total</span><br>
+          <progress id="electric-charge-total" value="70" max="100">70%</progress>
+        </div>
+      </div>
+
+      <div id="monopropellant" class="resource-readout">
+        <p>Monopropellant</p>
+        <div>
+          <span>Current Stage</span><br>
+          <progress id="monopropellant-current" value="30" max="100">30%</progress>
+        </div>
+
+        <div>
+          <span>Total</span><br>
+          <progress id="monopropellant-total" value="70" max="100">70%</progress>
+        </div>
+      </div>
+    </div>
+
+    <div id="ablator-readout">
+      <div id="ablator" class="resource-readout">
+        <p>Ablator</p>
+        <progress id="ablator-total" value="70" max="100">70%</progress>
+      </div>
+    </div>
+  </div>
+
+  <div id="button-panel">
+    <button id="rcs" disabled="disabled" class="status">RCS</button>
+    <button id="sas" disabled="disabled" class="status">SAS</button>
+  </div>
+
+  <table id="orbital-data" class="readout-display readout-table"></table>
+</div>
+
+<div id="ground-track-wrapper">
+  <div id="gt-map" class="ground-track readout-display"></div>
+  <div id="altitude-estimate" class="readout-display">
+    <h2>Altitude Estimate</h2>
+    <div id="altitude-estimate-chart" class="ct-chart"></div>
+  </div>
+</div>
+
+
+  </div>
+
+
+  <script>
+
+  $(document).observe("dom:loaded", function() {
+    window.datalink = new Telemachus("192.168.1.10", "8085")
+    
+  window.datalink.rate = 1000
+  window.groundTrack = new GroundTrack(datalink, 'gt-map', 'altitude-estimate-chart')
+  window.titleBar = new TitleBar(datalink, 'title-bar')
+  window.rcsButtonIndicator = new ButtonIndicator(datalink, 'rcs', 'v.rcsValue')
+  window.rcsButtonIndicator = new ButtonIndicator(datalink, 'sas', 'v.sasValue')
+
+  window.liquidFuelMonitor = new ResourceMonitor(datalink, 'LiquidFuel', {
+    currentStageProgressBar: $('liquid-fuel-current'),
+    totalProgressBar: $('liquid-fuel-total')
+  })
+
+  window.oxidizerMonitor = new ResourceMonitor(datalink, 'Oxidizer', {
+    currentStageProgressBar: $('oxidizer-current'),
+    totalProgressBar: $('oxidizer-total')
+  })
+
+  window.electricChargeMonitor = new ResourceMonitor(datalink, 'ElectricCharge', {
+    currentStageProgressBar: $('electric-charge-current'),
+    totalProgressBar: $('electric-charge-total')
+  })
+
+  window.monopropellantMonitor = new ResourceMonitor(datalink, 'Monopropellant', {
+    currentStageProgressBar: $('monopropellant-current'),
+    totalProgressBar: $('monopropellant-total')
+  })
+
+  window.ablatorMonitor = new ResourceMonitor(datalink, 'Ablator', {
+    totalProgressBar: $('ablator-total')
+  })
+
+
+
+  window.readoutTable = new ReadoutTable(datalink, 'orbital-data', [
+    {
+      label: "Altitude",
+      value: 'v.altitude',
+      formatter: function(value){ return value.toFixed(3) + " m" }
+    },
+    {
+      label: "Apoapsis",
+      value: 'o.ApA',
+      formatter: function(value){ return value.toFixed(3) + " m" }
+    },
+    {
+      label: "Periapsis",
+      value: 'o.PeA',
+      formatter: function(value){ return value.toFixed(3) + " m" }
+    },
+    {
+      label: "Time to Apoapsis",
+      value: 'o.timeToAp',
+      formatter: function(value){ return "-" + TimeFormatters.durationString(value) }
+    },
+    {
+      label: "Time to Periapsis",
+      value: 'o.timeToPe',
+      formatter: function(value){ return "-" + TimeFormatters.durationString(value) }
+    },
+    {
+      label: "Inclination",
+      value: 'o.inclination',
+      formatter: function(value){ return value.toFixed(3) + "&deg;" }
+    },
+    {
+      label: "Eccentricity",
+      value: 'o.eccentricity',
+      formatter: function(value){ return value.toFixed(3) }
+    },
+    {
+      label: "Orbital Velocity",
+      value: 'v.orbitalVelocity',
+      formatter: function(value){ return value.toFixed(3) + " m/s" }
+    },
+  ])
+
+  })
+
+  </script>
+</body>
+</html>

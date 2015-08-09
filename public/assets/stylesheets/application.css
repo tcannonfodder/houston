@@ -1,0 +1,216 @@
+body{
+  background: #9B9B9B
+}
+
+header,#content{
+  padding:10px;
+}
+
+h1{
+  /* Ground Track: */
+  border: 0px solid #000000;
+  font-family: AeroMaticsDisplayBold;
+  font-size: 55px;
+  color: #4A4A4A;
+  margin: 0px;
+  margin: auto;
+}
+
+.readout-display{
+  background: #3A1604;
+  box-shadow: inset 0px 1px 3px 0px rgba(0,0,0,0.50);
+  border-radius: 8px;
+  color: #FD7E23;
+  font-family: PTMono-Bold;
+  padding: 5px;
+}
+
+.readout-display h2{
+  text-align: center;
+}
+
+.resource-readout progress{
+  height: 14px;
+  border: 1px solid #FD7E23;
+  border-radius: 3px;
+}
+
+.resource-readout progress[value]::-webkit-progress-bar{
+  background: none;
+}
+
+.resource-readout progress[value]::-webkit-progress-value{
+  background-color: #F5A623;
+  border-right: 1px solid #FD7E23;
+}
+
+.readout-table th{
+  text-align: left;
+}
+
+.readout-table td{
+  text-align: right;
+}
+
+button.status{
+  width: 50px;
+  height: 50px;
+  /* RCS: */
+  font-family: AeroMaticsDisplayBold;
+  font-size: 24px;
+  color: #666666;
+  text-align: center;
+  padding: 0;
+
+  border: 3px solid #4A4A4A;
+  box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.50);
+  border-radius: 3px;
+
+  background-color: #FFFFFF;
+  background-image: linear-gradient(-180deg, #747474 50%, rgba(0,0,0,0.50) 100%);
+}
+
+button.status.on{
+  background-image: radial-gradient(70% 70%, rgba(255,255,255,0.50) 39%, rgba(0,0,0,0.50) 100%);
+}
+
+button#rcs{
+  color: #417505;
+}
+
+button#sas{
+  color: #19314D
+}
+
+button#rcs.on{
+  background-color: #7ED321;
+}
+
+button#sas.on{
+  /* SAS: */
+  color: #4A90E2;
+}
+
+
+#title-bar{
+  display: -webkit-flex;
+  display: flex;
+  -webkit-align-items: center;
+  align-items: center;
+}
+
+#title-bar > h1, #title-bar > div{
+  vertical-align: middle;
+}
+
+#mission-time-warp-indicator, #world-clock{
+  padding: 10px;
+  font-size: 24px;
+}
+
+#mission-time-warp-indicator{
+  /*width: 459px;*/
+}
+
+.readout-display .ct-line, .readout-display .ct-point{
+  stroke: #FD7E23;
+}
+
+.readout-display .ct-grid{
+  stroke: rgba(253, 126, 35, .5);
+}
+
+.readout-display .ct-label{
+  color: #FD7E23;
+  fill: #FD7E23;
+}
+
+.gauge{
+  background: #D4D3D1;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.gauge .min{
+  left: 0;
+  position: relative;
+}
+
+.gauge .max{
+  float: right;
+}
+
+.gauge p{
+  border: 0px solid #000000;
+  font-family: AeroMaticsDisplayBold;
+  color: #4A4A4A;
+  text-align: center;
+  font-size: 30px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+.gauge span{
+  border: 0px solid #000000;
+  font-family: AeroMaticsDisplayBold;
+  color: #4A4A4A;
+  text-align: center;
+  font-size: 20px;
+}
+
+.navigation-wrapper{
+  width: 200px;
+  height: 200px;
+}
+
+.atmospheric-density-wrapper{
+  width:400px;
+}
+
+.atmospheric-density-wrapper progress{
+  width:100%; height: 40px;
+}
+
+.throttle-wrapper{
+  width:400px;
+}
+
+.throttle-wrapper progress{
+  width:100%; height: 40px;
+}
+
+.atmospheric_density, progress.atmospheric_density::-webkit-progress-bar{
+  background-color: black;
+  background-image:
+    /* the major tick marks*/
+    linear-gradient(90deg, white 1%, transparent 2%, transparent 11%, white 11%, white 12%, transparent 12%, transparent 52%, white 52%, white 54%, transparent 54%, transparent 78%, transparent 98.5%, white 98%),
+    /* semi-major tick marks */
+    linear-gradient(90deg, transparent, transparent 29%, white 29%, white 30%, transparent 30%, transparent 77%, white 77%, white 78%, transparent 78%),
+    /* The minor tick marks */
+    repeating-linear-gradient(90deg, transparent, transparent 5%, white 5%, white 6%),
+    linear-gradient(90deg,   #000000 0%, #000000 11%, #153851 11%, #153851 40%, #006EBD 40%, #0D73BD 77%, #4E8EBD 77%, #4E8EBD 100%);
+  background-size: 100% 100%, 100% 75%, 100% 50%, 100% 80%;
+  background-position: top, top, top, center;
+  background-repeat: no-repeat;
+}
+
+progress.atmospheric_density::-webkit-progress-value, progress.throttle::-webkit-progress-value{
+  background: none;
+  border-right: 5px solid red
+}
+
+.throttle,progress.throttle::-webkit-progress-bar{
+  background-color: black;
+  /* Rectangle 93: */
+  background-image:
+    /* the major tick marks*/
+    linear-gradient(90deg, white 1%, transparent 1%, transparent 49%, white 49%, white 50%, transparent 50%, transparent 78%, transparent 99%, white 99%),
+    /* semi-major tick marks */
+    repeating-linear-gradient(90deg, transparent, transparent 24%, white 24%, white 25%),
+    /* minor tick marks */
+    repeating-linear-gradient(90deg, transparent, transparent 4%, white 4%, white 5%);
+
+  background-size: 100% 100%, 100% 75%, 100% 50%;
+  background-position: top, top, top;
+  background-repeat: no-repeat;
+}
