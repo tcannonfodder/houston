@@ -8,6 +8,7 @@ title: Ascension Module
 
 <div class="navigation-wrapper gauge">
   <div id="navball"></div>
+  <div id="navball-heading"></div>
 </div>
 
 <div class="atmospheric-density-wrapper gauge">
@@ -23,7 +24,7 @@ title: Ascension Module
 </div>
 
 <% content_for :dom_loaded do %>
-  window.navball = new Navball(window.datalink, 'navball')
+  window.navball = new Navball(window.datalink, 'navball', 'navball-heading')
   window.atmosphericDensityGauge = new AtmosphericDensityGauge(window.datalink, 'atmospheric-density')
   window.throttleGauge = new ThrottleGauge(window.datalink, 'throttle')
 <% end %>

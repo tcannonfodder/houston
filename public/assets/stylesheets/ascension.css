@@ -24,3 +24,19 @@
   border-radius: 50%;
   border: 3px solid red;
 }
+
+#navball-heading{
+  position: relative;
+  bottom: 11px;
+  left: 50%;
+  -webkit-transform: translate(-50%, 0);
+  -ms-transform: translate(-50%, 0);
+  transform: translate(-50%, 0);
+  background: #d4d3d1 url('/img/noise.png');
+  /*padding: ($quarter-gutter / 2) 0 0 0;*/
+  width: 5em;
+  text-align: center;
+  border-top-left-radius: 2em;
+  border-top-right-radius: 2em;
+  box-shadow: 0 -1px 0 rgba(#fff, 1);
+}

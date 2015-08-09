@@ -6,10 +6,12 @@
 */
 
 var Navball = Class.create({
-  initialize: function(datalink, containerID){
+  initialize: function(datalink, containerID, headingContainerID){
     this.datalink = datalink
     this.containerID = containerID
     this.container = $(this.containerID)
+    this.headingContainerID = headingContainerID
+    this.headingContainer = $(this.headingContainerID)
     this.initializeDatalink()
     this.initializeNavBall()
     this.displayRadius = 50
@@ -44,6 +46,7 @@ var Navball = Class.create({
       this.navballMesh.rotation.y = Math.toRadians(270 - navballTweenProperties.heading)
     }.bind(this))
 
+    this.headingContainer.update(this.heading.toFixed(1) + "&deg;")
 
     navballTween.start()
   },
