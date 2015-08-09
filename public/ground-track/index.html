@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title></title>
+  <title>Ground Track</title>
   <script src="../assets/js/math_polyfill.js"></script>
   <script src="../assets/js/numeric.js"></script>
   <script src="../assets/js/chartist.min.js"></script>
@@ -9,19 +9,28 @@
   <script src="../assets/js/prototype.js"></script>
   <script src="../assets/js/leaflet.ksp.js"></script>
   <script src="../assets/js/L.Graticule.js"></script>
+  <script src="../assets/js/three.min.js"></script>
+  <script src="../assets/js/tween.min.js"></script>
 
   <script src="../assets/js/telemachus.js"></script>
   <script src="../assets/js/orbital_math.js"></script>
+
+  <script src="../assets/js/title_bar.js"></script>
   <script src="../assets/js/button_indicator.js"></script>
   <script src="../assets/js/readout_table.js"></script>
   <script src="../assets/js/resource_monitor.js"></script>
   <script src="../assets/js/ground_track.js"></script>
-  <script src="../assets/js/title_bar.js"></script>
+  <script src="../assets/js/navball.js"></script>
+  <script src="../assets/js/atmospheric_density_gauge.js"></script>
+  <script src="../assets/js/throttle_gauge.js"></script>
 
   <link rel="stylesheet" type="text/css" href="../assets/stylesheets/chartist.min.css" />
   <link rel="stylesheet" type="text/css" href="../assets/stylesheets/leafletksp.css" />
   <link rel="stylesheet" type="text/css" href="../assets/stylesheets/application.css" />
+
+  
   <link rel="stylesheet" type="text/css" href="../assets/stylesheets/ground-track.css" />
+
 </head>
 <body>
   <header id="title-bar">
@@ -37,7 +46,10 @@
   </header>
 
   <div id="content">
-    <div id="top-panel">
+    
+
+
+<div id="top-panel">
   <div id="resources" class="readout-display">
     <div class="resource-grid">
       <div id="liquid-fuel" class="resource-readout">
@@ -125,10 +137,10 @@
 
   $(document).observe("dom:loaded", function() {
     window.datalink = new Telemachus("192.168.1.10", "8085")
+    window.titleBar = new TitleBar(datalink, 'title-bar')
     
   window.datalink.rate = 1000
   window.groundTrack = new GroundTrack(datalink, 'gt-map', 'altitude-estimate-chart')
-  window.titleBar = new TitleBar(datalink, 'title-bar')
   window.rcsButtonIndicator = new ButtonIndicator(datalink, 'rcs', 'v.rcsValue')
   window.rcsButtonIndicator = new ButtonIndicator(datalink, 'sas', 'v.sasValue')
 

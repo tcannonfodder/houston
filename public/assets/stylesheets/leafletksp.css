@@ -257,7 +257,7 @@
     border-radius: 8px
 }
 .leaflet-control-layers-toggle {
-    background-image: url("layers.png");
+    background-image: url("../images/layers.png");
     width: 36px;
     height: 36px
 }

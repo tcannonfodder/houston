@@ -1,3 +1,11 @@
+---
+title: Ground Track
+---
+
+<% content_for :head do %>
+  <link rel="stylesheet" type="text/css" href="../assets/stylesheets/ground-track.css" />
+<% end %>
+
 <div id="top-panel">
   <div id="resources" class="readout-display">
     <div class="resource-grid">
@@ -78,10 +86,9 @@
   </div>
 </div>
 
-<% content_for :scripts do %>
+<% content_for :dom_loaded do %>
   window.datalink.rate = 1000
   window.groundTrack = new GroundTrack(datalink, 'gt-map', 'altitude-estimate-chart')
-  window.titleBar = new TitleBar(datalink, 'title-bar')
   window.rcsButtonIndicator = new ButtonIndicator(datalink, 'rcs', 'v.rcsValue')
   window.rcsButtonIndicator = new ButtonIndicator(datalink, 'sas', 'v.sasValue')
 
