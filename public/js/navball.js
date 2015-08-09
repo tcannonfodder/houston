@@ -72,6 +72,7 @@ var Navball = Class.create({
     this.container.update(this.renderer.domElement)
 
     this.resize()
+    Event.observe(window, "resize", this.resize.bind(this))
 
     //scene, camera, lights!
     var scene = new THREE.Scene()
