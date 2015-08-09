@@ -9,6 +9,8 @@
 
   <script src="js/telemachus.js"></script>
   <script src="js/navball.js"></script>
+  <script src="js/atmospheric_density_gauge.js"></script>
+  <script src="js/throttle_gauge.js"></script>
 
   <link rel="stylesheet" type="text/css" href="stylesheets/chartist.min.css" />
   <link rel="stylesheet" type="text/css" href="stylesheets/leafletksp.css" />
@@ -17,8 +19,20 @@
 </head>
 <body>
 
-  <div class="navigation-wrapper">
+  <div class="navigation-wrapper gauge">
     <div id="navball"></div>
+  </div>
+
+  <div class="atmospheric-density-wrapper gauge">
+    <progress id="atmospheric-density" class="atmospheric_density"></progress>
+    <p>Atmosphere</p>
+  </div>
+
+  <div class="throttle-wrapper gauge">
+    <span class="min">0</span>
+    <span class="max">100</span>
+    <progress id="throttle" class="throttle"></progress>
+    <p>Throttle</p>
   </div>
 
   <script>
@@ -27,6 +41,8 @@
       window.datalink.rate = 1000
 
       window.navball = new Navball(window.datalink, 'navball')
+      window.atmosphericDensityGauge = new AtmosphericDensityGauge(window.datalink, 'atmospheric-density')
+      window.throttleGauge = new ThrottleGauge(window.datalink, 'throttle')
     })
   </script>
 </body>
