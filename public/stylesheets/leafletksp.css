@@ -159,7 +159,7 @@
     outline: 0
 }
 .leaflet-container a {
-    color: #0078a8
+    color: #FD7E23
 }
 .leaflet-container a.leaflet-active {
     outline: 2px solid orange
@@ -173,14 +173,13 @@
     font: 12px/1.5 "Helvetica Neue", Arial, Helvetica, sans-serif
 }
 .leaflet-bar {
-    box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
-    border: 1px solid #888;
+    border: 1px solid #FD7E23;
     -webkit-border-radius: 5px;
     border-radius: 5px
 }
 .leaflet-bar-part {
-    background-color: rgba(255, 255, 255, 0.8);
-    border-bottom: 1px solid #aaa
+    background-color: rgba(245, 166, 35, 1.0);
+    border-bottom: 1px solid #3A1604;
 }
 .leaflet-bar-part-top {
     -webkit-border-radius: 4px 4px 0 0;
@@ -216,7 +215,7 @@
     height: 22px;
     text-align: center;
     text-decoration: none;
-    color: black
+    color: #3A1604;
 }
 .leaflet-control-zoom a,
 .leaflet-control-layers-toggle {
@@ -225,8 +224,8 @@
     display: block
 }
 .leaflet-control-zoom a:hover {
-    background-color: #fff;
-    color: #777
+    background-color: #3A1604;
+    color: #FD7E23;
 }
 .leaflet-control-zoom-in {
     font: bold 18px/24px Arial, Helvetica, sans-serif
@@ -236,8 +235,8 @@
 }
 .leaflet-control-zoom a.leaflet-control-zoom-disabled {
     cursor: default;
-    background-color: rgba(255, 255, 255, 0.8);
-    color: #bbb
+    background-color: rgba(58, 22, 4, 0.8);
+    color: #3A1604;
 }
 .leaflet-touch .leaflet-control-zoom a {
     width: 30px;
@@ -253,7 +252,7 @@
 }
 .leaflet-control-layers {
     box-shadow: 0 1px 7px rgba(0, 0, 0, 0.4);
-    background: #f8f8f9;
+    background: #FD7E23;
     -webkit-border-radius: 8px;
     border-radius: 8px
 }
@@ -276,9 +275,11 @@
 }
 .leaflet-control-layers-expanded {
     padding: 6px 10px 6px 6px;
-    color: #333;
-    background: #fff
+    color: #FD7E23;
+    background: #3A1604;
+    border: 1px solid #FD7E23;
 }
+
 .leaflet-control-layers-selector {
     margin-top: 2px;
     position: relative;
@@ -293,8 +294,9 @@
     margin: 5px -10px 5px -6px
 }
 .leaflet-container .leaflet-control-attribution {
-    background-color: rgba(255, 255, 255, 0.7);
-    box-shadow: 0 0 5px #bbb;
+    color: #FD7E23;
+    background: #3A1604;
+    border: 1px solid #FD7E23;
     margin: 0
 }
 .leaflet-control-attribution,
@@ -313,15 +315,13 @@
     margin-bottom: 5px
 }
 .leaflet-control-scale-line {
-    border: 2px solid #777;
+    border: 2px solid #FD7E23;
     border-top: 0;
-    color: black;
+    color: #FD7E23;
     line-height: 1.1;
     padding: 2px 5px 1px;
     font-size: 11px;
-    text-shadow: 1px 1px 1px #fff;
-    background-color: rgba(255, 255, 255, 0.5);
-    box-shadow: 0 -1px 5px rgba(0, 0, 0, 0.2);
+    background-color: #3A1604;
     white-space: nowrap;
     overflow: hidden
 }
