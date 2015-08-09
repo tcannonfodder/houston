@@ -183,9 +183,9 @@ button#sas.on{
   background-color: black;
   background-image:
     /* the major tick marks*/
-    linear-gradient(90deg, white 1%, transparent 2%, transparent 10%, white 11%, white 12%, transparent 12%, transparent 52%, white 52%, white 54%, transparent 54%, transparent 78%, transparent 98.5%, white 98%),
+    linear-gradient(90deg, white 1%, transparent 2%, transparent 11%, white 11%, white 12%, transparent 12%, transparent 52%, white 52%, white 54%, transparent 54%, transparent 78%, transparent 98.5%, white 98%),
     /* semi-major tick marks */
-    linear-gradient(90deg, transparent, transparent 29%, white 29%, white 30%, transparent 31%, transparent 76%, white 77%, white 78%, transparent 78%),
+    linear-gradient(90deg, transparent, transparent 29%, white 29%, white 30%, transparent 30%, transparent 77%, white 77%, white 78%, transparent 78%),
     /* The minor tick marks */
     repeating-linear-gradient(90deg, transparent, transparent 5%, white 5%, white 6%),
     linear-gradient(90deg,   #000000 0%, #000000 11%, #153851 11%, #153851 40%, #006EBD 40%, #0D73BD 77%, #4E8EBD 77%, #4E8EBD 100%);
