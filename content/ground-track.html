@@ -90,7 +90,7 @@ title: Ground Track
   window.datalink.rate = 1000
   window.groundTrack = new GroundTrack(datalink, 'gt-map', 'altitude-estimate-chart')
   window.rcsButtonIndicator = new ButtonIndicator(datalink, 'rcs', 'v.rcsValue')
-  window.rcsButtonIndicator = new ButtonIndicator(datalink, 'sas', 'v.sasValue')
+  window.sasButtonIndicator = new ButtonIndicator(datalink, 'sas', 'v.sasValue')
 
   window.liquidFuelMonitor = new ResourceMonitor(datalink, 'LiquidFuel', {
     currentStageProgressBar: $('liquid-fuel-current'),
