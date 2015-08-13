@@ -201,7 +201,7 @@
     {
       label: "Inclination",
       value: 'o.inclination',
-      formatter: function(value){ return value.toFixed(3) + "&deg;" }
+      formatter: function(value){ return numeral(value).format('0.000') + "&deg;" }
     },
     {
       label: "Orbital Velocity",
