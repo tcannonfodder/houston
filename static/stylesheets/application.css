@@ -53,6 +53,7 @@ h1{
 }
 
 button.status{
+  vertical-align: top;
   width: 50px;
   height: 50px;
   /* RCS: */
@@ -71,15 +72,39 @@ button.status{
 }
 
 button.status.on{
-  background-image: radial-gradient(70% 70%, rgba(255,255,255,0.50) 39%, rgba(0,0,0,0.50) 100%);
+  background-image: radial-gradient(70% 70%, rgba(255,255,255,0.50) 39%, rgba(0,0,0,0.50) 100%) !important;
 }
 
 button#rcs{
   color: #417505;
+  background-image: linear-gradient(-180deg, rgba(56,56,56,.5) 50%, rgba(0,0,0,.5) 100%);
+  background-color: rgba(126,211,33,1);
 }
 
 button#sas{
   color: #19314D
+}
+
+button#light{
+  color: rgba(0,0,0,.3);
+  font-size: 18px;
+}
+
+button#gear{
+  font-size: 18px;
+  background-image: linear-gradient(-180deg, rgba(56,56,56,.5) 50%, rgba(0,0,0,.5) 100%);
+  background-color: rgba(76,145,192,1);
+  color: #2F5975
+}
+
+button#brake{
+  color: #75010F;
+  background-image: linear-gradient(-180deg, rgba(56,56,56,.5) 50%, rgba(0,0,0,.5) 100%);
+  background-color: #D0021B;
+}
+
+button#gear.on{
+  background-color: #4C91C0;
 }
 
 button#rcs.on{
@@ -89,6 +114,14 @@ button#rcs.on{
 button#sas.on{
   /* SAS: */
   color: #4A90E2;
+}
+
+button#light.on{
+  color: black;
+}
+
+button#brake.on{
+  background-color: #D0021B;
 }
 
 
