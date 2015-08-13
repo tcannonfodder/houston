@@ -1,9 +1,14 @@
 var GroundTrack = Class.create({
-  initialize: function(datalink, map_id, altitudeEstimationId){
+  initialize: function(datalink, map_id, altitudeEstimationId, options){
     this.datalink = datalink
     this.map_id = map_id
     this.altitudeEstimationId = altitudeEstimationId
-    this.initializeAltitudeEstimate()
+    if(this.altitudeEstimationId){
+      this.initializeAltitudeEstimate()
+    }
+    this.options = Object.extend({
+      centerOnVehicle: false
+    }, options)
     this.initializeMap()
     this.initializeDatalink()
   },
@@ -100,11 +105,13 @@ var GroundTrack = Class.create({
     }
 
     this.updateMap()
-    this.updateAltitudeEstimateChart()
+    if(this.altitudeEstimateChart){
+      this.updateAltitudeEstimateChart()
+    }
   },
 
   convertCoordinatesToMap: function(latitude, longitude){
-    return [latitude, longitude > 180 ? longitude - 360 : longitude]
+    return [latitude, longitude > 180 ? longitude - 180 : longitude]
   },
 
   setCoordinatesForMapObject: function(object, latitude, longitude){
@@ -115,6 +122,10 @@ var GroundTrack = Class.create({
   updateMap: function(){
     this.setCoordinatesForMapObject(this.markers.actualCoordinates, this.actualLatitudeInDegrees, this.actualLongitudeInDegrees)
     this.setCoordinatesForMapObject(this.markers.convertedActualCoordinates, Math.toDegrees(this.estimatedLatitude), Math.toDegrees(this.estimatedLongitude))
+
+    if(this.options.centerOnVehicle){
+      this.map.setView(this.convertCoordinatesToMap(this.actualLatitudeInDegrees, this.actualLongitudeInDegrees))
+    }
 
     for (var i = this.markers.orbitalPaths.length - 1; i >= 0; i--) {
       this.markers.orbitalPaths[i].setLatLngs([])
@@ -192,7 +203,7 @@ var GroundTrack = Class.create({
       'o.trueAnomaly', 'o.sma', 'o.maae', 'o.eccentricity',
       'o.inclination', 'o.lan', 'o.argumentOfPeriapsis', 'v.lat', 'v.long',
       'o.period', 'v.angularVelocity', 't.universalTime', "b.o.gravParameter[1]",
-      'v.altitude'
+      'v.altitude', 'o.PeA'
     ])
 
     this.datalink.addReceiverFunction(this.recalculate.bind(this))

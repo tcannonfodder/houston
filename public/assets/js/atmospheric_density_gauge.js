@@ -7,7 +7,7 @@ var AtmosphericDensityGauge = Class.create({
   },
 
   update: function(data){
-    var maxDensity = 1.2040531;
+    var maxDensity = 1.0;
 
     var currentPercentage = (data['v.atmosphericDensity']/maxDensity) * 100
 
