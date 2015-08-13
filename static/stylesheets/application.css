@@ -247,3 +247,46 @@ progress.atmospheric_density::-webkit-progress-value, progress.throttle::-webkit
   background-position: top, top, top;
   background-repeat: no-repeat;
 }
+
+#navball{
+  height: 200px;
+  width: 200px;
+  background: #555;
+  box-shadow: inset 0 .1em .8em #000, inset 0 1px 0 #000, 0 1px 0 #fff
+  min-width: 10em;
+  min-height: 10em;
+  border-radius: 50%;
+  position: relative;
+  margin: 0 auto;
+}
+
+#navball::after{
+  content: '';
+  display: block;
+  position: absolute;
+  width: 1em;
+  height: 1em;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border: 3px solid red;
+}
+
+#navball-heading{
+  position: relative;
+  bottom: 11px;
+  left: 50%;
+  -webkit-transform: translate(-50%, 0);
+  -ms-transform: translate(-50%, 0);
+  transform: translate(-50%, 0);
+  background: #d4d3d1 url('/img/noise.png');
+  /*padding: ($quarter-gutter / 2) 0 0 0;*/
+  width: 5em;
+  text-align: center;
+  border-top-left-radius: 2em;
+  border-top-right-radius: 2em;
+  box-shadow: 0 -1px 0 rgba(#fff, 1);
+}
