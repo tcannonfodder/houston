@@ -55,55 +55,64 @@
 <div id="top-panel">
   <div id="throttle-and-map">
     <div class="throttle-wrapper gauge">
-      <p>
-        <span class="min">0</span>
-        Throttle
-        <span class="max">100</span>
-      </p>
-      <progress id="throttle" class="throttle"></progress>
-    </div>
+  <p>
+    <span class="min">0</span>
+    Throttle
+    <span class="max">100</span>
+  </p>
+  <progress id="throttle" class="throttle"></progress>
+</div>
 
     <div id="position-map" class="map readout-display"></div>
   </div>
 
   <div id="resources" class="readout-display">
     <div id="liquid-fuel" class="resource-readout">
-      <p>Liquid Fuel</p>
-      <div>
-        <span>Current Stage</span><br>
-        <progress id="liquid-fuel-current" value="30" max="100">30%</progress>
-      </div>
+  <p>Liquid Fuel</p>
 
-      <div>
-        <span>Total</span><br>
-        <progress id="liquid-fuel-total" value="70" max="100">70%</progress>
-      </div>
+  
+    <div>
+      <span>Current Stage</span><br>
+      <progress id="liquid-fuel-current" value="0" max="0">0%</progress>
     </div>
+  
+
+  <div>
+    
+      <span>Total</span><br>
+    
+    <progress id="liquid-fuel-total" value="0" max="0">0%</progress>
+  </div>
+</div>
 
     <div id="oxidizer" class="resource-readout">
-      <p>Oxidizer</p>
-      <div>
-        <span>Current Stage</span><br>
-        <progress id="oxidizer-current" value="30" max="100">30%</progress>
-      </div>
+  <p>Oxidizer</p>
 
-      <div>
-        <span>Total</span><br>
-        <progress id="oxidizer-total" value="70" max="100">70%</progress>
-      </div>
+  
+    <div>
+      <span>Current Stage</span><br>
+      <progress id="oxidizer-current" value="0" max="0">0%</progress>
     </div>
+  
+
+  <div>
+    
+      <span>Total</span><br>
+    
+    <progress id="oxidizer-total" value="0" max="0">0%</progress>
+  </div>
+</div>
   </div>
 
   <div id="navigation-and-atmospheric-density" class="gauge">
     <div class="navigation-wrapper">
-      <div id="navball"></div>
-      <div id="navball-heading"></div>
-    </div>
-
+  <div id="navball"></div>
+  <div id="navball-heading"></div>
+</div>
     <div class="atmospheric-density-wrapper">
-      <progress id="atmospheric-density" class="atmospheric_density"></progress>
-      <p>Atmosphere</p>
-    </div>
+  <progress id="atmospheric-density" class="atmospheric_density"></progress>
+  <p>Atmosphere</p>
+</div>
   </div>
 
   <div id="ascension-data-and-button-panel">
@@ -121,13 +130,13 @@
 
 <div class="readout-display">
   <div class="legend">
-    <p>
-      <span id="altitude" class="item"></span>Altitude
+  <p>
+    <span id="altitude" class="item"></span>Altitude
 
-      <span id="height-from-terrain" class="item"></span>Terrain Height
-    </p>
-  </div>
-  <div id='altitude-tracker'></div>
+    <span id="height-from-terrain" class="item"></span>Terrain Height
+  </p>
+</div>
+<div id='altitude-tracker'></div>
 </div>
 
 
