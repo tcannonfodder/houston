@@ -1,0 +1,170 @@
+---
+title: Landing Module
+---
+
+<% content_for :head do %>
+  <link rel="stylesheet" type="text/css" href="../assets/stylesheets/landing.css" />
+<% end %>
+
+<div id="top-panel">
+  <div id="position-map" class="map readout-display"></div>
+
+  <div id="navigation-and-atmospheric-density" class="gauge">
+    <div class="navigation-wrapper">
+      <div id="navball"></div>
+      <div id="navball-heading"></div>
+    </div>
+
+    <div class="atmospheric-density-wrapper">
+      <progress id="atmospheric-density" class="atmospheric_density"></progress>
+      <p>Atmosphere</p>
+    </div>
+  </div>
+
+  <div id="throttle-and-button-readout">
+
+    <div id="ablator-readout" class="readout-display">
+      <div id="ablator" class="resource-readout">
+        <p>Ablator</p>
+        <progress id="ablator-total" value="70" max="100">70%</progress>
+      </div>
+    </div>
+
+    <div id="button-panel">
+      <button id="rcs" disabled="disabled" class="status">RCS</button>
+      <button id="sas" disabled="disabled" class="status">SAS</button>
+      <button id="light" disabled="disabled" class="status">LGHT</button>
+      <button id="gear" disabled="disabled" class="status">GEAR</button>
+      <button id="brake" disabled="disabled" class="status">BRK</button>
+    </div>
+
+    <div class="throttle-wrapper gauge">
+      <p>
+        <span class="min">0</span>
+        Throttle
+        <span class="max">100</span>
+      </p>
+      <progress id="throttle" class="throttle"></progress>
+    </div>
+  </div>
+
+  <div id="landing-data" class="readout-display">
+    <table id="ascension-data" class="readout-table"></table>
+
+    <div id="resources">
+      <div id="liquid-fuel" class="resource-readout">
+        <p>Liquid Fuel</p>
+        <div>
+          <span>Current Stage</span><br>
+          <progress id="liquid-fuel-current" value="30" max="100">30%</progress>
+        </div>
+
+        <div>
+          <span>Total</span><br>
+          <progress id="liquid-fuel-total" value="70" max="100">70%</progress>
+        </div>
+      </div>
+
+      <div id="oxidizer" class="resource-readout">
+        <p>Oxidizer</p>
+        <div>
+          <span>Current Stage</span><br>
+          <progress id="oxidizer-current" value="30" max="100">30%</progress>
+        </div>
+
+        <div>
+          <span>Total</span><br>
+          <progress id="oxidizer-total" value="70" max="100">70%</progress>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="readout-display">
+  <div class="legend">
+    <p>
+      <span id="altitude" class="item"></span>Altitude
+
+      <span id="height-from-terrain" class="item"></span>Terrain Height
+    </p>
+  </div>
+  <div id='altitude-tracker'></div>
+</div>
+
+<% content_for :dom_loaded do %>
+  window.navball = new Navball(window.datalink, 'navball', 'navball-heading')
+  window.rcsButtonIndicator = new ButtonIndicator(datalink, 'rcs', 'v.rcsValue')
+  window.sasButtonIndicator = new ButtonIndicator(datalink, 'sas', 'v.sasValue')
+  window.lightButtonIndicator = new ButtonIndicator(datalink, 'light', 'v.lightValue')
+  window.gearButtonIndicator = new ButtonIndicator(datalink, 'gear', 'v.gearValue')
+  window.brakeButtonIndicator = new ButtonIndicator(datalink, 'brake', 'v.brakeValue')
+
+  window.atmosphericDensityGauge = new AtmosphericDensityGauge(window.datalink, 'atmospheric-density')
+  window.throttleGauge = new ThrottleGauge(window.datalink, 'throttle')
+
+  window.altitudeTracker = new AltitudeTracker(datalink, 'altitude-tracker', {maxDataPoints : 50})
+
+  window.positionMap = new PositionMap(datalink, 'position-map')
+
+  window.liquidFuelMonitor = new ResourceMonitor(datalink, 'LiquidFuel', {
+    currentStageProgressBar: $('liquid-fuel-current'),
+    totalProgressBar: $('liquid-fuel-total')
+  })
+
+  window.oxidizerMonitor = new ResourceMonitor(datalink, 'Oxidizer', {
+    currentStageProgressBar: $('oxidizer-current'),
+    totalProgressBar: $('oxidizer-total')
+  })
+
+  window.readoutTable = new ReadoutTable(datalink, 'ascension-data', [
+    {
+      label: "Altitude",
+      value: 'v.altitude',
+      formatter: function(value){ return numeral(value).format('0,0.000 a') + "m" }
+    },
+    {
+      label: "Apoapsis",
+      value: 'o.ApA',
+      formatter: function(value){ return numeral(value).format('0,0.000 a') + "m" }
+    },
+    {
+      label: "Periapsis",
+      value: 'o.PeA',
+      formatter: function(value){ return numeral(value).format('0,0.000 a') + "m" }
+    },
+    {
+      label: "Time to Apoapsis",
+      value: 'o.timeToAp',
+      formatter: function(value){ return "-" + TimeFormatters.durationString(value) }
+    },
+    {
+      label: "Time to Periapsis",
+      value: 'o.timeToPe',
+      formatter: function(value){ return "-" + TimeFormatters.durationString(value) }
+    },
+    {
+      label: "Height from Terrain",
+      value: 'v.heightFromTerrain',
+      formatter: function(value){
+        if(value <= -1 ){ return "NA" }
+        return numeral(value).format('0,0.000 a') + "m"
+      }
+    },
+    {
+      label: "Inclination",
+      value: 'o.inclination',
+      formatter: function(value){ return numeral(value).format('0.000') + "&deg;" }
+    },
+    {
+      label: "Orbital Velocity",
+      value: 'v.orbitalVelocity',
+      formatter: function(value){ return numeral(value).format('0,0.000 a') + "m/s" }
+    },
+    {
+      label: "Surface Velocity",
+      value: 'v.surfaceVelocity',
+      formatter: function(value){ return numeral(value).format('0,0.000 a') + "m/s" }
+    },
+  ])
+<% end %>

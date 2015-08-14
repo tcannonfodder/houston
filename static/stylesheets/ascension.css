@@ -23,10 +23,6 @@
   height: 20px;
 }
 
-.throttle-wrapper .min{
-  float: left;
-}
-
 .map{
   height: 200px;
   width: 350px;
@@ -59,42 +55,3 @@
   text-align: right;
 }
 
-#altitude-tracker{
-  width: 100%;
-  height: 300px;
-}
-
-.legend p{
-  font-size: 15px;
-  margin: 0px;
-}
-
-.legend .item{
-  vertical-align: middle;
-}
-
-.legend .item{
-  height: 20px;
-  width: 40px;
-  display: inline-block;
-  margin-right: 5px;
-}
-
-.legend #altitude{
-  height: 5px;
-  border-top: 2px #F5A623 dashed;
-}
-
-.legend #height-from-terrain{
-  border: 3px #F5A623 solid;
-  background-color: rgba(245, 166, 34, .45);
-}
-
-.ct-series-a .ct-line{
-  stroke-dasharray: 10;
-}
-
-.ct-series-b .ct-area{
-  fill: rgba(245,166,34,1);
-  fill-opacity: .45;
-}

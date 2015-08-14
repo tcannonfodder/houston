@@ -1,0 +1,59 @@
+#top-panel{
+  display: -webkit-flex;
+  display: flex;
+  margin-bottom: 10px;
+  -webkit-justify-content: space-around;
+  justify-content: space-around;
+}
+
+
+#position-map{
+  margin-right: auto;
+  width: 350px;
+}
+
+#navigation-and-atmospheric-density .atmospheric-density-wrapper{
+  width: 200px;
+}
+
+#navigation-and-atmospheric-density .atmospheric-density-wrapper progress{
+  height: 20px;
+}
+
+#navigation-and-atmospheric-density .navigation-wrapper{
+  margin-bottom: 20px;
+}
+
+#landing-data{
+  margin-left: auto;
+}
+
+#throttle-and-button-readout{
+  margin-left: 10px;
+  width: 300px;
+}
+
+.throttle-wrapper{
+  width: 250px;
+}
+
+.throttle-wrapper p, .atmospheric-density-wrapper p{
+  font-size: 20px;
+}
+
+.throttle-wrapper .throttle{
+  height: 20px;
+}
+
+#button-panel{
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+#ablator-readout{
+  width: 200px;
+}
+
+#ablator-readout progress{
+  width: 100%;
+}
