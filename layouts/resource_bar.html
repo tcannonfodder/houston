@@ -1,0 +1,17 @@
+<div id="<%= @resource_name %>" class="resource-readout">
+  <p><%= @resource_label %></p>
+
+  <% if @current_stage %>
+    <div>
+      <span>Current Stage</span><br>
+      <progress id="<%= @resource_name %>-current" value="0" max="0">0%</progress>
+    </div>
+  <% end %>
+
+  <div>
+    <% if @current_stage %>
+      <span>Total</span><br>
+    <% end %>
+    <progress id="<%= @resource_name %>-total" value="0" max="0">0%</progress>
+  </div>
+</div>

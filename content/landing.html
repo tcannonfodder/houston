@@ -10,86 +10,40 @@ title: Landing Module
   <div id="position-map" class="map readout-display"></div>
 
   <div id="navigation-and-atmospheric-density" class="gauge">
-    <div class="navigation-wrapper">
-      <div id="navball"></div>
-      <div id="navball-heading"></div>
-    </div>
-
-    <div class="atmospheric-density-wrapper">
-      <progress id="atmospheric-density" class="atmospheric_density"></progress>
-      <p>Atmosphere</p>
-    </div>
+    <%= render 'navball' %>
+    <%= render 'atmospheric_density' %>
   </div>
 
   <div id="throttle-and-button-readout">
 
     <div id="ablator-readout" class="readout-display">
-      <div id="ablator" class="resource-readout">
-        <p>Ablator</p>
-        <progress id="ablator-total" value="70" max="100">70%</progress>
-      </div>
+      <%= render 'resource_bar', :resource_name => "ablator", :resource_label => "Ablator" %>
     </div>
 
     <div id="button-panel">
-      <button id="rcs" disabled="disabled" class="status">RCS</button>
-      <button id="sas" disabled="disabled" class="status">SAS</button>
-      <button id="light" disabled="disabled" class="status">LGHT</button>
-      <button id="gear" disabled="disabled" class="status">GEAR</button>
-      <button id="brake" disabled="disabled" class="status">BRK</button>
+      <%= render 'button', :button_id => "rcs", :button_label => "RCS" %>
+      <%= render 'button', :button_id => "sas", :button_label => "SAS" %>
+      <%= render 'button', :button_id => "light", :button_label => "LGHT" %>
+      <%= render 'button', :button_id => "gear", :button_label => "GEAR" %>
+      <%= render 'button', :button_id => "brake", :button_label => "BRK" %>
     </div>
 
-    <div class="throttle-wrapper gauge">
-      <p>
-        <span class="min">0</span>
-        Throttle
-        <span class="max">100</span>
-      </p>
-      <progress id="throttle" class="throttle"></progress>
-    </div>
+    <%= render 'throttle' %>
   </div>
 
   <div id="landing-data" class="readout-display">
     <table id="ascension-data" class="readout-table"></table>
 
     <div id="resources">
-      <div id="liquid-fuel" class="resource-readout">
-        <p>Liquid Fuel</p>
-        <div>
-          <span>Current Stage</span><br>
-          <progress id="liquid-fuel-current" value="30" max="100">30%</progress>
-        </div>
+      <%= render 'resource_bar', :resource_name => "liquid-fuel", :resource_label => "Liquid Fuel", :current_stage => true %>
 
-        <div>
-          <span>Total</span><br>
-          <progress id="liquid-fuel-total" value="70" max="100">70%</progress>
-        </div>
-      </div>
-
-      <div id="oxidizer" class="resource-readout">
-        <p>Oxidizer</p>
-        <div>
-          <span>Current Stage</span><br>
-          <progress id="oxidizer-current" value="30" max="100">30%</progress>
-        </div>
-
-        <div>
-          <span>Total</span><br>
-          <progress id="oxidizer-total" value="70" max="100">70%</progress>
-        </div>
-      </div>
+      <%= render 'resource_bar', :resource_name => "oxidizer", :resource_label => "Oxidizer", :current_stage => true %>
     </div>
   </div>
 </div>
 
 <div class="readout-display">
-  <div class="legend">
-    <p>
-      <span id="altitude" class="item"></span>Altitude
-
-      <span id="height-from-terrain" class="item"></span>Terrain Height
-    </p>
-  </div>
-  <div id='altitude-tracker'></div>
+  <%= render 'altitude_tracker_chart' %>
 </div>
 
 <% content_for :dom_loaded do %>

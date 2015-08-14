@@ -9,70 +9,23 @@ title: Ground Track
 <div id="top-panel">
   <div id="resources" class="readout-display">
     <div class="resource-grid">
-      <div id="liquid-fuel" class="resource-readout">
-        <p>Liquid Fuel</p>
-        <div>
-          <span>Current Stage</span><br>
-          <progress id="liquid-fuel-current" value="30" max="100">30%</progress>
-        </div>
+      <%= render 'resource_bar', :resource_name => "liquid-fuel", :resource_label => "Liquid Fuel", :current_stage => true %>
 
-        <div>
-          <span>Total</span><br>
-          <progress id="liquid-fuel-total" value="70" max="100">70%</progress>
-        </div>
-      </div>
+      <%= render 'resource_bar', :resource_name => "oxidizer", :resource_label => "Oxidizer", :current_stage => true %>
 
-      <div id="oxidizer" class="resource-readout">
-        <p>Oxidizer</p>
-        <div>
-          <span>Current Stage</span><br>
-          <progress id="oxidizer-current" value="30" max="100">30%</progress>
-        </div>
+      <%= render 'resource_bar', :resource_name => "electric-charge", :resource_label => "Electric Charge", :current_stage => true %>
 
-        <div>
-          <span>Total</span><br>
-          <progress id="oxidizer-total" value="70" max="100">70%</progress>
-        </div>
-      </div>
-
-      <div id="electric-charge" class="resource-readout">
-        <p>Electric Charge</p>
-        <div>
-          <span>Current Stage</span><br>
-          <progress id="electric-charge-current" value="30" max="100">30%</progress>
-        </div>
-
-        <div>
-          <span>Total</span><br>
-          <progress id="electric-charge-total" value="70" max="100">70%</progress>
-        </div>
-      </div>
-
-      <div id="monopropellant" class="resource-readout">
-        <p>Monopropellant</p>
-        <div>
-          <span>Current Stage</span><br>
-          <progress id="monopropellant-current" value="30" max="100">30%</progress>
-        </div>
-
-        <div>
-          <span>Total</span><br>
-          <progress id="monopropellant-total" value="70" max="100">70%</progress>
-        </div>
-      </div>
+      <%= render 'resource_bar', :resource_name => "monopropellant", :resource_label => "Monopropellant", :current_stage => true %>
     </div>
 
     <div id="ablator-readout">
-      <div id="ablator" class="resource-readout">
-        <p>Ablator</p>
-        <progress id="ablator-total" value="70" max="100">70%</progress>
-      </div>
+      <%= render 'resource_bar', :resource_name => "ablator", :resource_label => "Ablator" %>
     </div>
   </div>
 
   <div id="button-panel">
-    <button id="rcs" disabled="disabled" class="status">RCS</button>
-    <button id="sas" disabled="disabled" class="status">SAS</button>
+    <%= render 'button', :button_id => "rcs", :button_label => "RCS" %>
+    <%= render 'button', :button_id => "sas", :button_label => "SAS" %>
   </div>
 
   <table id="orbital-data" class="readout-display readout-table"></table>
