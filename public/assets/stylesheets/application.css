@@ -77,9 +77,78 @@ nav.open #nav_toggle{
   bottom:-15px;
 }
 
+#settings_overlay{
+  display: none;
+}
+
+#settings_overlay.open{
+  display: block;
+}
+
+#settings_overlay{
+  z-index: 100;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0, .8);
+}
+
+#settings{
+  position: relative;
+  top: 25%;
+  left: 25%;
+  width: 50%;
+  min-height: 200px;
+  background: white;
+  display: inline-block;
+  text-align: center;
+
+  background: #9B9B9B;
+  background-image: url('../images/background-noise.png');
+  border-radius: 8px;
+
+  color: rgba(51,51,51, 1);
+  text-shadow: 0px 1px 1px rgba(255,255,255,.3);
+  border: 3px solid #4A4A4A;
+}
+
+#settings fieldset{
+  border: none;
+  position: relative;
+  top: 25%;
+  left: 25%;
+  width: 50%;
+  max-width: 400px;
+}
+
+#settings label{
+  width: 50px;
+  display: inline-block;
+  vertical-align: middle;
+  text-align: right;
+}
+
+#settings button{
+  min-width: 100px;
+  background-color: rgba(51,51,51, 1);
+  background-image: url('../images/title-noise.png');
+  border: 1px solid ;
+  border-radius: 8px;
+  border: 2px solid #9B9B9B;
+
+
+  text-shadow: 0px 2px 3px rgba(0,0,0,.8);
+  color: #d4d4d4;
+}
+
+h1, h2, h3, h4, h5, h6{
+  font-family: AeroMaticsDisplayBold;
+}
+
 h1{
   /* Ground Track: */
-  font-family: AeroMaticsDisplayBold;
   font-size: 55px;
   background-color: rgba(51,51,51, 1);
   background-image: url('../images/title-noise.png');

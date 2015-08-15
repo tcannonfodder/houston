@@ -14,6 +14,8 @@
   <script src="../assets/js/three.min.js"></script>
   <script src="../assets/js/tween.min.js"></script>
 
+
+  <script src="../assets/js/settings.js"></script>
   <script src="../assets/js/telemachus.js"></script>
   <script src="../assets/js/orbital_math.js"></script>
   <script src="../assets/js/orbital_prediction.js"></script>
@@ -40,42 +42,42 @@
 <body>
   <nav>
     <ul>
-      <li class="current">
+      <li id="" class="current">
   <a href="../ground-track/index.html">
     <img src="../assets/images/ground-track-preview.png"/>
     Ground Track
   </a>
 </li>
 
-      <li class="">
+      <li id="" class="">
   <a href="../ascension/index.html">
     <img src="../assets/images/ground-track-preview.png"/>
     Ascension
   </a>
 </li>
 
-      <li class="">
+      <li id="" class="">
   <a href="../landing/index.html">
     <img src="../assets/images/ground-track-preview.png"/>
     Landing
   </a>
 </li>
 
-      <li class="">
+      <li id="" class="">
   <a href="/telemachus/console.html">
     <img src="../assets/images/ground-track-preview.png"/>
     Telemachus Console
   </a>
 </li>
 
-      <li class="">
+      <li id="" class="">
   <a href="/telemachus/MKON/index.html">
     <img src="../assets/images/ground-track-preview.png"/>
     MKON
   </a>
 </li>
 
-      <li class="">
+      <li id="settings-link" class="">
   <a href="#settings">
     <img src="../assets/images/ground-track-preview.png"/>
     Settings
@@ -84,6 +86,22 @@
     </ul>
     <div id="nav_toggle"><a href="#">&darr; Open</a></div>
   </nav>
+
+  <section id="settings_overlay" >
+    <form id="settings">
+      <h2>Settings</h2>
+      <fieldset>
+        <label for="host">Host</label>
+        <input name="host" id="host" type="text" placeholder="localhost"/><br>
+
+        <label for="port">Port</label>
+        <input name="port" id="port" type="text" placeholder="8085"/>
+      </fieldset>
+
+      <button type="submit">Save &amp; Close</button>
+    </form>
+  </section>
+
   <header id="title-bar">
     <div id="mission-time-warp-indicator" class="readout-display">
       <span id="mission-time">T+12:34:14 MET</span>
@@ -213,7 +231,30 @@
   <script>
 
   $(document).observe("dom:loaded", function() {
-    window.datalink = new Telemachus("192.168.1.10", "8085")
+    window.settings = new Settings("localhost", "8085")
+    $('settings')['host'].value = settings.getHost()
+    $('settings')['port'].value = settings.getPort()
+
+    $('settings-link').observe('click', function(e){
+      e.preventDefault()
+      $('settings_overlay').addClassName('open')
+    })
+
+    $('settings').observe('submit', function(e){
+      e.preventDefault();
+      var form = e.target
+      window.settings.setHost(form['host'].value)
+      window.settings.setPort(form['port'].value)
+
+      window.datalink.updateConnection(
+        window.settings.getHost(),
+        window.settings.getPort()
+      )
+
+      $('settings_overlay').removeClassName('open')
+    })
+
+    window.datalink = new Telemachus(settings.getHost(), settings.getPort())
     window.titleBar = new TitleBar(datalink, 'title-bar')
 
     $('nav_toggle').observe("click", function(e){
