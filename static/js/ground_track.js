@@ -47,7 +47,7 @@ var GroundTrack = Class.create({
       var coordinateSet = orbitalPredictionSets[i]
       if(!this.markers.orbitalPaths[i]){
         this.markers.orbitalPaths[i] = L.polyline([], {color: '#F5A623'})
-        this.markers.orbitalPaths[i].addTo(this.map)
+        this.markers.orbitalPaths[i].addTo(this.positionMap.map)
       }
 
       this.markers.orbitalPaths[i].setLatLngs(coordinateSet)
@@ -115,34 +115,8 @@ var GroundTrack = Class.create({
   },
 
   initializeMap: function(){
-    this.map = new L.KSP.Map(this.map_id, {
-      layers: [L.KSP.CelestialBody.KERBIN],
-      zoom: 'fit',
-      bodyControl: false,
-      layerControl: true,
-      scaleControl: true
-    })
-
-    this.map.fitWorld()
-
-    L.graticule().addTo(this.map)
-
-    var estimationIcon = L.icon({
-      iconUrl: 'markers-anomaly.png',
-      shadowUrl: 'marker-shadow.png',
-      iconSize:     [25, 41], // size of the icon
-      shadowSize:   [41, 41], // size of the shadow
-      iconAnchor:   [12, 41], // point of the icon which will correspond to marker's location
-      popupAnchor:  [-1, -34] // point from which the popup should open relative to the iconAnchor
-    })
-
-    var conversionIcon = L.icon({
-      iconUrl: 'markers-spacecenter.png',
-      shadowUrl: 'marker-shadow.png',
-      iconSize:     [25, 41], // size of the icon
-      shadowSize:   [41, 41], // size of the shadow
-      iconAnchor:   [12, 41], // point of the icon which will correspond to marker's location
-      popupAnchor:  [-1, -34] // point from which the popup should open relative to the iconAnchor
+    this.positionMap = new PositionMap(this.datalink, this.map_id, {
+      lockOnVessel: false
     })
 
     var circleMarkerOptions = {
@@ -154,15 +128,11 @@ var GroundTrack = Class.create({
     }
 
     this.markers = {
-      actualCoordinates : L.circleMarker([0, 0], circleMarkerOptions),
       estimatedCoordinates : L.circleMarker([0,0], circleMarkerOptions),
-      convertedActualCoordinates : L.circleMarker([0,0], circleMarkerOptions),
       orbitalPaths : []
     }
 
-    this.markers.actualCoordinates.addTo(this.map)
-    this.markers.estimatedCoordinates.addTo(this.map)
-    this.markers.convertedActualCoordinates.addTo(this.map)
+    this.markers.estimatedCoordinates.addTo(this.positionMap.map)
   },
 
   initializeAltitudeEstimate: function(){
