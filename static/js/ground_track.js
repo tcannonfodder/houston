@@ -5,7 +5,6 @@ var GroundTrack = Class.create({
     this.altitudeEstimationId = altitudeEstimationId
     this.initializeAltitudeEstimate()
     this.initializeMap()
-    this.initializeDatalink()
 
     this.orbitalPrediction = new OrbitalPrediction(this.datalink, {
       onRecalculate: this.drawOrbitalPrediction.bind(this)
@@ -101,17 +100,6 @@ var GroundTrack = Class.create({
     }
 
     this.altitudeEstimateChart.update(chartData)
-  },
-
-  initializeDatalink: function(){
-    this.datalink.subscribeToData([
-      'o.trueAnomaly', 'o.sma', 'o.maae', 'o.eccentricity',
-      'o.inclination', 'o.lan', 'o.argumentOfPeriapsis', 'v.lat', 'v.long',
-      'o.period', 'v.angularVelocity', 't.universalTime', "b.o.gravParameter[1]",
-      'v.altitude'
-    ])
-
-    this.datalink.addReceiverFunction(this.recalculate.bind(this))
   },
 
   initializeMap: function(){
