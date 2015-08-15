@@ -32,7 +32,7 @@ var GroundTrack = Class.create({
 
       previousOrbitalPredictionValue = orbitalPredictionValue
 
-      var convertedCoordinates = this.convertCoordinatesToMap(latitude, longitude)
+      var convertedCoordinates = this.positionMap.convertCoordinatesToMap(latitude, longitude)
 
       if(currentOrbitalPathSet == null){
         var currentOrbitalPathSet = []
@@ -53,26 +53,9 @@ var GroundTrack = Class.create({
     };
 
     var estimatedCoordinates = orbitalPrediction.orbitalPredictionValues[0]
-    this.setCoordinatesForMapObject(this.markers.estimatedCoordinates, estimatedCoordinates.latitude, estimatedCoordinates.longitude)
-  },
+    this.positionMap.setCoordinatesForMapObject(this.markers.estimatedCoordinates, estimatedCoordinates.latitude, estimatedCoordinates.longitude)
 
-  recalculate: function(data){
-    // this.updateMap()
-    // this.updateAltitudeEstimateChart()
-  },
-
-  convertCoordinatesToMap: function(latitude, longitude){
-    return [latitude, longitude > 180 ? longitude - 360 : longitude]
-  },
-
-  setCoordinatesForMapObject: function(object, latitude, longitude){
-    var convertedCoordinates = this.convertCoordinatesToMap(latitude, longitude)
-    object.setLatLng([convertedCoordinates[0], convertedCoordinates[1]])
-  },
-
-  updateMap: function(){
-    this.setCoordinatesForMapObject(this.markers.actualCoordinates, this.actualLatitudeInDegrees, this.actualLongitudeInDegrees)
-    this.setCoordinatesForMapObject(this.markers.convertedActualCoordinates, Math.toDegrees(this.estimatedLatitude), Math.toDegrees(this.estimatedLongitude))
+    this.updateAltitudeEstimateChart()
   },
 
   updateAltitudeEstimateChart: function(){
@@ -80,9 +63,9 @@ var GroundTrack = Class.create({
     var interval = 60 * 5 //seconds based
     var intervalsCovered = {}
 
-    for (var i = 0 ; i < this.orbitalPredictionValues.length; (interval * i++)) {
-      var orbitalPredictionValue = this.orbitalPredictionValues[i]
-      var deltaT = orbitalPredictionValue.time - this.startTime
+    for (var i = 0 ; i < this.orbitalPrediction.orbitalPredictionValues.length; (interval * i++)) {
+      var orbitalPredictionValue = this.orbitalPrediction.orbitalPredictionValues[i]
+      var deltaT = orbitalPredictionValue.time - this.orbitalPrediction.startTime
 
       var intervalPeriod = Math.floor(deltaT/interval)
 
