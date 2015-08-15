@@ -7,6 +7,7 @@
   <script src="../assets/js/numeral.min.js"></script>
   <script src="../assets/js/chartist.min.js"></script>
   <script src="../assets/js/time_formatters.js"></script>
+  <script src="../assets/js/data_formatters.js"></script>
   <script src="../assets/js/prototype.js"></script>
   <script src="../assets/js/leaflet.ksp.js"></script>
   <script src="../assets/js/L.Graticule.js"></script>
@@ -203,17 +204,17 @@
     {
       label: "Altitude",
       value: 'v.altitude',
-      formatter: function(value){ return value.toFixed(3) + " m" }
+      formatter: function(value){ return DataFormatters.distanceString(value) }
     },
     {
       label: "Apoapsis",
       value: 'o.ApA',
-      formatter: function(value){ return value.toFixed(3) + " m" }
+      formatter: function(value){ return DataFormatters.distanceString(value) }
     },
     {
       label: "Periapsis",
       value: 'o.PeA',
-      formatter: function(value){ return value.toFixed(3) + " m" }
+      formatter: function(value){ return DataFormatters.distanceString(value) }
     },
     {
       label: "Time to Apoapsis",
@@ -228,7 +229,7 @@
     {
       label: "Inclination",
       value: 'o.inclination',
-      formatter: function(value){ return value.toFixed(3) + "&deg;" }
+      formatter: function(value){ return DataFormatters.degreeString(value) }
     },
     {
       label: "Eccentricity",
@@ -238,7 +239,7 @@
     {
       label: "Orbital Velocity",
       value: 'v.orbitalVelocity',
-      formatter: function(value){ return value.toFixed(3) + " m/s" }
+      formatter: function(value){ return DataFormatters.velocityString(value) }
     },
   ])
 

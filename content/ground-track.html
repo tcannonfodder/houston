@@ -75,17 +75,17 @@ title: Ground Track
     {
       label: "Altitude",
       value: 'v.altitude',
-      formatter: function(value){ return value.toFixed(3) + " m" }
+      formatter: function(value){ return DataFormatters.distanceString(value) }
     },
     {
       label: "Apoapsis",
       value: 'o.ApA',
-      formatter: function(value){ return value.toFixed(3) + " m" }
+      formatter: function(value){ return DataFormatters.distanceString(value) }
     },
     {
       label: "Periapsis",
       value: 'o.PeA',
-      formatter: function(value){ return value.toFixed(3) + " m" }
+      formatter: function(value){ return DataFormatters.distanceString(value) }
     },
     {
       label: "Time to Apoapsis",
@@ -100,7 +100,7 @@ title: Ground Track
     {
       label: "Inclination",
       value: 'o.inclination',
-      formatter: function(value){ return value.toFixed(3) + "&deg;" }
+      formatter: function(value){ return DataFormatters.degreeString(value) }
     },
     {
       label: "Eccentricity",
@@ -110,7 +110,7 @@ title: Ground Track
     {
       label: "Orbital Velocity",
       value: 'v.orbitalVelocity',
-      formatter: function(value){ return value.toFixed(3) + " m/s" }
+      formatter: function(value){ return DataFormatters.velocityString(value) }
     },
   ])
 <% end %>
