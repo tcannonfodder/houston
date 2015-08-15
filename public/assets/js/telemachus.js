@@ -39,10 +39,10 @@ var Telemachus = Class.create({
   },
 
   getOrbitalBodyInfo: function(name){
-    var ID = this.orbitingBodies[name]
+    var properties = this.orbitingBodies[name]
 
-    if(ID){
-      return {name: name, id: ID }
+    if(properties){
+      return Object.extend({name: name}, properties)
     } else{
       return null
     }
@@ -80,23 +80,74 @@ var Telemachus = Class.create({
 
   getOrbitalBodies: function(){
     return {
-      "Kerbol" : 0,
-      "Kerbin" : 1,
-      "Mun" : 2,
-      "Minmus" : 3,
-      "Moho" : 4,
-      "Eve" : 5,
-      "Duna" : 6,
-      "Ike" : 7,
-      "Jool" : 8,
-      "Laythe" : 9,
-      "Vall" : 10,
-      "Bop" : 11,
-      "Tylo" : 12,
-      "Gilly" : 13,
-      "Pol" : 14,
-      "Dres" : 15,
-      "Eeloo" : 16
+      "Kerbol" : {
+        id: 0,
+        mapBody: null
+      },
+      "Kerbin" : {
+        id: 1,
+        mapBody: L.KSP.CelestialBody.KERBIN
+      },
+      "Mun" : {
+        id: 2,
+        mapBody: L.KSP.CelestialBody.MUN
+      },
+      "Minmus" : {
+        id: 3,
+        mapBody: L.KSP.CelestialBody.MINMUS
+      },
+      "Moho" : {
+        id: 4,
+        mapBody: L.KSP.CelestialBody.MOHO
+      },
+      "Eve" : {
+        id: 5,
+        mapBody: L.KSP.CelestialBody.EVE
+      },
+      "Duna" : {
+        id: 6,
+        mapBody: L.KSP.CelestialBody.DUNA
+      },
+      "Ike" : {
+        id: 7,
+        mapBody: L.KSP.CelestialBody.IKE
+      },
+      "Jool" : {
+        id: 8,
+        mapBody: L.KSP.CelestialBody.JOOL
+      },
+      "Laythe" : {
+        id: 9,
+        mapBody: L.KSP.CelestialBody.LAYTHE
+      },
+      "Vall" : {
+        id: 10,
+        mapBody: L.KSP.CelestialBody.VALL
+      },
+      "Bop" : {
+        id: 11,
+        mapBody: L.KSP.CelestialBody.BOP
+      },
+      "Tylo" : {
+        id: 12,
+        mapBody: L.KSP.CelestialBody.TYLO
+      },
+      "Gilly" : {
+        id: 13,
+        mapBody: L.KSP.CelestialBody.GILLY
+      },
+      "Pol" : {
+        id: 14,
+        mapBody: L.KSP.CelestialBody.POL
+      },
+      "Dres" : {
+        id: 15,
+        mapBody: L.KSP.CelestialBody.DRES
+      },
+      "Eeloo" : {
+        id: 16,
+        mapBody: L.KSP.CelestialBody.EELOO
+      }
     }
   }
 })
