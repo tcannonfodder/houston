@@ -1,12 +1,21 @@
 var Telemachus = Class.create({
   initialize: function(host, port){
-    this.url = "http://" + host + ":" + port + "/telemachus/datalink"
+    this.updateConnection(host, port)
     this.receiverFunctions = []
     this.subscribedFields = {}
     this.orbitingBodies = this.getOrbitalBodies()
     this.rate = 500
 
     this.loopTimeout = setTimeout(this.poll.bind(this), this.rate)
+  },
+
+  url: function(){
+    return "http://" + this.host + ":" + this.port + "/telemachus/datalink"
+  },
+
+  updateConnection: function(host, port){
+    this.host = host
+    this.port = port
   },
 
   addReceiverFunction: function(func){
@@ -56,7 +65,7 @@ var Telemachus = Class.create({
       params.push(sanitizedFieldName + "=" + field)
     })
 
-    var requestURL = this.url + "?" + params.join("&")
+    var requestURL = this.url() + "?" + params.join("&")
 
     new Ajax.Request(requestURL, {
       method: "get",
