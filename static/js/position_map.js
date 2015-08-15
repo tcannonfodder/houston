@@ -5,7 +5,7 @@ var PositionMap = Class.create({
     this.previousBody = "KERBIN"
     this.options = Object.extend({
       lockOnVessel: true
-    })
+    }, options)
     this.initializeMap()
     this.initializeDatalink()
   },
