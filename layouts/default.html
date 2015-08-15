@@ -46,9 +46,9 @@
 
       <%= render 'nav_item', :nav_item => 'landing', :nav_title => "Landing", :nav_url => '../landing/index.html' %>
 
-      <%= render 'nav_item', :nav_title => "Telemachus Console", :nav_url => '/telemachus/console.html' %>
+      <%= render 'nav_item', :nav_title => "Telemachus Console", :nav_url => '/telemachus/console.html', :id => 'telemachus-console' %>
 
-      <%= render 'nav_item', :nav_title => "MKON", :nav_url => '/telemachus/MKON/index.html' %>
+      <%= render 'nav_item', :nav_title => "MKON", :nav_url => '/telemachus/MKON/index.html', :id => 'mkon' %>
 
       <%= render 'nav_item', :nav_title => "Settings", :nav_url => '#settings', :id => 'settings-link' %>
     </ul>
@@ -94,6 +94,14 @@
     $('settings')['host'].value = settings.getHost()
     $('settings')['port'].value = settings.getPort()
 
+    function updateTelemachusAndMKONLinks(){
+      var baseURL = "http://" + settings.getHost() + ":" + settings.getPort()
+      $('telemachus-console').down('a').href = baseURL + "/telemachus/console.html"
+      $('mkon').down('a').href = baseURL + "/telemachus/MKON/index.html"
+    }
+
+    updateTelemachusAndMKONLinks()
+
     $('settings-link').observe('click', function(e){
       e.preventDefault()
       $('settings_overlay').addClassName('open')
@@ -109,6 +117,8 @@
         window.settings.getHost(),
         window.settings.getPort()
       )
+
+      updateTelemachusAndMKONLinks()
 
       $('settings_overlay').removeClassName('open')
     })
