@@ -37,6 +37,52 @@
 
 </head>
 <body>
+  <nav>
+    <ul>
+      <li class="">
+  <a href="../ground-track/index.html">
+    <img src="../assets/images/ground-track-preview.png"/>
+    Ground Track
+  </a>
+</li>
+
+      <li class="current">
+  <a href="../ascension/index.html">
+    <img src="../assets/images/ground-track-preview.png"/>
+    Ascension
+  </a>
+</li>
+
+      <li class="">
+  <a href="../landing/index.html">
+    <img src="../assets/images/ground-track-preview.png"/>
+    Landing
+  </a>
+</li>
+
+      <li class="">
+  <a href="/telemachus/console.html">
+    <img src="../assets/images/ground-track-preview.png"/>
+    Telemachus Console
+  </a>
+</li>
+
+      <li class="">
+  <a href="/telemachus/MKON/index.html">
+    <img src="../assets/images/ground-track-preview.png"/>
+    MKON
+  </a>
+</li>
+
+      <li class="">
+  <a href="#settings">
+    <img src="../assets/images/ground-track-preview.png"/>
+    Settings
+  </a>
+</li>
+    </ul>
+    <div id="nav_toggle"><a href="#">&darr; Open</a></div>
+  </nav>
   <header id="title-bar">
     <div id="mission-time-warp-indicator" class="readout-display">
       <span id="mission-time">T+12:34:14 MET</span>
@@ -149,6 +195,17 @@
   $(document).observe("dom:loaded", function() {
     window.datalink = new Telemachus("192.168.1.10", "8085")
     window.titleBar = new TitleBar(datalink, 'title-bar')
+
+    $('nav_toggle').observe("click", function(e){
+      var nav = $$('nav')[0]
+      nav.toggleClassName('open')
+      if(nav.hasClassName('open')){
+        $('nav_toggle').down('a').update('&uarr; Close')
+      } else{
+        $('nav_toggle').down('a').update('&darr; Open')
+      }
+    })
+
     
   window.navball = new Navball(window.datalink, 'navball', 'navball-heading')
   window.rcsButtonIndicator = new ButtonIndicator(datalink, 'rcs', 'v.rcsValue')

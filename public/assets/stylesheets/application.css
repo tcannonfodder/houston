@@ -7,6 +7,76 @@ header,#content{
   padding:10px;
 }
 
+nav{
+  background-color: rgba(51,51,51, 1);
+  background-image: url('../images/title-noise.png');
+  font-family: AeroMaticsDisplayBold;
+  font-size: 25px;
+  text-shadow: 0px 2px 3px rgba(0,0,0,.8);
+  color: #d4d4d4;
+  box-shadow: inset 0px -1px 7px 0px rgba(0,0,0,0.50);
+}
+
+nav:not(.open){
+  height: 3px;
+}
+
+nav a{
+  color: #d4d4d4;
+  text-decoration: none;
+}
+
+nav.open{
+}
+
+nav ul {
+  display: none;
+  margin: 0px;
+  padding: 0px;
+  list-style-type:none;
+  white-space:nowrap;
+  overflow-x:auto;
+}
+
+nav.open ul{
+  display: block;
+  padding: 10px;
+  padding-bottom: 0px;
+}
+
+nav.open ul li{
+  display: inline-block;
+  margin-right: 10px;
+  text-align: center;
+}
+
+nav.open ul li img{
+  max-height: 100px;
+  display: block;
+  border: 2px solid #9B9B9B;
+  box-shadow: 0px 2px 3px rgba(0,0,0,.8);
+  border-radius: 3px;
+}
+
+#nav_toggle{
+  font-size: 15px;
+  position: relative;
+  background-color: rgba(51,51,51, 1);
+  background-image: url('../images/title-noise.png');
+  width: 80px;
+  text-align: center;
+  left: 300px;
+  border-radius: 8px;
+  padding-bottom: 5px;
+  padding-top: 10px;
+  bottom: 5px;
+}
+
+nav.open #nav_toggle{
+  padding-top: 0px;
+  bottom:-15px;
+}
+
 h1{
   /* Ground Track: */
   font-family: AeroMaticsDisplayBold;
