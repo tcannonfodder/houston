@@ -63,14 +63,14 @@
   </a>
 </li>
 
-      <li id="" class="">
+      <li id="telemachus-console" class="">
   <a href="/telemachus/console.html">
     <img src="../assets/images/ground-track-preview.png"/>
     Telemachus Console
   </a>
 </li>
 
-      <li id="" class="">
+      <li id="mkon" class="">
   <a href="/telemachus/MKON/index.html">
     <img src="../assets/images/ground-track-preview.png"/>
     MKON
@@ -216,6 +216,14 @@
     $('settings')['host'].value = settings.getHost()
     $('settings')['port'].value = settings.getPort()
 
+    function updateTelemachusAndMKONLinks(){
+      var baseURL = "http://" + settings.getHost() + ":" + settings.getPort()
+      $('telemachus-console').down('a').href = baseURL + "/telemachus/console.html"
+      $('mkon').down('a').href = baseURL + "/telemachus/MKON/index.html"
+    }
+
+    updateTelemachusAndMKONLinks()
+
     $('settings-link').observe('click', function(e){
       e.preventDefault()
       $('settings_overlay').addClassName('open')
@@ -231,6 +239,8 @@
         window.settings.getHost(),
         window.settings.getPort()
       )
+
+      updateTelemachusAndMKONLinks()
 
       $('settings_overlay').removeClassName('open')
     })
