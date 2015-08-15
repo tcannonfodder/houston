@@ -1,20 +1,35 @@
 var PositionMap = Class.create({
-  initialize: function(datalink, mapId){
+  initialize: function(datalink, mapId, options){
     this.datalink = datalink
     this.mapId = mapId
+    this.previousBody = "KERBIN"
+    this.options = Object.extend({
+      lockOnVessel: true
+    })
     this.initializeMap()
     this.initializeDatalink()
   },
 
   update: function(data){
+    this.updateBodyIfNecessary(data)
     this.setCoordinatesForMapObject(this.coordinates, data['v.lat'], data['v.long'])
-    // debugger
-    this.map.panTo([data['v.lat'], data['v.long']])
+    if(this.options.lockOnVessel){
+      this.map.panTo([data['v.lat'], data['v.long']])
+    }
+  },
+
+  updateBodyIfNecessary: function(data){
+    var bodyName = data['v.body'].toUpperCase()
+    if(this.previousBody != bodyName){
+      newBody = L.KSP.CelestialBody[bodyName];
+      newBody.addTo(this.map);
+      this.previousBody = bodyName;
+    }
   },
 
   initializeMap: function(){
     this.map = new L.KSP.Map(this.mapId, {
-      layers: [L.KSP.CelestialBody.KERBIN],
+      layers: [L.KSP.CelestialBody[this.previousBody.toUpperCase()]],
       zoom: 'fit',
       bodyControl: false,
       layerControl: true,
@@ -47,7 +62,7 @@ var PositionMap = Class.create({
   },
 
   initializeDatalink: function(){
-    this.datalink.subscribeToData(['v.lat', 'v.long'])
+    this.datalink.subscribeToData(['v.lat', 'v.long', 'v.body'])
 
     this.datalink.addReceiverFunction(this.update.bind(this))
   }
