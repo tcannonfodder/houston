@@ -1,6 +1,6 @@
 <li id="<%= @id %>" class="<%= current_page?(@item, @nav_item) ? "current" : "" %>">
   <a href="<%= @nav_url %>">
-    <img src="../assets/images/ground-track-preview.png"/>
+    <img src="../assets/images/<%= @nav_item %>-preview.png"/>
     <%= @nav_title %>
   </a>
 </li>
