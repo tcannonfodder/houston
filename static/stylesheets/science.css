@@ -1,0 +1,13 @@
+#top-panel{
+  display: -webkit-flex;
+  display: flex;
+  margin-bottom: 10px;
+  -webkit-justify-content: space-around; 
+  justify-content: space-around; 
+}
+
+#position-map{
+  height: 300px;
+  width: 500px;
+  margin-bottom: 10px;
+}
