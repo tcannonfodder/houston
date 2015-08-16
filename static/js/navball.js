@@ -112,7 +112,7 @@ var Navball = Class.create({
     var animate = function(){
       window.setTimeout(function(){
         requestAnimationFrame(animate)
-      }, 1000/60 ) //60 fps
+      }, this.datalink.rate/60 ) //60 fps
 
       TWEEN.update()
 
