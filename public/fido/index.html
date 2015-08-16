@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Ground Track</title>
+  <title>FIDO</title>
   <script src="../assets/js/math_polyfill.js"></script>
   <script src="../assets/js/numeric.js"></script>
   <script src="../assets/js/numeral.min.js"></script>
@@ -38,13 +38,13 @@
   <link rel="stylesheet" type="text/css" href="../assets/stylesheets/application.css" />
 
   
-  <link rel="stylesheet" type="text/css" href="../assets/stylesheets/ground-track.css" />
+  <link rel="stylesheet" type="text/css" href="../assets/stylesheets/fido.css" />
 
 </head>
 <body>
   <nav>
     <ul>
-      <li id="" class="current">
+      <li id="" class="">
   <a href="../ground-track/index.html">
     <img src="../assets/images/ground-track-preview.png"/>
     Ground Track
@@ -72,7 +72,7 @@
   </a>
 </li>
 
-      <li id="" class="">
+      <li id="" class="current">
   <a href="../fido/index.html">
     <img src="../assets/images/ground-track-preview.png"/>
     FIDO
@@ -130,7 +130,7 @@
       <span id="mission-time">T+12:34:14 MET</span>
     </div>
 
-    <h1>Ground Track</h1>
+    <h1>FIDO</h1>
 
     <div id="world-clock" class="readout-display">
       Year 1, Day 1 00:23:13 UT
@@ -142,108 +142,91 @@
 
 
 <div id="top-panel">
-  <div id="resources" class="readout-display">
-    <div class="resource-grid">
-      <div id="liquid-fuel" class="resource-readout">
-  <p>Liquid Fuel</p>
-
-  
-    <div>
-      <span>Current Stage</span><br>
-      <progress id="liquid-fuel-current" value="0" max="0">0%</progress>
-    </div>
-  
-
-  <div>
-    
-      <span>Total</span><br>
-    
-    <progress id="liquid-fuel-total" value="0" max="0">0%</progress>
-  </div>
+  <div id="navigation-throttle-and-buttons" class="gauge">
+    <div class="navigation-wrapper">
+  <div id="navball"></div>
+  <div id="navball-heading"></div>
 </div>
-
-      <div id="oxidizer" class="resource-readout">
-  <p>Oxidizer</p>
-
-  
-    <div>
-      <span>Current Stage</span><br>
-      <progress id="oxidizer-current" value="0" max="0">0%</progress>
-    </div>
-  
-
-  <div>
-    
-      <span>Total</span><br>
-    
-    <progress id="oxidizer-total" value="0" max="0">0%</progress>
-  </div>
-</div>
-
-      <div id="electric-charge" class="resource-readout">
-  <p>Electric Charge</p>
-
-  
-    <div>
-      <span>Current Stage</span><br>
-      <progress id="electric-charge-current" value="0" max="0">0%</progress>
-    </div>
-  
-
-  <div>
-    
-      <span>Total</span><br>
-    
-    <progress id="electric-charge-total" value="0" max="0">0%</progress>
-  </div>
-</div>
-
-      <div id="monopropellant" class="resource-readout">
-  <p>Monopropellant</p>
-
-  
-    <div>
-      <span>Current Stage</span><br>
-      <progress id="monopropellant-current" value="0" max="0">0%</progress>
-    </div>
-  
-
-  <div>
-    
-      <span>Total</span><br>
-    
-    <progress id="monopropellant-total" value="0" max="0">0%</progress>
-  </div>
-</div>
-    </div>
-
-    <div id="ablator-readout">
-      <div id="ablator" class="resource-readout">
-  <p>Ablator</p>
-
-  
-
-  <div>
-    
-    <progress id="ablator-total" value="0" max="0">0%</progress>
-  </div>
-</div>
+    <div id="button-panel">
+      <button id="rcs" disabled="disabled" class="status">RCS</button>
+      <button id="sas" disabled="disabled" class="status">SAS</button>
     </div>
   </div>
 
-  <div id="button-panel">
-    <button id="rcs" disabled="disabled" class="status">RCS</button>
-    <button id="sas" disabled="disabled" class="status">SAS</button>
+  <div id="throttle-panel">
+    <div class="throttle-wrapper gauge">
+  <p>
+    <span class="min">0</span>
+    Throttle
+    <span class="max">100</span>
+  </p>
+  <progress id="throttle" class="throttle"></progress>
+</div>
   </div>
 
-  <table id="orbital-data" class="readout-display readout-table"></table>
+  <div id="position-map" class="map readout-display"></div>
+
+  <div class="readout-display">
+    <h2>Orbit Info</h2>
+    <table id="orbit-info" class="readout-table"></table>
+  </div>
 </div>
 
-<div id="ground-track-wrapper">
-  <div id="gt-map" class="ground-track readout-display"></div>
-  <div id="altitude-estimate" class="readout-display">
-    <h2>Altitude Estimate</h2>
-    <div id="altitude-estimate-chart" class="ct-chart"></div>
+<div id="bottom-panel">
+  <div class="readout-display">
+    <h2>Danger Zone</h2>
+    <table id="vessel-speed" class="readout-table"></table>
+  </div>
+
+  <div class="readout-display">
+    <h2>Docking Info</h2>
+    <table id="docking-info" class="readout-table"></table>
+  </div>
+
+  <div class="readout-display">
+    <h2>Hohmann Transfer Tool</h2>
+    <strong id="go-signal"></strong>
+    <table class="readout-table">
+      <tr>
+        <th>Vessel Altitude</th>
+        <td id="vessel-altitude"></td>
+      </tr>
+
+      <tr>
+        <th>Vessel Orbital Velocity</th>
+        <td id="vessel-orbital-velocity"></td>
+      </tr>
+
+      <tr>
+        <th>Vessel Periapsis</th>
+        <td id="vessel-periapsis"></td>
+      </tr>
+
+      <tr>
+        <th>Target Periapsis</th>
+        <td id="target-periapsis"></td>
+      </tr>
+
+      <tr>
+        <th>Delta-V</th>
+        <td id="delta-v"></td>
+      </tr>
+
+      <tr>
+        <th>Sweep Angle</th>
+        <td id="sweep-angle"></td>
+      </tr>
+
+      <tr>
+        <th>Phase Angle</th>
+        <td id="phase-angle"></td>
+      </tr>
+
+      <tr>
+        <th>Target's Current Phase Angle</th>
+        <td id="target-current-phase-angle"></td>
+      </tr>
+    </table>
   </div>
 </div>
 
@@ -301,38 +284,14 @@
     })
 
     
-  window.datalink.rate = 1000
-  window.groundTrack = new GroundTrack(datalink, 'gt-map', 'altitude-estimate-chart')
+  window.navball = new Navball(window.datalink, 'navball', 'navball-heading')
   window.rcsButtonIndicator = new ButtonIndicator(datalink, 'rcs', 'v.rcsValue')
   window.sasButtonIndicator = new ButtonIndicator(datalink, 'sas', 'v.sasValue')
+  window.throttleGauge = new ThrottleGauge(window.datalink, 'throttle')
 
-  window.liquidFuelMonitor = new ResourceMonitor(datalink, 'LiquidFuel', {
-    currentStageProgressBar: $('liquid-fuel-current'),
-    totalProgressBar: $('liquid-fuel-total')
-  })
+  window.positionMap = new PositionMap(datalink, 'position-map')
 
-  window.oxidizerMonitor = new ResourceMonitor(datalink, 'Oxidizer', {
-    currentStageProgressBar: $('oxidizer-current'),
-    totalProgressBar: $('oxidizer-total')
-  })
-
-  window.electricChargeMonitor = new ResourceMonitor(datalink, 'ElectricCharge', {
-    currentStageProgressBar: $('electric-charge-current'),
-    totalProgressBar: $('electric-charge-total')
-  })
-
-  window.monopropellantMonitor = new ResourceMonitor(datalink, 'Monopropellant', {
-    currentStageProgressBar: $('monopropellant-current'),
-    totalProgressBar: $('monopropellant-total')
-  })
-
-  window.ablatorMonitor = new ResourceMonitor(datalink, 'Ablator', {
-    totalProgressBar: $('ablator-total')
-  })
-
-
-
-  window.readoutTable = new ReadoutTable(datalink, 'orbital-data', [
+  window.orbitInfoTable = new ReadoutTable(datalink, 'orbit-info', [
     {
       label: "Altitude",
       value: 'v.altitude',
@@ -369,11 +328,105 @@
       formatter: function(value){ return value.toFixed(3) }
     },
     {
+      label: "Orbital Period",
+      value: 'o.period',
+      formatter: function(value){ return TimeFormatters.durationString(value) }
+    },
+    {
+      label: "True Anomaly",
+      value: 'o.trueAnomaly',
+      formatter: function(value){ return DataFormatters.degreeString(value) }
+    },
+  ])
+
+  window.dockingInfoTable = new ReadoutTable(datalink, 'docking-info', [
+    {
+      label: "X Angle",
+      value: 'dock.ax',
+      formatter: function(value){ return DataFormatters.degreeString(value) }
+    },
+    {
+      label: "Y Angle",
+      value: 'dock.ay',
+      formatter: function(value){ return DataFormatters.degreeString(value) }
+    },
+    {
+      label: "Z Angle",
+      value: 'dock.az',
+      formatter: function(value){ return DataFormatters.degreeString(value) }
+    },
+    {
+      label: "X Distance",
+      value: 'dock.x',
+      formatter: function(value){ return DataFormatters.distanceString(value) }
+    },
+    {
+      label: "Y Distance",
+      value: 'dock.y',
+      formatter: function(value){ return DataFormatters.distanceString(value) }
+    }
+  ])
+
+  window.vesselSpeedTable = new ReadoutTable(datalink, 'vessel-speed', [
+    {
+      label: "Surface Velocity",
+      value: 'v.surfaceVelocity',
+      formatter: function(value){ return DataFormatters.velocityString(value) }
+    },
+    {
+      label: "Vertical Velocity",
+      value: 'v.verticalSpeed',
+      formatter: function(value){ return DataFormatters.velocityString(value) }
+    },
+    {
       label: "Orbital Velocity",
       value: 'v.orbitalVelocity',
       formatter: function(value){ return DataFormatters.velocityString(value) }
     },
+    {
+      label: "Vessel's Relative Velocity",
+      value: 'o.relativeVelocity',
+      formatter: function(value){ return DataFormatters.velocityString(value) }
+    },
+    {
+      label: "Target's Relative Velocity",
+      value: 'tar.o.relativeVelocity',
+      formatter: function(value){ return DataFormatters.velocityString(value) }
+    },
+    {
+      label: "G-Force",
+      value: 'v.geeForce',
+      formatter: function(value){ return value.toFixed(3) }
+    },
   ])
+
+  window.intercept = new HohmannIntercept(window.datalink)
+
+  document.observe('hohmann-intercept:update', function(){
+    var updateValue = function(id, value, updateFunction){
+      $(id).update(updateFunction(value))
+    }
+
+    if(!intercept.deltaV){
+      $('go-signal').update("NO TARGET SELECTED")
+      return
+    }
+
+    updateValue('vessel-altitude', intercept.vessel.altitude, DataFormatters.distanceString)
+
+    // $('vessel-altitude').update(numeral.format())
+    updateValue('vessel-orbital-velocity', intercept.vessel.orbitalVelocity, DataFormatters.velocityString)
+    updateValue('vessel-periapsis', intercept.vessel.periapsis, DataFormatters.distanceString)
+    updateValue('target-periapsis', intercept.targetBody.periapsis, DataFormatters.distanceString)
+    updateValue('delta-v', intercept.deltaV, DataFormatters.velocityString)
+    updateValue('sweep-angle', intercept.sweepAngle, DataFormatters.degreeString)
+    updateValue('phase-angle', intercept.phaseAngle, DataFormatters.degreeString)
+    updateValue('target-current-phase-angle', intercept.targetsCurrentPhaseAngle, DataFormatters.degreeString)
+
+    if(intercept.isGoForIntercept()){
+      $('go-signal').update("GO FOR MANUEVER")
+    }
+  })
 
   })
 

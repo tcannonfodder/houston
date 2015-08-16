@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Ground Track</title>
+  <title>SCIENCE</title>
   <script src="../assets/js/math_polyfill.js"></script>
   <script src="../assets/js/numeric.js"></script>
   <script src="../assets/js/numeral.min.js"></script>
@@ -38,13 +38,13 @@
   <link rel="stylesheet" type="text/css" href="../assets/stylesheets/application.css" />
 
   
-  <link rel="stylesheet" type="text/css" href="../assets/stylesheets/ground-track.css" />
+  <link rel="stylesheet" type="text/css" href="../assets/stylesheets/science.css" />
 
 </head>
 <body>
   <nav>
     <ul>
-      <li id="" class="current">
+      <li id="" class="">
   <a href="../ground-track/index.html">
     <img src="../assets/images/ground-track-preview.png"/>
     Ground Track
@@ -79,7 +79,7 @@
   </a>
 </li>
 
-      <li id="" class="">
+      <li id="" class="current">
   <a href="../science/index.html">
     <img src="../assets/images/ground-track-preview.png"/>
     SCIENCE
@@ -130,7 +130,7 @@
       <span id="mission-time">T+12:34:14 MET</span>
     </div>
 
-    <h1>Ground Track</h1>
+    <h1>SCIENCE</h1>
 
     <div id="world-clock" class="readout-display">
       Year 1, Day 1 00:23:13 UT
@@ -142,108 +142,34 @@
 
 
 <div id="top-panel">
-  <div id="resources" class="readout-display">
-    <div class="resource-grid">
-      <div id="liquid-fuel" class="resource-readout">
-  <p>Liquid Fuel</p>
+  <div id="map-and-sensors">
+    <div id="position-map" class="map readout-display"></div>
 
-  
-    <div>
-      <span>Current Stage</span><br>
-      <progress id="liquid-fuel-current" value="0" max="0">0%</progress>
-    </div>
-  
+    <div class="readout-display">
+      <h2>Sensor Info</h2>
+      <table id="sensor-info" class="readout-table"></table>
 
-  <div>
-    
-      <span>Total</span><br>
-    
-    <progress id="liquid-fuel-total" value="0" max="0">0%</progress>
-  </div>
-</div>
-
-      <div id="oxidizer" class="resource-readout">
-  <p>Oxidizer</p>
-
-  
-    <div>
-      <span>Current Stage</span><br>
-      <progress id="oxidizer-current" value="0" max="0">0%</progress>
-    </div>
-  
-
-  <div>
-    
-      <span>Total</span><br>
-    
-    <progress id="oxidizer-total" value="0" max="0">0%</progress>
-  </div>
-</div>
-
-      <div id="electric-charge" class="resource-readout">
-  <p>Electric Charge</p>
-
-  
-    <div>
-      <span>Current Stage</span><br>
-      <progress id="electric-charge-current" value="0" max="0">0%</progress>
-    </div>
-  
-
-  <div>
-    
-      <span>Total</span><br>
-    
-    <progress id="electric-charge-total" value="0" max="0">0%</progress>
-  </div>
-</div>
-
-      <div id="monopropellant" class="resource-readout">
-  <p>Monopropellant</p>
-
-  
-    <div>
-      <span>Current Stage</span><br>
-      <progress id="monopropellant-current" value="0" max="0">0%</progress>
-    </div>
-  
-
-  <div>
-    
-      <span>Total</span><br>
-    
-    <progress id="monopropellant-total" value="0" max="0">0%</progress>
-  </div>
-</div>
-    </div>
-
-    <div id="ablator-readout">
-      <div id="ablator" class="resource-readout">
-  <p>Ablator</p>
+      <div id="ore" class="resource-readout">
+  <p>Ore</p>
 
   
 
   <div>
     
-    <progress id="ablator-total" value="0" max="0">0%</progress>
+    <progress id="ore-total" value="0" max="0">0%</progress>
   </div>
 </div>
     </div>
   </div>
 
-  <div id="button-panel">
-    <button id="rcs" disabled="disabled" class="status">RCS</button>
-    <button id="sas" disabled="disabled" class="status">SAS</button>
+  <div class="readout-display">
+    <h2>Target Info</h2>
+    <table id="target-info" class="readout-table"></table>
   </div>
 
-  <table id="orbital-data" class="readout-display readout-table"></table>
-</div>
-
-<div id="ground-track-wrapper">
-  <div id="gt-map" class="ground-track readout-display"></div>
-  <div id="altitude-estimate" class="readout-display">
-    <h2>Altitude Estimate</h2>
-    <div id="altitude-estimate-chart" class="ct-chart"></div>
+  <div class="readout-display">
+    <h2>Orbiting Body Info</h2>
+    <table id="orbiting-body-info" class="readout-table"></table>
   </div>
 </div>
 
@@ -301,79 +227,110 @@
     })
 
     
-  window.datalink.rate = 1000
-  window.groundTrack = new GroundTrack(datalink, 'gt-map', 'altitude-estimate-chart')
-  window.rcsButtonIndicator = new ButtonIndicator(datalink, 'rcs', 'v.rcsValue')
-  window.sasButtonIndicator = new ButtonIndicator(datalink, 'sas', 'v.sasValue')
+  window.positionMap = new PositionMap(datalink, 'position-map')
 
-  window.liquidFuelMonitor = new ResourceMonitor(datalink, 'LiquidFuel', {
-    currentStageProgressBar: $('liquid-fuel-current'),
-    totalProgressBar: $('liquid-fuel-total')
-  })
-
-  window.oxidizerMonitor = new ResourceMonitor(datalink, 'Oxidizer', {
-    currentStageProgressBar: $('oxidizer-current'),
-    totalProgressBar: $('oxidizer-total')
-  })
-
-  window.electricChargeMonitor = new ResourceMonitor(datalink, 'ElectricCharge', {
-    currentStageProgressBar: $('electric-charge-current'),
-    totalProgressBar: $('electric-charge-total')
-  })
-
-  window.monopropellantMonitor = new ResourceMonitor(datalink, 'Monopropellant', {
-    currentStageProgressBar: $('monopropellant-current'),
-    totalProgressBar: $('monopropellant-total')
-  })
-
-  window.ablatorMonitor = new ResourceMonitor(datalink, 'Ablator', {
-    totalProgressBar: $('ablator-total')
+  window.oreMonitor = new ResourceMonitor(datalink, 'Ore', {
+    totalProgressBar: $('ore-total')
   })
 
 
-
-  window.readoutTable = new ReadoutTable(datalink, 'orbital-data', [
+  window.sensorInfoTable = new ReadoutTable(datalink, 'sensor-info', [
     {
-      label: "Altitude",
-      value: 'v.altitude',
+      label: "Gravity Sensor",
+      value: 's.sensor.grav',
+      formatter: function(value){ return DataFormatters.accelerationSensorString(value) }
+    },
+    {
+      label: "Acceleration Sensor",
+      value: 's.sensor.acc',
+      formatter: function(value){ return DataFormatters.accelerationSensorString(value) }
+    },
+    {
+      label: "Pressure Sensor",
+      value: 's.sensor.pres',
+      formatter: function(value){ return DataFormatters.pressureSensorString(value) }
+    },
+    {
+      label: "Temperature Sensor",
+      value: 's.sensor.temp',
+      formatter: function(value){ return DataFormatters.temperatureString(value[1][0]) }
+    },
+    {
+      label: "G-Force",
+      value: 'v.geeForce',
+      formatter: function(value){ return value.toFixed(3) }
+    },
+  ])
+
+  window.sensorInfoTable = new ReadoutTable(datalink, 'target-info', [
+    {
+      label: "Target Name",
+      value: 'tar.name',
+      formatter: function(value){ return value }
+    },
+    {
+      label: "Target Type",
+      value: 'tar.type',
+      formatter: function(value){ return value }
+    },
+    {
+      label: "Target Distance",
+      value: 'tar.distance',
       formatter: function(value){ return DataFormatters.distanceString(value) }
     },
     {
-      label: "Apoapsis",
-      value: 'o.ApA',
+      label: "Target's Orbiting Body",
+      value: 'tar.o.orbitingBody',
+      formatter: function(value){ return value }
+    },
+    {
+      label: "Target Apoapsis",
+      value: 'tar.o.ApA',
       formatter: function(value){ return DataFormatters.distanceString(value) }
     },
     {
-      label: "Periapsis",
-      value: 'o.PeA',
+      label: "Target Periapsis",
+      value: 'tar.o.PeA',
       formatter: function(value){ return DataFormatters.distanceString(value) }
     },
     {
-      label: "Time to Apoapsis",
-      value: 'o.timeToAp',
+      label: "Target Time to Apoapsis",
+      value: 'tar.o.timeToAp',
       formatter: function(value){ return "-" + TimeFormatters.durationString(value) }
     },
     {
-      label: "Time to Periapsis",
-      value: 'o.timeToPe',
+      label: "Target Time to Periapsis",
+      value: 'tar.o.timeToPe',
       formatter: function(value){ return "-" + TimeFormatters.durationString(value) }
     },
     {
-      label: "Inclination",
-      value: 'o.inclination',
+      label: "Target Inclination",
+      value: 'tar.o.inclination',
       formatter: function(value){ return DataFormatters.degreeString(value) }
     },
     {
-      label: "Eccentricity",
-      value: 'o.eccentricity',
+      label: "Target Eccentricity",
+      value: 'tar.o.eccentricity',
       formatter: function(value){ return value.toFixed(3) }
     },
     {
-      label: "Orbital Velocity",
-      value: 'v.orbitalVelocity',
+      label: "Target Orbital Period",
+      value: 'tar.o.period',
+      formatter: function(value){ return TimeFormatters.durationString(value) }
+    },
+    {
+      label: "Target Velocity",
+      value: 'tar.o.velocity',
       formatter: function(value){ return DataFormatters.velocityString(value) }
     },
+    {
+      label: "Target Relative Velocity",
+      value: 'tar.o.relativeVelocity',
+      formatter: function(value){ return DataFormatters.velocityString(value) }
+    }
   ])
+
+  window.orbitingBodyInfoTable = new OrbitingBodyInfoTable(datalink, 'orbiting-body-info')
 
   })
 
