@@ -449,27 +449,32 @@
 
   window.liquidFuelMonitor = new ResourceMonitor(datalink, 'LiquidFuel', {
     currentStageProgressBar: $('liquid-fuel-current'),
-    totalProgressBar: $('liquid-fuel-total')
+    totalProgressBar: $('liquid-fuel-total'),
+    valuePrefix: 'liquid-fuel'
   })
 
   window.solidFuelMonitor = new ResourceMonitor(datalink, 'SolidFuel', {
     currentStageProgressBar: $('solid-fuel-current'),
-    totalProgressBar: $('solid-fuel-total')
+    totalProgressBar: $('solid-fuel-total'),
+    valuePrefix: 'solid-fuel'
   })
 
   window.oxidizerMonitor = new ResourceMonitor(datalink, 'Oxidizer', {
     currentStageProgressBar: $('oxidizer-current'),
-    totalProgressBar: $('oxidizer-total')
+    totalProgressBar: $('oxidizer-total'),
+    valuePrefix: 'oxidizer'
   })
 
   window.monopropellantMonitor = new ResourceMonitor(datalink, 'Monopropellant', {
     currentStageProgressBar: $('monopropellant-current'),
-    totalProgressBar: $('monopropellant-total')
+    totalProgressBar: $('monopropellant-total'),
+    valuePrefix: 'monopropellant'
   })
 
   window.electricChargeMonitor = new ResourceMonitor(datalink, 'ElectricCharge', {
     currentStageProgressBar: $('electric-charge-current'),
-    totalProgressBar: $('electric-charge-total')
+    totalProgressBar: $('electric-charge-total'),
+    valuePrefix: 'electric-charge'
   })
 
   window.readoutTable = new ReadoutTable(datalink, 'flight-data', [

@@ -82,7 +82,9 @@ var GroundTrack = Class.create({
       }
     }
 
-    this.altitudeEstimateChart.update(chartData)
+    window.requestAnimationFrame(function(){
+      this.altitudeEstimateChart.update(chartData)
+    }.bind(this))
   },
 
   initializeMap: function(){

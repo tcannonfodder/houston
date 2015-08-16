@@ -7,8 +7,10 @@ var TitleBar = Class.create({
   },
 
   update: function(data){
-    this.title_bar.down("#world-clock").update(TimeFormatters.formatUT(data["t.universalTime"]))
-    this.title_bar.down("#mission-time").update(TimeFormatters.formatMET(data["v.missionTime"]))
+    window.requestAnimationFrame(function(){
+      this.title_bar.down("#world-clock").update(TimeFormatters.formatUT(data["t.universalTime"]))
+      this.title_bar.down("#mission-time").update(TimeFormatters.formatMET(data["v.missionTime"]))
+    }.bind(this))
   },
 
   initializeDatalink: function(){

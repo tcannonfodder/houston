@@ -33,7 +33,9 @@ var AltitudeTracker = Class.create({
       this.initializeChart()
     }
 
-    this.altitudeTrackerChart.update(this.generateData())
+    window.requestAnimationFrame(function(){
+      this.altitudeTrackerChart.update(this.generateData())
+    }.bind(this))
   },
 
   initializeDatalink: function(){

@@ -4,7 +4,8 @@ var ResourceMonitor = Class.create({
     this.resourceName = resourceName
     this.options = Object.extend({
       currentStageProgressBar: null,
-      totalProgressBar: null
+      totalProgressBar: null,
+      valuePrefix: null
     }, options)
 
     this.resourceStrings = this.buildResourceStrings()
@@ -13,30 +14,32 @@ var ResourceMonitor = Class.create({
   },
 
   update: function(data){
-    if(this.options.totalProgressBar){
-      this.options.totalProgressBar.value = data[this.resourceStrings.totalAvailable]
-      this.options.totalProgressBar.max = data[this.resourceStrings.totalMax]
-    }
+    window.requestAnimationFrame(function(){
+      if(this.options.totalProgressBar){
+        this.options.totalProgressBar.value = data[this.resourceStrings.totalAvailable]
+        this.options.totalProgressBar.max = data[this.resourceStrings.totalMax]
+      }
 
-    if($(this.resourceName + "-total-value")){
-      $(this.resourceName + "-total-value").update(data[this.resourceStrings.totalAvailable])
-    }
+      if(this.options.currentStageProgressBar){
+        this.options.currentStageProgressBar.value = data[this.resourceStrings.currentStageAvailable]
+        this.options.currentStageProgressBar.max = data[this.resourceStrings.currentStageMax]
+      }
 
-    if($(this.resourceName + "-total-max")){
-      $(this.resourceName + "-total-max").update(data[this.resourceStrings.totalMax])
-    }
+      this.updateValue("-total-value", data[this.resourceStrings.totalAvailable])
+      this.updateValue("-total-max", data[this.resourceStrings.totalMax])
 
-    if(this.options.currentStageProgressBar){
-      this.options.currentStageProgressBar.value = data[this.resourceStrings.currentStageAvailable]
-      this.options.currentStageProgressBar.max = data[this.resourceStrings.currentStageMax]
-    }
+      this.updateValue("-current-stage-value", data[this.resourceStrings.currentStageAvailable])
+      this.updateValue("-current-stage-max", data[this.resourceStrings.currentStageMax])
+    }.bind(this))
+  },
 
-    if($(this.resourceName + "-current-stage-value")){
-      $(this.resourceName + "-current-stage-value").update(data[this.resourceStrings.currentStageAvailable])
-    }
-
-    if($(this.resourceName + "-total-max")){
-      $(this.resourceName + "-total-max").update(data[this.resourceStrings.currentStageMax])
+  updateValue: function(id, value){
+    if($(this.options.valuePrefix + id)){
+      if(value < 0){
+        $(this.options.valuePrefix + id).update("NA")
+      } else{
+        $(this.options.valuePrefix + id).update(value.toFixed(2))
+      }
     }
   },
 
