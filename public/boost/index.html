@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Ascension Module</title>
+  <title>BOOST/EECOM</title>
   <script src="../assets/js/math_polyfill.js"></script>
   <script src="../assets/js/numeric.js"></script>
   <script src="../assets/js/numeral.min.js"></script>
@@ -36,7 +36,7 @@
   <link rel="stylesheet" type="text/css" href="../assets/stylesheets/application.css" />
 
   
-  <link rel="stylesheet" type="text/css" href="../assets/stylesheets/ascension.css" />
+  <link rel="stylesheet" type="text/css" href="../assets/stylesheets/boost.css" />
 
 </head>
 <body>
@@ -49,7 +49,7 @@
   </a>
 </li>
 
-      <li id="" class="current">
+      <li id="" class="">
   <a href="../ascension/index.html">
     <img src="../assets/images/ground-track-preview.png"/>
     Ascension
@@ -63,7 +63,7 @@
   </a>
 </li>
 
-      <li id="" class="">
+      <li id="" class="current">
   <a href="../boost/index.html">
     <img src="../assets/images/ground-track-preview.png"/>
     BOOST/EECOM
@@ -114,7 +114,7 @@
       <span id="mission-time">T+12:34:14 MET</span>
     </div>
 
-    <h1>Ascension Module</h1>
+    <h1>BOOST/EECOM</h1>
 
     <div id="world-clock" class="readout-display">
       Year 1, Day 1 00:23:13 UT
@@ -126,7 +126,18 @@
 
 
 <div id="top-panel">
-  <div id="throttle-and-map">
+  <div id="navigation-and-atmospheric-density" class="gauge">
+    <div class="navigation-wrapper">
+  <div id="navball"></div>
+  <div id="navball-heading"></div>
+</div>
+    <div class="atmospheric-density-wrapper">
+  <progress id="atmospheric-density" class="atmospheric_density"></progress>
+  <p>Atmosphere</p>
+</div>
+  </div>
+
+  <div id="throttle-and-button-panel">
     <div class="throttle-wrapper gauge">
   <p>
     <span class="min">0</span>
@@ -136,11 +147,18 @@
   <progress id="throttle" class="throttle"></progress>
 </div>
 
-    <div id="position-map" class="map readout-display"></div>
+    <div id="button-panel">
+      <button id="rcs" disabled="disabled" class="status">RCS</button>
+      <button id="sas" disabled="disabled" class="status">SAS</button>
+      <button id="light" disabled="disabled" class="status">LGHT</button>
+      <button id="gear" disabled="disabled" class="status">GEAR</button>
+      <button id="brake" disabled="disabled" class="status">BRK</button>
+    </div>
   </div>
 
   <div id="resources" class="readout-display">
-    <div id="liquid-fuel" class="resource-readout">
+    <div class="resource-grid">
+      <div id="liquid-fuel" class="resource-readout">
   <p>Liquid Fuel</p>
 
   
@@ -158,7 +176,25 @@
   </div>
 </div>
 
-    <div id="oxidizer" class="resource-readout">
+      <div id="solid-fuel" class="resource-readout">
+  <p>Solid Fuel</p>
+
+  
+    <div>
+      <span>Current Stage</span><br>
+      <progress id="solid-fuel-current" value="0" max="0">0%</progress>
+    </div>
+  
+
+  <div>
+    
+      <span>Total</span><br>
+    
+    <progress id="solid-fuel-total" value="0" max="0">0%</progress>
+  </div>
+</div>
+
+      <div id="oxidizer" class="resource-readout">
   <p>Oxidizer</p>
 
   
@@ -175,34 +211,85 @@
     <progress id="oxidizer-total" value="0" max="0">0%</progress>
   </div>
 </div>
+
+      <div id="monopropellant" class="resource-readout">
+  <p>Monopropellant</p>
+
+  
+    <div>
+      <span>Current Stage</span><br>
+      <progress id="monopropellant-current" value="0" max="0">0%</progress>
+    </div>
+  
+
+  <div>
+    
+      <span>Total</span><br>
+    
+    <progress id="monopropellant-total" value="0" max="0">0%</progress>
   </div>
+</div>
 
-  <div id="navigation-and-atmospheric-density" class="gauge">
-    <div class="navigation-wrapper">
-  <div id="navball"></div>
-  <div id="navball-heading"></div>
-</div>
-    <div class="atmospheric-density-wrapper">
-  <progress id="atmospheric-density" class="atmospheric_density"></progress>
-  <p>Atmosphere</p>
-</div>
+      <div id="electric-charge" class="resource-readout">
+  <p>Electric Charge</p>
+
+  
+    <div>
+      <span>Current Stage</span><br>
+      <progress id="electric-charge-current" value="0" max="0">0%</progress>
+    </div>
+  
+
+  <div>
+    
+      <span>Total</span><br>
+    
+    <progress id="electric-charge-total" value="0" max="0">0%</progress>
   </div>
+</div>
 
-  <div id="ascension-data-and-button-panel">
-    <table id="ascension-data" class="readout-display readout-table"></table>
+      <div id="xenon-gas" class="resource-readout">
+  <p>Xenon Gas</p>
 
-    <div id="button-panel">
-      <button id="rcs" disabled="disabled" class="status">RCS</button>
-      <button id="sas" disabled="disabled" class="status">SAS</button>
-      <button id="light" disabled="disabled" class="status">LGHT</button>
-      <button id="gear" disabled="disabled" class="status">GEAR</button>
-      <button id="brake" disabled="disabled" class="status">BRK</button>
+  
+    <div>
+      <span>Current Stage</span><br>
+      <progress id="xenon-gas-current" value="0" max="0">0%</progress>
+    </div>
+  
+
+  <div>
+    
+      <span>Total</span><br>
+    
+    <progress id="xenon-gas-total" value="0" max="0">0%</progress>
+  </div>
+</div>
+    </div>
+
+    <div id="ablator-readout">
+      <div id="ablator" class="resource-readout">
+  <p>Ablator</p>
+
+  
+
+  <div>
+    
+    <progress id="ablator-total" value="0" max="0">0%</progress>
+  </div>
+</div>
     </div>
   </div>
 </div>
 
-<div class="readout-display">
-  <div class="legend">
+<div id="bottom-panel">
+  <div class="readout-display">
+    <h2>Flight Data</h2>
+    <table id="flight-data" class="readout-table"></table>
+  </div>
+
+  <div class="readout-display">
+    <div class="legend">
   <p>
     <span id="altitude" class="item"></span>Altitude
 
@@ -210,6 +297,7 @@
   </p>
 </div>
 <div id='altitude-tracker'></div>
+  </div>
 </div>
 
 
@@ -278,11 +366,14 @@
 
   window.altitudeTracker = new AltitudeTracker(datalink, 'altitude-tracker', {maxDataPoints : 50})
 
-  window.positionMap = new PositionMap(datalink, 'position-map')
-
   window.liquidFuelMonitor = new ResourceMonitor(datalink, 'LiquidFuel', {
     currentStageProgressBar: $('liquid-fuel-current'),
     totalProgressBar: $('liquid-fuel-total')
+  })
+
+  window.solidFuelMonitor = new ResourceMonitor(datalink, 'SolidFuel', {
+    currentStageProgressBar: $('solid-fuel-current'),
+    totalProgressBar: $('solid-fuel-total')
   })
 
   window.oxidizerMonitor = new ResourceMonitor(datalink, 'Oxidizer', {
@@ -290,31 +381,21 @@
     totalProgressBar: $('oxidizer-total')
   })
 
-  window.readoutTable = new ReadoutTable(datalink, 'ascension-data', [
+  window.monopropellantMonitor = new ResourceMonitor(datalink, 'Monopropellant', {
+    currentStageProgressBar: $('monopropellant-current'),
+    totalProgressBar: $('monopropellant-total')
+  })
+
+  window.electricChargeMonitor = new ResourceMonitor(datalink, 'ElectricCharge', {
+    currentStageProgressBar: $('electric-charge-current'),
+    totalProgressBar: $('electric-charge-total')
+  })
+
+  window.readoutTable = new ReadoutTable(datalink, 'flight-data', [
     {
       label: "Altitude",
       value: 'v.altitude',
       formatter: function(value){ return DataFormatters.distanceString(value) }
-    },
-    {
-      label: "Apoapsis",
-      value: 'o.ApA',
-      formatter: function(value){ return DataFormatters.distanceString(value) }
-    },
-    {
-      label: "Periapsis",
-      value: 'o.PeA',
-      formatter: function(value){ return DataFormatters.distanceString(value) }
-    },
-    {
-      label: "Time to Apoapsis",
-      value: 'o.timeToAp',
-      formatter: function(value){ return "-" + TimeFormatters.durationString(value) }
-    },
-    {
-      label: "Time to Periapsis",
-      value: 'o.timeToPe',
-      formatter: function(value){ return "-" + TimeFormatters.durationString(value) }
     },
     {
       label: "Height from Terrain",
@@ -324,9 +405,14 @@
       }
     },
     {
-      label: "Inclination",
-      value: 'o.inclination',
-      formatter: function(value){ return DataFormatters.degreeString(value) }
+      label: "Surface Velocity",
+      value: 'v.surfaceVelocity',
+      formatter: function(value){ return DataFormatters.velocityString(value) }
+    },
+    {
+      label: "Vertical Velocity",
+      value: 'v.verticalSpeed',
+      formatter: function(value){ return DataFormatters.velocityString(value) }
     },
     {
       label: "Orbital Velocity",
@@ -334,9 +420,9 @@
       formatter: function(value){ return DataFormatters.velocityString(value) }
     },
     {
-      label: "Surface Velocity",
-      value: 'v.surfaceVelocity',
-      formatter: function(value){ return DataFormatters.velocityString(value) }
+      label: "G-Force",
+      value: 'v.geeForce',
+      formatter: function(value){ return value.toFixed(3) }
     },
   ])
 

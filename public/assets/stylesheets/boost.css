@@ -1,0 +1,82 @@
+#top-panel{
+  display: -webkit-flex;
+  display: flex;
+  margin-bottom: 10px;
+  -webkit-justify-content: space-around; 
+  justify-content: space-around; 
+}
+
+#navigation-and-atmospheric-density .atmospheric-density-wrapper{
+  width: 200px;
+}
+
+#navigation-and-atmospheric-density .atmospheric-density-wrapper progress{
+  height: 20px;
+}
+
+#navigation-and-atmospheric-density .navigation-wrapper{
+  margin-bottom: 20px;
+}
+
+.throttle-wrapper{
+  width: 300px;
+}
+
+.throttle-wrapper p,.atmospheric-density-wrapper p{
+  font-size: 20px;
+}
+
+.throttle-wrapper .throttle{
+  height: 20px;
+}
+
+#button-panel{
+  margin-top: 10px;
+  text-align: left;
+}
+
+
+#resources{
+  width: 800px;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-direction: row;
+  flex-direction: row;
+
+  -webkit-align-self: flex-start;
+  align-self: flex-start;
+}
+
+#resources .resource-grid{
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-flow: row wrap;
+  flex-flow: row wrap;
+  /* tweak the where items line up on the row */
+  /* valid values are: flex-start, flex-end, space-between, space-around, stretch */
+  -webkit-align-content: flex-end;
+  align-content: flex-end;
+  width: 75%;
+}
+
+.resource-grid .resource-readout{
+  margin-right: 10px;
+}
+
+#bottom-panel{
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-direction: row;
+  flex-direction: row;
+}
+
+#bottom-panel > div:first-child{
+  min-width: 350px;
+  margin-right: 10px;
+}
+
+#bottom-panel > div:last-child{
+  -webkit-flex: 1; /* Safari 6.1+ */
+  -ms-flex: 1; /* IE 10 */ 
+  flex: 1;
+}
