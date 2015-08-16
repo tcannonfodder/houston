@@ -86,7 +86,7 @@ nav.open #nav_toggle{
 }
 
 #settings_overlay{
-  z-index: 100;
+  z-index: 10000;
   position: absolute;
   top: 0;
   bottom: 0;
@@ -197,7 +197,7 @@ h1{
 }
 
 .resource-readout .totals{
-  font-size: 13px;
+  font-size: 10px;
 }
 
 .readout-table th{
