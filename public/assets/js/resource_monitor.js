@@ -18,9 +18,25 @@ var ResourceMonitor = Class.create({
       this.options.totalProgressBar.max = data[this.resourceStrings.totalMax]
     }
 
+    if($(this.resourceName + "-total-value")){
+      $(this.resourceName + "-total-value").update(data[this.resourceStrings.totalAvailable])
+    }
+
+    if($(this.resourceName + "-total-max")){
+      $(this.resourceName + "-total-max").update(data[this.resourceStrings.totalMax])
+    }
+
     if(this.options.currentStageProgressBar){
       this.options.currentStageProgressBar.value = data[this.resourceStrings.currentStageAvailable]
       this.options.currentStageProgressBar.max = data[this.resourceStrings.currentStageMax]
+    }
+
+    if($(this.resourceName + "-current-stage-value")){
+      $(this.resourceName + "-current-stage-value").update(data[this.resourceStrings.currentStageAvailable])
+    }
+
+    if($(this.resourceName + "-total-max")){
+      $(this.resourceName + "-total-max").update(data[this.resourceStrings.currentStageMax])
     }
   },
 

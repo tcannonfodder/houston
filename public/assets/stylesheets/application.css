@@ -188,6 +188,18 @@ h1{
   border-right: 1px solid #FD7E23;
 }
 
+.resource-readout p{
+  text-decoration: underline;
+}
+
+.resource-readout > div:last-child{
+  margin-top: 5px;
+}
+
+.resource-readout .totals{
+  font-size: 13px;
+}
+
 .readout-table th{
   text-align: left;
 }
