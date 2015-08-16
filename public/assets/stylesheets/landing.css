@@ -12,6 +12,10 @@
   width: 350px;
 }
 
+#navigation-and-atmospheric-density, #position-map{
+  max-height: 280px;
+}
+
 #navigation-and-atmospheric-density .atmospheric-density-wrapper{
   width: 200px;
 }
