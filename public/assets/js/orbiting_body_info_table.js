@@ -55,11 +55,6 @@ var OrbitingBodyInfoTable = Class.create({
         formatter: function(value){ return value }
       },
       {
-        label: "Number of Bodies",
-        value: this.propertyForBody('number'),
-        formatter: function(value){ return value }
-      },
-      {
         label: "GravitationalParameter",
         value: this.propertyForBody('o.gravParameter'),
         formatter: function(value){ return value }
