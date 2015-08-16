@@ -8,20 +8,22 @@ var ReadoutTable = Class.create({
   },
 
   update: function(data){
-    this.dataRows.forEach(function(row){
-      var rowId = row.label
-      var tableRow = this.table.down("tr[data-label='"+ rowId +"']")
+    window.requestAnimationFrame(function(){
+      this.dataRows.forEach(function(row){
+        var rowId = row.label
+        var tableRow = this.table.down("tr[data-label='"+ rowId +"']")
 
-      if(!tableRow){
-        var tableRow = new Element("tr", {
-          "data-label" : rowId
-        })
+        if(!tableRow){
+          var tableRow = new Element("tr", {
+            "data-label" : rowId
+          })
 
-        tableRow.insert("<th>" + row.label + "</th><td></td>")
-        this.table.insert(tableRow)
-      }
+          tableRow.insert("<th>" + row.label + "</th><td></td>")
+          this.table.insert(tableRow)
+        }
 
-      tableRow.down("td").update(row.formatter(data[row.value]))
+        tableRow.down("td").update(row.formatter(data[row.value]))
+      }.bind(this))
     }.bind(this))
   },
 

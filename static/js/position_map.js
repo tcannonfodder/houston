@@ -11,11 +11,13 @@ var PositionMap = Class.create({
   },
 
   update: function(data){
-    this.updateBodyIfNecessary(data)
-    this.setCoordinatesForMapObject(this.coordinates, data['v.lat'], data['v.long'])
-    if(this.options.lockOnVessel){
-      this.map.panTo([data['v.lat'], data['v.long']])
-    }
+    window.requestAnimationFrame(function(){
+      this.updateBodyIfNecessary(data)
+      this.setCoordinatesForMapObject(this.coordinates, data['v.lat'], data['v.long'])
+      if(this.options.lockOnVessel){
+        this.map.panTo([data['v.lat'], data['v.long']])
+      }
+    }.bind(this))
   },
 
   updateBodyIfNecessary: function(data){
