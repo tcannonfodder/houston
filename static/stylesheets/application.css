@@ -190,6 +190,7 @@ h1{
 
 .resource-readout p{
   text-decoration: underline;
+  margin-bottom: 3px;
 }
 
 .resource-readout > div:last-child{
