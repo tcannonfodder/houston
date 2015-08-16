@@ -1,0 +1,131 @@
+---
+title: BOOST/EECOM
+---
+
+<% content_for :head do %>
+  <link rel="stylesheet" type="text/css" href="../assets/stylesheets/boost.css" />
+<% end %>
+
+<div id="top-panel">
+  <div id="navigation-and-atmospheric-density" class="gauge">
+    <%= render 'navball' %>
+    <%= render 'atmospheric_density' %>
+  </div>
+
+  <div id="throttle-and-button-panel">
+    <%= render 'throttle' %>
+
+    <div id="button-panel">
+      <%= render 'button', :button_id => "rcs", :button_label => "RCS" %>
+      <%= render 'button', :button_id => "sas", :button_label => "SAS" %>
+      <%= render 'button', :button_id => "light", :button_label => "LGHT" %>
+      <%= render 'button', :button_id => "gear", :button_label => "GEAR" %>
+      <%= render 'button', :button_id => "brake", :button_label => "BRK" %>
+    </div>
+  </div>
+
+  <div id="resources" class="readout-display">
+    <div class="resource-grid">
+      <%= render 'resource_bar', :resource_name => "liquid-fuel", :resource_label => "Liquid Fuel", :current_stage => true %>
+
+      <%= render 'resource_bar', :resource_name => "solid-fuel", :resource_label => "Solid Fuel", :current_stage => true %>
+
+      <%= render 'resource_bar', :resource_name => "oxidizer", :resource_label => "Oxidizer", :current_stage => true %>
+
+      <%= render 'resource_bar', :resource_name => "monopropellant", :resource_label => "Monopropellant", :current_stage => true %>
+
+      <%= render 'resource_bar', :resource_name => "electric-charge", :resource_label => "Electric Charge", :current_stage => true %>
+
+      <%= render 'resource_bar', :resource_name => "xenon-gas", :resource_label => "Xenon Gas", :current_stage => true %>
+    </div>
+
+    <div id="ablator-readout">
+      <%= render 'resource_bar', :resource_name => "ablator", :resource_label => "Ablator" %>
+    </div>
+  </div>
+</div>
+
+<div id="bottom-panel">
+  <div class="readout-display">
+    <h2>Flight Data</h2>
+    <table id="flight-data" class="readout-table"></table>
+  </div>
+
+  <div class="readout-display">
+    <%= render 'altitude_tracker_chart' %>
+  </div>
+</div>
+
+<% content_for :dom_loaded do %>
+  window.navball = new Navball(window.datalink, 'navball', 'navball-heading')
+  window.rcsButtonIndicator = new ButtonIndicator(datalink, 'rcs', 'v.rcsValue')
+  window.sasButtonIndicator = new ButtonIndicator(datalink, 'sas', 'v.sasValue')
+  window.lightButtonIndicator = new ButtonIndicator(datalink, 'light', 'v.lightValue')
+  window.gearButtonIndicator = new ButtonIndicator(datalink, 'gear', 'v.gearValue')
+  window.brakeButtonIndicator = new ButtonIndicator(datalink, 'brake', 'v.brakeValue')
+
+  window.atmosphericDensityGauge = new AtmosphericDensityGauge(window.datalink, 'atmospheric-density')
+  window.throttleGauge = new ThrottleGauge(window.datalink, 'throttle')
+
+  window.altitudeTracker = new AltitudeTracker(datalink, 'altitude-tracker', {maxDataPoints : 50})
+
+  window.liquidFuelMonitor = new ResourceMonitor(datalink, 'LiquidFuel', {
+    currentStageProgressBar: $('liquid-fuel-current'),
+    totalProgressBar: $('liquid-fuel-total')
+  })
+
+  window.solidFuelMonitor = new ResourceMonitor(datalink, 'SolidFuel', {
+    currentStageProgressBar: $('solid-fuel-current'),
+    totalProgressBar: $('solid-fuel-total')
+  })
+
+  window.oxidizerMonitor = new ResourceMonitor(datalink, 'Oxidizer', {
+    currentStageProgressBar: $('oxidizer-current'),
+    totalProgressBar: $('oxidizer-total')
+  })
+
+  window.monopropellantMonitor = new ResourceMonitor(datalink, 'Monopropellant', {
+    currentStageProgressBar: $('monopropellant-current'),
+    totalProgressBar: $('monopropellant-total')
+  })
+
+  window.electricChargeMonitor = new ResourceMonitor(datalink, 'ElectricCharge', {
+    currentStageProgressBar: $('electric-charge-current'),
+    totalProgressBar: $('electric-charge-total')
+  })
+
+  window.readoutTable = new ReadoutTable(datalink, 'flight-data', [
+    {
+      label: "Altitude",
+      value: 'v.altitude',
+      formatter: function(value){ return DataFormatters.distanceString(value) }
+    },
+    {
+      label: "Height from Terrain",
+      value: 'v.heightFromTerrain',
+      formatter: function(value){
+        return DataFormatters.heightFromTerrainString(value)
+      }
+    },
+    {
+      label: "Surface Velocity",
+      value: 'v.surfaceVelocity',
+      formatter: function(value){ return DataFormatters.velocityString(value) }
+    },
+    {
+      label: "Vertical Velocity",
+      value: 'v.verticalSpeed',
+      formatter: function(value){ return DataFormatters.velocityString(value) }
+    },
+    {
+      label: "Orbital Velocity",
+      value: 'v.orbitalVelocity',
+      formatter: function(value){ return DataFormatters.velocityString(value) }
+    },
+    {
+      label: "G-Force",
+      value: 'v.geeForce',
+      formatter: function(value){ return value.toFixed(3) }
+    },
+  ])
+<% end %>
