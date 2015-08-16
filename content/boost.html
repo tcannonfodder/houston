@@ -26,21 +26,21 @@ title: BOOST/EECOM
 
   <div id="resources" class="readout-display">
     <div class="resource-grid">
-      <%= render 'resource_bar', :resource_name => "liquid-fuel", :resource_label => "Liquid Fuel", :current_stage => true %>
+      <%= render 'resource_bar', :resource_name => "liquid-fuel", :resource_label => "Liquid Fuel", :current_stage => true, :show_totals => true %>
 
-      <%= render 'resource_bar', :resource_name => "solid-fuel", :resource_label => "Solid Fuel", :current_stage => true %>
+      <%= render 'resource_bar', :resource_name => "solid-fuel", :resource_label => "Solid Fuel", :current_stage => true, :show_totals => true %>
 
-      <%= render 'resource_bar', :resource_name => "oxidizer", :resource_label => "Oxidizer", :current_stage => true %>
+      <%= render 'resource_bar', :resource_name => "oxidizer", :resource_label => "Oxidizer", :current_stage => true, :show_totals => true %>
 
-      <%= render 'resource_bar', :resource_name => "monopropellant", :resource_label => "Monopropellant", :current_stage => true %>
+      <%= render 'resource_bar', :resource_name => "monopropellant", :resource_label => "Monopropellant", :current_stage => true, :show_totals => true %>
 
-      <%= render 'resource_bar', :resource_name => "electric-charge", :resource_label => "Electric Charge", :current_stage => true %>
+      <%= render 'resource_bar', :resource_name => "electric-charge", :resource_label => "Electric Charge", :current_stage => true, :show_totals => true %>
 
-      <%= render 'resource_bar', :resource_name => "xenon-gas", :resource_label => "Xenon Gas", :current_stage => true %>
+      <%= render 'resource_bar', :resource_name => "xenon-gas", :resource_label => "Xenon Gas", :current_stage => true, :show_totals => true %>
     </div>
 
     <div id="ablator-readout">
-      <%= render 'resource_bar', :resource_name => "ablator", :resource_label => "Ablator" %>
+      <%= render 'resource_bar', :resource_name => "ablator", :resource_label => "Ablator", :show_totals => true %>
     </div>
   </div>
 </div>
