@@ -99,6 +99,17 @@ title: BOOST/EECOM
     valuePrefix: 'electric-charge'
   })
 
+  window.ablatorMonitor = new ResourceMonitor(datalink, 'Ablator', {
+    totalProgressBar: $('ablator-total'),
+    valuePrefix: 'ablator'
+  })
+
+  window.ablatorMonitor = new ResourceMonitor(datalink, 'XenonGas', {
+    currentStageProgressBar: $('xenon-gas-current'),
+    totalProgressBar: $('xenon-gas-total'),
+    valuePrefix: 'xenon-gas'
+  })
+
   window.readoutTable = new ReadoutTable(datalink, 'flight-data', [
     {
       label: "Altitude",
