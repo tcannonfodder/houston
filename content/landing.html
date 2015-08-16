@@ -78,26 +78,6 @@ title: Landing Module
       formatter: function(value){ return DataFormatters.distanceString(value) }
     },
     {
-      label: "Apoapsis",
-      value: 'o.ApA',
-      formatter: function(value){ return DataFormatters.distanceString(value) }
-    },
-    {
-      label: "Periapsis",
-      value: 'o.PeA',
-      formatter: function(value){ return DataFormatters.distanceString(value) }
-    },
-    {
-      label: "Time to Apoapsis",
-      value: 'o.timeToAp',
-      formatter: function(value){ return "-" + TimeFormatters.durationString(value) }
-    },
-    {
-      label: "Time to Periapsis",
-      value: 'o.timeToPe',
-      formatter: function(value){ return "-" + TimeFormatters.durationString(value) }
-    },
-    {
       label: "Height from Terrain",
       value: 'v.heightFromTerrain',
       formatter: function(value){
@@ -105,18 +85,13 @@ title: Landing Module
       }
     },
     {
-      label: "Inclination",
-      value: 'o.inclination',
-      formatter: function(value){ return DataFormatters.degreeString(value) }
-    },
-    {
-      label: "Orbital Velocity",
-      value: 'v.orbitalVelocity',
+      label: "Surface Velocity",
+      value: 'v.surfaceVelocity',
       formatter: function(value){ return DataFormatters.velocityString(value) }
     },
     {
-      label: "Surface Velocity",
-      value: 'v.surfaceVelocity',
+      label: "Vertical Speed",
+      value: 'v.verticalSpeed',
       formatter: function(value){ return DataFormatters.velocityString(value) }
     },
   ])
