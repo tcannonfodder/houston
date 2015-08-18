@@ -100,7 +100,7 @@ var Navball = Class.create({
 
     var navballMaterial = new THREE.MeshPhongMaterial({
       map: navballTexture,
-      bumpMap: THREE.ImageUtils.loadTexture('../assets/images/navball-normal.png'),
+      bumpMap: THREE.ImageUtils.loadTexture('../assets/images/navball-white-gray-normal.png'),
       bumpScale: 0.25,
       shininess: 80,
     })
