@@ -1,5 +1,9 @@
 #top-panel{
-  display: -webkit-flex;
+  display: -webkit-box; /* OLD - iOS 6-, Safari 3.1-6 */
+  display: -moz-box; /* OLD - Firefox 19- (buggy but mostly works) */
+  display:-webkit-flex;
+  display:-webkit-flexbox;
+  display:-ms-flex;
   display: flex;
   margin-bottom: 10px;
   -webkit-justify-content: space-around; 

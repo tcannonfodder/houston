@@ -95,7 +95,7 @@ var Navball = Class.create({
 
     //initialize the body geometry and materials
     var navballGeometry = new THREE.SphereGeometry(this.displayRadius, 48, 48)
-    var navballTexture = THREE.ImageUtils.loadTexture('../assets/images/navball.png')
+    var navballTexture = THREE.ImageUtils.loadTexture('../assets/images/navball-white-gray.png')
     navballTexture.anisotropy = this.renderer.getMaxAnisotropy()
 
     var navballMaterial = new THREE.MeshPhongMaterial({
