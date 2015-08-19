@@ -55,7 +55,7 @@ var PositionMap = Class.create({
   },
 
   convertCoordinatesToMap: function(latitude, longitude){
-    return [latitude, longitude > 180 ? longitude - 180 : longitude]
+    return [latitude, longitude > 180 ? longitude - 360 : longitude]
   },
 
   setCoordinatesForMapObject: function(object, latitude, longitude){
