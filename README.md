@@ -16,7 +16,7 @@ Houston's designed for Mission Control Parties. What's a Mission Control Party? 
 
 You could also use it playing solo, switching between stations as needed.
 
-Want to see some more? here's a GIF of the Ground Track in action!
+Want to see some more? Here's a GIF of the Ground Track in action!
 
 ![](readme-images/ground-track-preview.gif)
 
@@ -25,7 +25,7 @@ Want to see some more? here's a GIF of the Ground Track in action!
 Houston has a ton of really cool features, some of which work!
 
 * A ground track, for plotting the path of a ship in orbit
-* An altitude estimate for said Ground Track (heavy emphasis on "estimate")
+* An altitude estimate for said ground track (heavy emphasis on "estimate")
 * Readouts for the stock resource types in KSP
 * Status light indicators
 * A 3D navball (**huuge** thanks to [Lokaltog/KeRD](https://github.com/Lokaltog/KeRD) for an awesome implementation)
@@ -40,7 +40,7 @@ Houston has a ton of really cool features, some of which work!
 Houston was designed to have specialized UIs for specific stations or contexts. That way you can divide the work across a team and only focus on the relevant data. So far, Houston has:
 
 ![](readme-images/ground-track.png)
-**A ground track/orbit overview view**
+**A ground track/orbit overview**
 
 ![](readme-images/ascension.png)
 **An ascension module**
