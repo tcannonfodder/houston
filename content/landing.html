@@ -71,6 +71,11 @@ title: Landing Module
     totalProgressBar: $('oxidizer-total')
   })
 
+  window.ablatorMonitor = new ResourceMonitor(datalink, 'Ablator', {
+    currentStageProgressBar: $('ablator-current'),
+    totalProgressBar: $('ablator-total')
+  })
+
   window.readoutTable = new ReadoutTable(datalink, 'ascension-data', [
     {
       label: "Altitude",
