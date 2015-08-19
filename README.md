@@ -39,19 +39,26 @@ Houston has a ton of really cool features, some of which work!
 
 Houston was designed to have specialized UIs for specific stations or contexts. That way you can divide the work across a team and only focus on the relevant data. So far, Houston has:
 
-![A ground track/orbit overview view](readme-images/ground-track.png)
+![](readme-images/ground-track.png)
+**A ground track/orbit overview view**
 
-![An ascension module](readme-images/ascension.png)
+![](readme-images/ascension.png)
+**An ascension module**
 
-![A landing module](readme-images/landing.png)
+![](readme-images/landing.png)
+**A landing module**
 
-![Combined BOOST/EECOM stations](readme-images/boost.png)
+![](readme-images/boost.png)
+**Combined BOOST/EECOM stations**
 
-![A FIDO station](readme-images/fido.png)
+![](readme-images/fido.png)
+**A FIDO station**
 
-![SCIEEENNNCEEE](readme-images/science.png)
+![](readme-images/science.png)
+**SCIEEENNNCEEE**
 
-![Everything's accessible through a pulldown menu, including links to the Telemachus console or MKON](readme-images/navigation.png)
+![](readme-images/navigation.png)
+**Everything's accessible through a pulldown menu, including links to the Telemachus console or MKON**
 
 ## Installing
 
