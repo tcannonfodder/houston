@@ -16,3 +16,8 @@ task :test => [:clean, :remove_output_dir, :compile] do
   require 'html/proofer'
   HTML::Proofer.new("./public").run
 end
+
+desc "Build a release version"
+task :release do
+  puts `cp -R public/ houston/`
+end
