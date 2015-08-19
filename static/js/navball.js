@@ -95,12 +95,12 @@ var Navball = Class.create({
 
     //initialize the body geometry and materials
     var navballGeometry = new THREE.SphereGeometry(this.displayRadius, 48, 48)
-    var navballTexture = THREE.ImageUtils.loadTexture('../assets/images/navball-white-gray.png')
+    var navballTexture = THREE.ImageUtils.loadTexture('../assets/images/navball.png')
     navballTexture.anisotropy = this.renderer.getMaxAnisotropy()
 
     var navballMaterial = new THREE.MeshPhongMaterial({
       map: navballTexture,
-      bumpMap: THREE.ImageUtils.loadTexture('../assets/images/navball-white-gray-normal.png'),
+      bumpMap: THREE.ImageUtils.loadTexture('../assets/images/navball-normal.png'),
       bumpScale: 0.25,
       shininess: 80,
     })
