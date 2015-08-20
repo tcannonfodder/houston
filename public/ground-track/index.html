@@ -299,7 +299,7 @@
   <script>
 
   $(document).observe("dom:loaded", function() {
-    window.settings = new Settings("localhost", "8085")
+    window.settings = new Settings(window.location.hostname, window.location.port)
     $('settings')['host'].value = settings.getHost()
     $('settings')['port'].value = settings.getPort()
 
