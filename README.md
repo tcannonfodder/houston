@@ -67,6 +67,12 @@ Houston was designed to have specialized UIs for specific stations or contexts. 
 3. Copy everything in the `public/` directory to `[YOUR KSP FOLDER]/Game Data/Telemachus/Plugins/PluginData/Telemachus/houston/`
 4. Launch KSP, add the Telemachus parts to your ships, and have fun!
 
+## How do I play?
+
+I've written up two guides for how to play KSP: Houston:
+* [Playing in the same room](https://github.com/tcannonfodder/houston/wiki/Playing-Houston-in-the-same-room)
+* [Playing over the Internet](https://github.com/tcannonfodder/houston/wiki/Playing-Houston-over-the-Internet)
+
 ## Developing
 
 Houston's compiled using [nanoc](http://nanoc.ws).
