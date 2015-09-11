@@ -49,20 +49,20 @@ You can combine roles if necessary, but we've found that having an individual at
 
 Getting everything setup to make Houston a fun party can be a bit tricky, but some basic rules to follow are:
 
-* Try to get some distance between the pilot and Misson Control. Part of the fun of Houston is the tension that comes from onyl having indirect control. Requiring Mission Control to make a plan, then relay that plan to the Pilot, without it being super easy to go "oh, just let me do it!" is what keeps everyone on their toes! You don't need a ton of extra space. We put the Pilot in an adjoining room, only 20 feet from Mission Control. It was just enough space to put the Pilot "out of reach" of Mission Control and made it so that the CAPCOM needs to manage communication.
+* Try to get some distance between the pilot and Mission Control. Part of the fun of Houston is the tension that comes from only having indirect control. Requiring Mission Control to make a plan, then relay that plan to the Pilot, without it being super easy to go "oh, just let me do it!" is what keeps everyone on their toes! You don't need a ton of extra space. We put the Pilot in an adjoining room, only 20 feet from Mission Control. It was just enough space to put the Pilot "out of reach" of Mission Control and made it so that the CAPCOM needs to manage communication.
 
 * Mission Control has to be able to see KSP, ideally on a big screen. There are 2 reasons for this:
-  1. Mission Control needs to see the map view in detail when planning manuevers
+  1. Mission Control needs to see the map view in detail when planning maneuvers
   2. It gives Mission Control something to look at other than data readouts. Not every station will have something to do at every moment, so being able to sit back and watch the action unfold is crucial for Mission Control players enjoying the game.
 
 * Keep everything within normal speaking distance. There will be a lot of chatting, either about the mission or to hang out. Trying to yell across halls or use Skype/Google Hangouts unnecessarily will just diminish the experience. Similarly, while it sounds cool in theory, we don't recommend locking the Pilot in the bathroom with some snacks. Authentic? Yes. Memorable? Yes. Fun for hours? *Ehhhh.*
 
 For reference, here was our setup:
 
-![](https://github.com/tcannonfodder/houston/blob/master/readme-images/mission-control-photo.png)
+![](https://github.com/tcannonfodder/houston/blob/master/readme-images/misson-control-photo.png)
 
 ## Playing
 
 * Make time for breaks, and take advantage of the natural breaks in Kerbal Space Program. Let people stretch their legs, chat over some food, and get some coffee. Houston can be a little intense at times, so these moments to unwind keep things fun for everyone.
-* Don't use manuever nodes, except as time markers. Part of the fun of KSP is doing all the manuevers manually. There's nothing like debating when to retrograde burn to intercept an orbiting space station, or how long and powerful a plane change burn should be. Similarly, don't use an autopilot tool.
+* Don't use maneuver nodes, except as time markers. Part of the fun of KSP is doing all the maneuvers manually. There's nothing like debating when to retrograde burn to intercept an orbiting space station, or how long and powerful a plane change burn should be. Similarly, don't use an autopilot tool.
 * Keep everyone involved, don't let a few folks dominate the game. It can be easy for someone to take the back seat, particularly if you have a great Pilot or CAPCOM. Everyone has something to contribute, and they probably have some data that will help! If you think someone might have something to add, ask what they think. :)

@@ -47,4 +47,4 @@ ngrok http 8085
 
 ## Additional notes
 
-The Twitch stream will have a 15ish second delay. This might trip up Misson Control a bit, but it's pretty close to the actual missions! And it adds a fun wrinkle to make up for not being in the same room. :)
+The Twitch stream will have a 15ish second delay. This might trip up Mission Control a bit, but it's pretty close to the actual missions! And it adds a fun wrinkle to make up for not being in the same room. :)
