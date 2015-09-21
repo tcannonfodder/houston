@@ -91,71 +91,88 @@ var Telemachus = Class.create({
     return {
       "Kerbol" : {
         id: 0,
-        mapBody: null
+        mapBody: null,
+        surfaceGravity: 17.1 //m/s^2
       },
       "Kerbin" : {
         id: 1,
-        mapBody: L.KSP.CelestialBody.KERBIN
+        mapBody: L.KSP.CelestialBody.KERBIN,
+        surfaceGravity: 9.81 //m/s^2
       },
       "Mun" : {
         id: 2,
-        mapBody: L.KSP.CelestialBody.MUN
+        mapBody: L.KSP.CelestialBody.MUN,
+        surfaceGravity: 1.63 //m/s^2
       },
       "Minmus" : {
         id: 3,
-        mapBody: L.KSP.CelestialBody.MINMUS
+        mapBody: L.KSP.CelestialBody.MINMUS,
+        surfaceGravity: 0.491 //m/s^2
       },
       "Moho" : {
         id: 4,
-        mapBody: L.KSP.CelestialBody.MOHO
+        mapBody: L.KSP.CelestialBody.MOHO,
+        surfaceGravity: 2.70 //m/s^2
       },
       "Eve" : {
         id: 5,
-        mapBody: L.KSP.CelestialBody.EVE
+        mapBody: L.KSP.CelestialBody.EVE,
+        surfaceGravity: 16.7 //m/s^2
       },
       "Duna" : {
         id: 6,
-        mapBody: L.KSP.CelestialBody.DUNA
+        mapBody: L.KSP.CelestialBody.DUNA,
+        surfaceGravity: 2.94 //m/s^2
       },
       "Ike" : {
         id: 7,
-        mapBody: L.KSP.CelestialBody.IKE
+        mapBody: L.KSP.CelestialBody.IKE,
+        surfaceGravity: 1.10 //m/s^2
       },
       "Jool" : {
         id: 8,
-        mapBody: L.KSP.CelestialBody.JOOL
+        mapBody: L.KSP.CelestialBody.JOOL,
+        surfaceGravity: 7.85 //m/s^2
       },
       "Laythe" : {
         id: 9,
-        mapBody: L.KSP.CelestialBody.LAYTHE
+        mapBody: L.KSP.CelestialBody.LAYTHE,
+        surfaceGravity: 7.85 //m/s^2
       },
       "Vall" : {
         id: 10,
-        mapBody: L.KSP.CelestialBody.VALL
+        mapBody: L.KSP.CelestialBody.VALL,
+        surfaceGravity: 2.31 //m/s^2
       },
       "Bop" : {
         id: 11,
-        mapBody: L.KSP.CelestialBody.BOP
+        mapBody: L.KSP.CelestialBody.BOP,
+        surfaceGravity: 0.589 //m/s^2
       },
       "Tylo" : {
         id: 12,
-        mapBody: L.KSP.CelestialBody.TYLO
+        mapBody: L.KSP.CelestialBody.TYLO,
+        surfaceGravity: 7.85 //m/s^2
       },
       "Gilly" : {
         id: 13,
-        mapBody: L.KSP.CelestialBody.GILLY
+        mapBody: L.KSP.CelestialBody.GILLY,
+        surfaceGravity: 0.049 //m/s^2
       },
       "Pol" : {
         id: 14,
-        mapBody: L.KSP.CelestialBody.POL
+        mapBody: L.KSP.CelestialBody.POL,
+        surfaceGravity: 0.373 //m/s^2
       },
       "Dres" : {
         id: 15,
-        mapBody: L.KSP.CelestialBody.DRES
+        mapBody: L.KSP.CelestialBody.DRES,
+        surfaceGravity: 1.13 //m/s^2
       },
       "Eeloo" : {
         id: 16,
-        mapBody: L.KSP.CelestialBody.EELOO
+        mapBody: L.KSP.CelestialBody.EELOO,
+        surfaceGravity: 1.69 //m/s^2
       }
     }
   }

@@ -9,6 +9,7 @@
   <script src="../assets/js/time_formatters.js"></script>
   <script src="../assets/js/data_formatters.js"></script>
   <script src="../assets/js/prototype.js"></script>
+  <script src="../assets/js/data_table.js"></script>
   <script src="../assets/js/leaflet.ksp.js"></script>
   <script src="../assets/js/L.Graticule.js"></script>
   <script src="../assets/js/three.min.js"></script>
@@ -32,6 +33,8 @@
   <script src="../assets/js/atmospheric_density_gauge.js"></script>
   <script src="../assets/js/throttle_gauge.js"></script>
   <script src="../assets/js/altitude_tracker.js"></script>
+
+  <script src="../assets/js/current_stage_burn_info.js"></script>
 
   <link rel="stylesheet" type="text/css" href="../assets/stylesheets/chartist.min.css" />
   <link rel="stylesheet" type="text/css" href="../assets/stylesheets/leafletksp.css" />
@@ -401,6 +404,16 @@
 </div>
 <div id='altitude-tracker'></div>
   </div>
+
+  <div class="readout-display">
+    <table id="current-stage-atmo" class="readout-table">
+      <caption>Atmosphere</caption>
+    </table>
+
+    <table id="current-stage-vacuum" class="readout-table">
+      <caption>Vacuum</caption>
+    </table>
+  </div>
 </div>
 
 
@@ -544,6 +557,8 @@
       formatter: function(value){ return value.toFixed(3) }
     },
   ])
+
+  window.currentStageBurnInfo = new CurrentStageBurnInfo(datalink, 'current-stage-atmo','current-stage-vacuum')
 
   })
 
