@@ -200,5 +200,9 @@ var OrbitalMath = {
     var theta = Math.atan(vector.j/vector.i)
     // debugger
     return theta - GMSTInRadians - (angularVelocityOfPlanet * deltaT)
+  },
+
+  TWR: function(thrust, totalMass, surfaceGravity){
+    return (thrust)/(totalMass * surfaceGravity)
   }
 }
