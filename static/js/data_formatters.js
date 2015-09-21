@@ -35,4 +35,24 @@ var DataFormatters = {
     if(value[0] == "No Sensors of the Appropriate Type"){return "NA"}
     return numeral(value[1][0]).format('0,000 a') + "m/s&sup2;"
   },
+
+  newtonsString: function(value){
+    return numeral(value).format('0,0.00') + " N"
+  },
+
+  percentageString: function(value){
+    return numeral(value).format("0%")
+  },
+
+  tonnageString: function(value){
+    return numeral(value).format("0,0.00") + " t"
+  },
+
+  timeString: function(value){
+    return numeral(value).format('00:00:00')
+  },
+
+  plainNumberString: function(value){
+    return numeral(value).format("0,0.00")
+  }
 }
