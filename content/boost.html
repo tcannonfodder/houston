@@ -54,6 +54,16 @@ title: BOOST/EECOM
   <div class="readout-display">
     <%= render 'altitude_tracker_chart' %>
   </div>
+
+  <div class="readout-display">
+    <table id="current-stage-atmo" class="readout-table">
+      <caption>Atmosphere</caption>
+    </table>
+
+    <table id="current-stage-vacuum" class="readout-table">
+      <caption>Vacuum</caption>
+    </table>
+  </div>
 </div>
 
 <% content_for :dom_loaded do %>
@@ -144,4 +154,6 @@ title: BOOST/EECOM
       formatter: function(value){ return value.toFixed(3) }
     },
   ])
+
+  window.currentStageBurnInfo = new CurrentStageBurnInfo(datalink, 'current-stage-atmo','current-stage-vacuum')
 <% end %>
