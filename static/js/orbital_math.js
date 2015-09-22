@@ -209,5 +209,18 @@ var OrbitalMath = {
   secondsToUseFuelAtCurrentThrust: function(massOfFuel, thrust, isp, surfaceGravity){
     if(thrust <= 0 || isp <= 0 || surfaceGravity <= 0){ return -1}
     return (massOfFuel)/((thrust/isp) * (1/surfaceGravity))
+  },
+
+  // returns in tons
+  weightOfFuelUsedDuringBurn: function(thrust, isp, surfaceGravity, deltaT){
+    return (thrust/isp) * (1/surfaceGravity) * deltaT;
+  },
+
+  deltaVForBurn: function(thrust, startMass, endMass, deltaT){
+    if(deltaT > 0 && startMass > endMass && startMass > 0 && endMass > 0){
+      return thrust * deltaT / (startMass - endMass) * Math.log(startMass/endMass)
+    } else {
+      return 0.0
+    }
   }
 }
