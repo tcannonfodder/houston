@@ -22,6 +22,11 @@ title: BOOST/EECOM
       <%= render 'button', :button_id => "gear", :button_label => "GEAR" %>
       <%= render 'button', :button_id => "brake", :button_label => "BRK" %>
     </div>
+
+    <div class="readout-display">
+      <h2>Flight Data</h2>
+      <table id="flight-data" class="readout-table"></table>
+    </div>
   </div>
 
   <div id="resources" class="readout-display">
@@ -46,15 +51,6 @@ title: BOOST/EECOM
 </div>
 
 <div id="bottom-panel">
-  <div class="readout-display">
-    <h2>Flight Data</h2>
-    <table id="flight-data" class="readout-table"></table>
-  </div>
-
-  <div class="readout-display">
-    <%= render 'altitude_tracker_chart' %>
-  </div>
-
   <div class="readout-display">
     <h2>Current Throttle Info</h2>
     <table id="current-stage-atmo" class="readout-table">
@@ -137,8 +133,6 @@ title: BOOST/EECOM
 
   window.atmosphericDensityGauge = new AtmosphericDensityGauge(window.datalink, 'atmospheric-density')
   window.throttleGauge = new ThrottleGauge(window.datalink, 'throttle')
-
-  window.altitudeTracker = new AltitudeTracker(datalink, 'altitude-tracker', {maxDataPoints : 50})
 
   window.liquidFuelMonitor = new ResourceMonitor(datalink, 'LiquidFuel', {
     currentStageProgressBar: $('liquid-fuel-current'),
