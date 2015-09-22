@@ -206,6 +206,10 @@ var OrbitalMath = {
     return (thrust)/(totalMass * surfaceGravity)
   },
 
+  MaxTWR: function(maxAcceleration, surfaceGravity){
+    return maxAcceleration/surfaceGravity
+  },
+
   secondsToUseFuelAtCurrentThrust: function(massOfFuel, thrust, isp, surfaceGravity){
     if(thrust <= 0 || isp <= 0 || surfaceGravity <= 0){ return -1}
     return (massOfFuel)/((thrust/isp) * (1/surfaceGravity))
