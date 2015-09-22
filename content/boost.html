@@ -120,6 +120,11 @@ title: BOOST/EECOM
       </tfoot>
     </table>
   </div>
+
+  <div class="readout-display">
+    <h2>Staging Info</h2>
+    <table id="staging-info-table" class="readout-table"></table>
+  </div>
 </div>
 
 <% content_for :dom_loaded do %>
@@ -212,6 +217,8 @@ title: BOOST/EECOM
   ])
 
   window.currentStageBurnInfo = new CurrentStageBurnInfo(datalink, 'current-stage-atmo','current-stage-vacuum')
+
+  window.stagingInfoTable = new StagingInfoTable(datalink, 'staging-info-table')
 
   window.burnPlanner = new BurnPlanner(datalink, {
     //control elements:
