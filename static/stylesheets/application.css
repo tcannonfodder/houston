@@ -1,3 +1,14 @@
+@font-face {font-family: 'PT Mono'; 
+  src: url('../fonts/ptm55f_w.eot'); 
+  src: local('PT Mono'), url('../fonts/ptm55f_w.eot?#iefix') format('embedded-opentype'),url('../fonts/ptm55f_w.woff') format('woff'),url('ptf55m_w.ttf') format('truetype'), url('../fonts/ptm55f_w.svg#PTMono-Regular') format('svg');}
+
+@font-face {font-family: 'PT Mono';
+  src: url('../fonts/ptm75f_w.eot');
+  font-style: normal;
+  font-weight: bold; 
+  src: local('PT Mono Bold'), url('../fonts/ptm75f_w.eot?#iefix') format('embedded-opentype'), url('../fonts/ptm75f_w.woff') format('woff'),url('../fonts/ptm75f_w.ttf') format('truetype'), url('../fonts/ptm75f_w.svg#PTMono-Bold') format('svg');}
+
+
 body{
   background: #9B9B9B;
   background-image: url('../images/background-noise.png');
@@ -166,7 +177,8 @@ h1{
   box-shadow: inset 0px 1px 3px 0px rgba(0,0,0,0.50);
   border-radius: 8px;
   color: #FD7E23;
-  font-family: PTMono-Bold;
+  font-family: 'PT Mono';
+  font-weight: bold;
   padding: 5px;
 }
 
@@ -179,7 +191,7 @@ h1{
   background-color: #FD7E23;
   color: #3A1604;
   border-radius: 3px;
-  font-family: PTMono-Bold;
+  font-family: 'PT Mono';
 }
 
 .readout-display input:hover, .readout-display button:hover, .readout-display select:hover{
@@ -218,6 +230,7 @@ h1{
 
 .readout-table th{
   text-align: left;
+  font-weight: normal;
 }
 
 .readout-table td{
