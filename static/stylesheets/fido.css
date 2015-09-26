@@ -57,3 +57,75 @@
 #bottom-panel > div:last-child{
   margin-right: 0px;
 }
+
+#maneuver_node{
+  display: none;
+}
+
+#manuever_nodes > div{
+  display: -webkit-box; /* OLD - iOS 6-, Safari 3.1-6 */
+  display: -moz-box; /* OLD - Firefox 19- (buggy but mostly works) */
+  display:-webkit-flex;
+  display:-webkit-flexbox;
+  display:-ms-flex;
+  display: flex;
+  -webkit-flex-direction: row;
+  flex-direction: row;
+}
+
+#node_list{
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+#node_selector{
+  list-style: none;
+  padding:0;
+}
+
+#node_selector li{
+  border: 2px solid #FD7E23;
+  padding: 3px;
+  border-radius: 3px;
+  margin-bottom: 2px;
+  max-width: 250px;
+}
+
+#node_selector li.selected{
+  color: #3A1604;
+  background-color: #FD7E23;
+  border: 2px solid #FD7E23;
+  padding: 3px;
+  border-radius: 3px;
+}
+
+#node_selector li.selected button{
+  border: 2px solid #FD7E23;
+  background-color: #3A1604;
+  color: #FD7E23;
+}
+
+#node_selector li span{
+  display:block;
+  font-size: 11px;
+}
+
+#node_editor th{
+  text-align: right;
+}
+
+#node_orbit_info td, #node_orbit_info th{
+  text-align: right;
+}
+
+#node_orbit_info th{
+  padding-right: 5px;
+}
+
+#node_editor input{
+  width: 100px;
+}
+
+#node_editor #ut_buttons{
+  text-align: center;
+}
