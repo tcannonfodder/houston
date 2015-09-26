@@ -83,6 +83,76 @@ title: FIDO
       </tr>
     </table>
   </div>
+
+  <div id="manuever_nodes" class="readout-display">
+    <h2>Manuever Node Editor</h2>
+    <div>
+      <div id="node_list">
+        <div id="no_maneuver_nodes">No Nodes!</div>
+        <select id="maneuver_node"></select>
+        <ul id="node_selector"></ul>
+        <button id="add_node">Add Node</button>
+      </div>
+      <table id="node_editor">
+        <tr>
+          <th>Increment</th>
+          <td>
+            <select id="node_quick_increment">
+              <option>0.01</option>
+              <option>0.1</option>
+              <option>1</option>
+              <option selected="selected">10</option>
+              <option>100</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <th>UT</th>
+          <td>
+            <input id="node_ut" type="number">
+            <button id="node_ut_plus">+</button>
+            <button id="node_ut_minus">-</button>
+          </td>
+        </tr>
+        <tr>
+          <td id="ut_buttons" colspan="2">
+            <button id="node_ut_ap">AP</button>
+            <button id="node_ut_pe">PE</button>
+            <button id="node_ut_1k_plus">+1K</button>
+            <button id="node_ut_1k_minus">-1K</button>
+          </td>
+        </tr>
+        <tr>
+          <th>Prograde</th>
+          <td>
+            <input id="node_prograde" type="number">
+            <button id="node_prograde_plus">+</button>
+            <button id="node_prograde_minus">-</button>
+          </td>
+        </tr>
+        <tr>
+          <th>Normal</th>
+          <td>
+            <input id="node_normal" type="number">
+            <button id="node_normal_plus">+</button>
+            <button id="node_normal_minus">-</button>
+          </td>
+        </tr>
+        <tr>
+          <th>Radial</th>
+          <td>
+            <input id="node_radial" type="number">
+            <button id="node_radial_plus">+</button>
+            <button id="node_radial_minus">-</button>
+          </td>
+        </tr>
+        <tr>
+          <th>&Delta;v</th><td id="node_delta_v"></td>
+        </tr>
+      </table>
+      <table id="node_orbit_info"></table>
+    </div>
+  </div>
 </div>
 
 <% content_for :dom_loaded do %>
@@ -201,6 +271,35 @@ title: FIDO
       formatter: function(value){ return value.toFixed(3) }
     },
   ])
+
+  window.nodeEditor = new ManeuverNodeEditor(window.datalink,{
+    //control elements
+    maneuverNode: $('maneuver_node'),
+    quickIncrement: $('node_quick_increment'),
+    ut: $('node_ut'),
+    utPlus: $('node_ut_plus'),
+    utMinus: $('node_ut_minus'),
+    utAp: $('node_ut_ap'),
+    utPe: $('node_ut_pe'),
+    ut1KPlus: $('node_ut_1k_plus'),
+    ut1KMinus: $('node_ut_1k_minus'),
+    prograde: $('node_prograde'),
+    progradePlus: $('node_prograde_plus'),
+    progradeMinus: $('node_prograde_minus'),
+    normal: $('node_normal'),
+    normalPlus: $('node_normal_plus'),
+    normalMinus: $('node_normal_minus'),
+    radial: $('node_radial'),
+    radialPlus: $('node_radial_plus'),
+    radialMinus: $('node_radial_minus'),
+    nodeSelector: $('node_selector'),
+    addNode: $('add_node'),
+
+    //display elements
+    deltaV: $('node_delta_v'),
+    orbitInfoTable: $('node_orbit_info'),
+    noManeuverNodesMessage: $('no_maneuver_nodes'),
+  })
 
   window.intercept = new HohmannIntercept(window.datalink)
 
