@@ -59,7 +59,7 @@ var HohmannIntercept = Class.create({
 
     this.deltaV = factor1 * (factor2 - 1)
 
-    console.log("delta V1: " + this.deltaV)
+    // console.log("delta V1: " + this.deltaV)
   },
 
   isGoForIntercept: function(){
@@ -87,10 +87,10 @@ var HohmannIntercept = Class.create({
 
     this.targetsCurrentPhaseAngle = data["b.o.phaseAngle["+ this.targetBody.id +"]"]
 
-    console.log("Phase Angle: " + this.phaseAngle + " targetsCurrentPhaseAngle: " + this.targetsCurrentPhaseAngle)
+    // console.log("Phase Angle: " + this.phaseAngle + " targetsCurrentPhaseAngle: " + this.targetsCurrentPhaseAngle)
 
     if(this.isGoForIntercept()){
-      console.log("FIRE EVERYTHING")
+      // console.log("FIRE EVERYTHING")
     }
   },
 
