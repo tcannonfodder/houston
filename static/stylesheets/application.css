@@ -200,16 +200,20 @@ h1{
 
 .readout-display input, .readout-display button, .readout-display select{
   border: 2px solid #FD7E23;
-  background-color: #FD7E23;
-  color: #3A1604;
+  background-color: #3A1604;
+  color: #FD7E23;
   border-radius: 3px;
   font-family: 'PT Mono';
 }
 
-.readout-display input:hover, .readout-display button:hover, .readout-display select:hover{
+.readout-display button{
+  background-color: #642607;
+}
+
+.readout-display button:hover, .readout-display select:hover{
   border: 2px solid #FD7E23;
-  background-color: #3A1604;
-  color: #FD7E23;
+  background-color: #FD7E23;
+  color: #3A1604;
 }
 
 .resource-readout progress{
