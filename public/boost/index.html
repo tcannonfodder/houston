@@ -426,7 +426,7 @@
           <td id="burn-planner-starting-fuel"></td>
         </tr>
         <tr>
-          <td>
+          <td colspan="2">
             <select id="burn-planner-mode">
               <option value="atmo">Atmo</option>
               <option value="vacuum">Vacuum</option>
@@ -438,7 +438,7 @@
           <td><input id='burn-planner-throttle' type="number" min="0" max="100"></td>
         </tr>
         <tr>
-          <th>Burn Time (sec)</th>
+          <th>&Delta;t (s)</th>
           <td><input id="burn-planner-burn-time" type="number" min="0"></td>
         </tr>
       </tbody>
@@ -446,6 +446,10 @@
         <tr>
           <th>&Delta;v</th>
           <td id="burn-planner-delta-v"></td>
+        </tr>
+        <tr>
+          <th>Burn Duration</th>
+          <td id="burn-planner-formatted-time"></td>
         </tr>
         <tr>
           <th>TWR</th>
@@ -458,7 +462,7 @@
       </tbody>
       <tfoot>
         <tr>
-          <td id="burn-planner-warning"></td>
+          <td colspan="2" id="burn-planner-warning"></td>
         </tr>
       </tfoot>
     </table>
@@ -466,7 +470,9 @@
 
   <div class="readout-display">
     <h2>Staging Info</h2>
-    <table id="staging-info-table" class="readout-table"></table>
+    <div id="staging-info-table-wrapper">
+      <table id="staging-info-table" class="readout-table"></table>
+    </div>
   </div>
 </div>
 
@@ -624,6 +630,7 @@
     //display elements:
     totalThrust: $('burn-planner-total-thrust'),
     startingFuel: $('burn-planner-starting-fuel'),
+    formattedTime: $('burn-planner-formatted-time'),
     deltaV: $('burn-planner-delta-v'),
     TWR: $('burn-planner-twr'),
     remainingFuel: $('burn-planner-remaining-fuel'),
