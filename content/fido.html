@@ -15,8 +15,15 @@ title: FIDO
     </div>
   </div>
 
-  <div id="throttle-panel">
-    <%= render 'throttle' %>
+  <div>
+    <div id="throttle-panel">
+      <%= render 'throttle' %>
+    </div>
+
+    <div class="readout-display">
+      <h2>Docking Info</h2>
+      <table id="docking-info" class="readout-table"></table>
+    </div>
   </div>
 
   <div id="position-map" class="map readout-display"></div>
@@ -25,19 +32,14 @@ title: FIDO
     <h2>Orbit Info</h2>
     <table id="orbit-info" class="readout-table"></table>
   </div>
-</div>
 
-<div id="bottom-panel">
   <div class="readout-display">
     <h2>Danger Zone</h2>
     <table id="vessel-speed" class="readout-table"></table>
   </div>
+</div>
 
-  <div class="readout-display">
-    <h2>Docking Info</h2>
-    <table id="docking-info" class="readout-table"></table>
-  </div>
-
+<div id="bottom-panel">
   <div class="readout-display">
     <h2>Hohmann Transfer Tool</h2>
     <strong id="go-signal"></strong>

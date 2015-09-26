@@ -12,6 +12,7 @@
 
 #throttle-panel{
   margin-right: auto;
+  margin-bottom: 5px;
 }
 
 .throttle-wrapper{
@@ -32,11 +33,11 @@
 }
 
 #position-map{
-  width: 500px;
+  width: 300px;
 }
 
 #top-panel > div:last-child{
-  margin-left: auto;
+  /*margin-left: auto;*/
 }
 
 #bottom-panel{
