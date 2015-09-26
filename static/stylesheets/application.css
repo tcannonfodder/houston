@@ -8,6 +8,18 @@
   font-weight: bold; 
   src: local('PT Mono Bold'), url('../fonts/ptm75f_w.eot?#iefix') format('embedded-opentype'), url('../fonts/ptm75f_w.woff') format('woff'),url('../fonts/ptm75f_w.ttf') format('truetype'), url('../fonts/ptm75f_w.svg#PTMono-Bold') format('svg');}
 
+@font-face {
+    font-family: 'AeroMatics Display Bold';
+    src: url('../fonts/aero_matics_display_bold-webfont.eot');
+    src: url('../fonts/aero_matics_display_bold-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/aero_matics_display_bold-webfont.woff2') format('woff2'),
+         url('../fonts/aero_matics_display_bold-webfont.woff') format('woff'),
+         url('../fonts/aero_matics_display_bold-webfont.ttf') format('truetype'),
+         url('../fonts/aero_matics_display_bold-webfont.svg#aero_matics_displaybold') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
 
 body{
   background: #9B9B9B;
@@ -21,7 +33,7 @@ header,#content{
 nav{
   background-color: rgba(51,51,51, 1);
   background-image: url('../images/title-noise.png');
-  font-family: AeroMaticsDisplayBold;
+  font-family: 'AeroMatics Display Bold';
   font-size: 25px;
   text-shadow: 0px 2px 3px rgba(0,0,0,.8);
   color: #d4d4d4;
@@ -156,7 +168,7 @@ nav.open #nav_toggle{
 }
 
 h1, h2, h3, h4, h5, h6{
-  font-family: AeroMaticsDisplayBold;
+  font-family: 'AeroMatics Display Bold';
 }
 
 h1{
@@ -242,7 +254,7 @@ button.status{
   width: 50px;
   height: 50px;
   /* RCS: */
-  font-family: AeroMaticsDisplayBold;
+  font-family: 'AeroMatics Display Bold';
   font-size: 24px;
   color: #666666;
   text-align: center;
@@ -383,7 +395,7 @@ button#brake.on{
 }
 
 .gauge p{
-  font-family: AeroMaticsDisplayBold;
+  font-family: 'AeroMatics Display Bold';
   /*color: #4A4A4A;*/
   text-align: center;
   font-size: 30px;
@@ -400,7 +412,7 @@ button#brake.on{
 
 .gauge span{
   border: 0px solid #000000;
-  font-family: AeroMaticsDisplayBold;
+  font-family: 'AeroMatics Display Bold';
   color: #4A4A4A;
   text-align: center;
   font-size: 20px;
