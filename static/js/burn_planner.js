@@ -64,6 +64,7 @@ var BurnPlanner = Class.create({
       window.requestAnimationFrame(function(){
         this.options.totalThrust.update(DataFormatters.newtonsString(this.stage["startThrust"]))
         this.options.startingFuel.update(DataFormatters.tonnageString(this.stage["resourceMass"]))
+        this.options.formattedTime.update(DataFormatters.timeString(this.burnTime() || 0))
         this.options.deltaV.update(DataFormatters.velocityString(deltaV))
         this.options.TWR.update(DataFormatters.plainNumberString(TWR))
         this.options.remainingFuel.update(DataFormatters.tonnageString(remainingFuel))
@@ -79,6 +80,7 @@ var BurnPlanner = Class.create({
         //the stage was not found, so return NAs across the board
         this.options.totalThrust.update("NA")
         this.options.startingFuel.update("NA")
+        this.options.formattedTime.update("NA")
         this.options.deltaV.update("NA")
         this.options.TWR.update("NA")
         this.options.remainingFuel.update("NA")
