@@ -57,13 +57,47 @@ var Telemachus = Class.create({
     }
   },
 
-  poll: function(){
-    var params = []
-
-    Object.keys(this.subscribedFields).forEach(function(field){
+  prepareParams: function(params){
+    var normalizedParams = []
+    Object.keys(params).forEach(function(field){
       var sanitizedFieldName = field.replace("[", "{").replace("]","}")
-      params.push(sanitizedFieldName + "=" + field)
+      normalizedParams.push(sanitizedFieldName + "=" + field)
     })
+    return normalizedParams
+  },
+
+  convertData: function(rawData){
+    var data = {}
+
+    Object.keys(rawData).forEach(function(key){
+      var convertedFieldName = key.replace("{", "[").replace("}", "]")
+      data[convertedFieldName] = rawData[key]
+    })
+
+    return data
+  },
+
+  poll: function(){
+    var params = this.prepareParams(this.subscribedFields)
+    var requestURL = this.url() + "?" + params.join("&")
+
+    new Ajax.Request(requestURL, {
+      method: "get",
+      onSuccess: function(response){
+        var rawData = JSON.parse(response.responseText)
+        var data = this.convertData(rawData)
+
+        this.dispatchMessages(data)
+      }.bind(this),
+
+      onComplete: function(response){
+        setTimeout(this.poll.bind(this),this.rate);
+      }.bind(this)
+    })
+  },
+
+  sendMessage: function(params, callback){
+    params = this.prepareParams(params)
 
     var requestURL = this.url() + "?" + params.join("&")
 
@@ -71,18 +105,8 @@ var Telemachus = Class.create({
       method: "get",
       onSuccess: function(response){
         var rawData = JSON.parse(response.responseText)
-        var data = {}
-
-        Object.keys(rawData).forEach(function(key){
-          var convertedFieldName = key.replace("{", "[").replace("}", "]")
-          data[convertedFieldName] = rawData[key]
-        })
-
-        this.dispatchMessages(data)
-      }.bind(this),
-
-      onComplete: function(response){
-        setTimeout(this.poll.bind(this),this.rate);
+        var data = this.convertData(rawData)
+        callback(data)
       }.bind(this)
     })
   },
