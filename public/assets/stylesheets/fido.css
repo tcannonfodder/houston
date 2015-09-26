@@ -63,7 +63,7 @@
   display: none;
 }
 
-#manuever_nodes > div{
+#maneuver_nodes > div{
   display: -webkit-box; /* OLD - iOS 6-, Safari 3.1-6 */
   display: -moz-box; /* OLD - Firefox 19- (buggy but mostly works) */
   display:-webkit-flex;
@@ -77,6 +77,7 @@
 #node_list{
   max-height: 200px;
   overflow-y: auto;
+  padding-right: 3px;
 }
 
 #node_selector{
