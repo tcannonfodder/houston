@@ -497,8 +497,19 @@ progress.atmospheric_density::-webkit-progress-value, progress.throttle::-webkit
   -webkit-transform: translate(-50%, 0);
   -ms-transform: translate(-50%, 0);
   transform: translate(-50%, 0);
-  background: #d4d3d1 url('/img/noise.png');
+  /*background: #d4d3d1 url('/img/noise.png');*/
   /*padding: ($quarter-gutter / 2) 0 0 0;*/
+  background-color: hsl(0,0%,90%);
+
+  background-size: 50px 1000px;
+  background-image: -webkit-repeating-linear-gradient(left, hsla(0,0%,100%,0) 0%, hsla(0,0%,100%,0)   6%, hsla(0,0%,100%, .1) 7.5%),
+    -webkit-repeating-linear-gradient(left, hsla(0,0%,  0%,0) 0%, hsla(0,0%,  0%,0)   4%, hsla(0,0%,  0%,.03) 4.5%),
+    -webkit-repeating-linear-gradient(left, hsla(0,0%,100%,0) 0%, hsla(0,0%,100%,0) 1.2%, hsla(0,0%,100%,.15) 2.2%),
+
+    linear-gradient(180deg, hsl(0,0%,78%)  0%, 
+    hsl(0,0%,90%) 47%, 
+    hsl(0,0%,78%) 53%,
+    hsl(0,0%,70%)100%);
   width: 5em;
   text-align: center;
   border-top-left-radius: 2em;
