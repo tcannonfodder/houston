@@ -9,6 +9,7 @@
   <script src="../assets/js/time_formatters.js"></script>
   <script src="../assets/js/data_formatters.js"></script>
   <script src="../assets/js/prototype.js"></script>
+  <script src="../assets/js/event.simulate.js"></script>
   <script src="../assets/js/data_table.js"></script>
   <script src="../assets/js/leaflet.ksp.js"></script>
   <script src="../assets/js/L.Graticule.js"></script>
@@ -35,6 +36,9 @@
   <script src="../assets/js/altitude_tracker.js"></script>
 
   <script src="../assets/js/current_stage_burn_info.js"></script>
+  <script src="../assets/js/burn_planner.js"></script>
+  <script src="../assets/js/staging_info_table.js"></script>
+  <script src="../assets/js/maneuver_node_editor.js"></script>
 
   <link rel="stylesheet" type="text/css" href="../assets/stylesheets/chartist.min.css" />
   <link rel="stylesheet" type="text/css" href="../assets/stylesheets/leafletksp.css" />
@@ -194,6 +198,11 @@
       <button id="light" disabled="disabled" class="status">LGHT</button>
       <button id="gear" disabled="disabled" class="status">GEAR</button>
       <button id="brake" disabled="disabled" class="status">BRK</button>
+    </div>
+
+    <div class="readout-display">
+      <h2>Flight Data</h2>
+      <table id="flight-data" class="readout-table"></table>
     </div>
   </div>
 
@@ -390,22 +399,7 @@
 
 <div id="bottom-panel">
   <div class="readout-display">
-    <h2>Flight Data</h2>
-    <table id="flight-data" class="readout-table"></table>
-  </div>
-
-  <div class="readout-display">
-    <div class="legend">
-  <p>
-    <span id="altitude" class="item"></span>Altitude
-
-    <span id="height-from-terrain" class="item"></span>Terrain Height
-  </p>
-</div>
-<div id='altitude-tracker'></div>
-  </div>
-
-  <div class="readout-display">
+    <h2>Current Throttle Info</h2>
     <table id="current-stage-atmo" class="readout-table">
       <caption>Atmosphere</caption>
     </table>
@@ -413,6 +407,66 @@
     <table id="current-stage-vacuum" class="readout-table">
       <caption>Vacuum</caption>
     </table>
+  </div>
+
+  <div class="readout-display">
+    <h2>Burn Planner</h2>
+    <table id="burn-planner-table" class="readout-table">
+      <tbody>
+        <tr>
+          <th>Stage</th>
+          <td><input id='burn-planner-stage' type="number" min="0"></td>
+        </tr>
+        <tr>
+          <th>Total Thrust</th>
+          <td id="burn-planner-total-thrust"></td>
+        </tr>
+        <tr>
+          <th>Starting Fuel</th>
+          <td id="burn-planner-starting-fuel"></td>
+        </tr>
+        <tr>
+          <td>
+            <select id="burn-planner-mode">
+              <option value="atmo">Atmo</option>
+              <option value="vacuum">Vacuum</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <th>Thrust %</th>
+          <td><input id='burn-planner-throttle' type="number" min="0" max="100"></td>
+        </tr>
+        <tr>
+          <th>Burn Time (sec)</th>
+          <td><input id="burn-planner-burn-time" type="number" min="0"></td>
+        </tr>
+      </tbody>
+      <tbody class="results">
+        <tr>
+          <th>&Delta;v</th>
+          <td id="burn-planner-delta-v"></td>
+        </tr>
+        <tr>
+          <th>TWR</th>
+          <td id="burn-planner-twr"></td>
+        </tr>
+        <tr>
+          <th>Remaining Fuel</th>
+          <td id="burn-planner-remaining-fuel"></td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td id="burn-planner-warning"></td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+
+  <div class="readout-display">
+    <h2>Staging Info</h2>
+    <table id="staging-info-table" class="readout-table"></table>
   </div>
 </div>
 
@@ -479,8 +533,6 @@
 
   window.atmosphericDensityGauge = new AtmosphericDensityGauge(window.datalink, 'atmospheric-density')
   window.throttleGauge = new ThrottleGauge(window.datalink, 'throttle')
-
-  window.altitudeTracker = new AltitudeTracker(datalink, 'altitude-tracker', {maxDataPoints : 50})
 
   window.liquidFuelMonitor = new ResourceMonitor(datalink, 'LiquidFuel', {
     currentStageProgressBar: $('liquid-fuel-current'),
@@ -559,6 +611,24 @@
   ])
 
   window.currentStageBurnInfo = new CurrentStageBurnInfo(datalink, 'current-stage-atmo','current-stage-vacuum')
+
+  window.stagingInfoTable = new StagingInfoTable(datalink, 'staging-info-table')
+
+  window.burnPlanner = new BurnPlanner(datalink, {
+    //control elements:
+    stage: $('burn-planner-stage'),
+    mode: $('burn-planner-mode'),
+    throttle: $('burn-planner-throttle'),
+    burnTime: $('burn-planner-burn-time'),
+
+    //display elements:
+    totalThrust: $('burn-planner-total-thrust'),
+    startingFuel: $('burn-planner-starting-fuel'),
+    deltaV: $('burn-planner-delta-v'),
+    TWR: $('burn-planner-twr'),
+    remainingFuel: $('burn-planner-remaining-fuel'),
+    warning: $('burn-planner-warning'),
+  })
 
   })
 
