@@ -185,9 +185,9 @@ var ManeuverNodeEditor = Class.create({
     var currentNode = this.maneuverNodes[index]
     var ut = parseFloat(this.options.ut.value)
     var deltaV = [
-      parseFloat(this.options.prograde.value) || 0,
-      parseFloat(this.options.normal.value) || 0,
       parseFloat(this.options.radial.value) || 0,
+      parseFloat(this.options.normal.value) || 0,
+      parseFloat(this.options.prograde.value) || 0,
     ]
 
     this.maneuverNodes[index] = Object.extend(newNode, {"ut": ut, "deltaV": deltaV})
@@ -318,7 +318,7 @@ var ManeuverNodeEditor = Class.create({
     var prograde = parseFloat(this.options.prograde.value) || 0.00
     var normal = parseFloat(this.options.normal.value) || 0.00
     var radial = parseFloat(this.options.radial.value) || 0.00
-    this.updateManeuverNode(index, ut, prograde, normal, radial)
+    this.updateManeuverNode(index, ut, radial, normal, prograde)
   },
 
   updateManeuverNode: function(index, ut, prograde, normal, radial){
