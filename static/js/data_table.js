@@ -23,5 +23,12 @@ var DataTable = Class.create({
         tableRow.down("td").update(row.value)
       }.bind(this))
     }.bind(this))
+  },
+
+  clear: function(){
+    window.requestAnimationFrame(function(){
+      this.dataRows = []
+      this.table.innerHTML = ""
+    }.bind(this))
   }
 })
