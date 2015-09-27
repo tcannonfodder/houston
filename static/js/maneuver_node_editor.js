@@ -93,10 +93,18 @@ var ManeuverNodeEditor = Class.create({
 
   updateNodeEditorUI: function(){
     var node = this.nodeCurrentlyEditing()
-    this.options.ut.value = node["UT"]
-    this.options.prograde.value = node["deltaV"][0]
-    this.options.normal.value = node["deltaV"][1]
-    this.options.radial.value = node["deltaV"][2]
+    if(node){
+      this.options.ut.value = node["UT"]
+      this.options.prograde.value = node["deltaV"][0]
+      this.options.normal.value = node["deltaV"][1]
+      this.options.radial.value = node["deltaV"][2]
+    } else{
+      // Zero out the UI if the node doesn't exist
+      this.options.ut.value = ""
+      this.options.prograde.value = ""
+      this.options.normal.value = ""
+      this.options.radial.value = ""
+    }
   },
 
   calculateDeltaV: function(deltaV){
@@ -108,14 +116,23 @@ var ManeuverNodeEditor = Class.create({
   updateNodeOrbitInfo: function(){
     var node = this.nodeCurrentlyEditing()
 
-    var deltaVResult = this.calculateDeltaV(node["deltaV"])
+    if(node){
+      var deltaVResult = this.calculateDeltaV(node["deltaV"])
+    } else{
+      var deltaVResult = ""
+    }
     this.options.deltaV.update(DataFormatters.velocityString(deltaVResult))
 
     this.orbitInfoTable.dataRows = this.dataRowsForOrbitInfo(node)
-    this.orbitInfoTable.update()
+    if(this.orbitInfoTable.dataRows.length == 0){
+      this.orbitInfoTable.clear()
+     }else{
+      this.orbitInfoTable.update()
+    }
   },
 
   dataRowsForOrbitInfo: function(node){
+    if(!node){ return [] }
     return [
       {
         label: "Apoapsis",
@@ -215,6 +232,12 @@ var ManeuverNodeEditor = Class.create({
     var node = this.maneuverNodes[index]
     var selector = this.options.nodeSelector.children[index]
 
+    //remove the selector if a matching node doesn't exist
+    if(!node){
+      if(selector){ this.options.nodeSelector.removeChild(selector) }
+      return
+    }
+
     if(!selector){
       var docFragment = document.createDocumentFragment();
       var selector = document.createElement('li')
@@ -235,6 +258,7 @@ var ManeuverNodeEditor = Class.create({
 
       selector.observe('click', function(){
         this.selectNodeToEdit(index)
+        this.updateNodeEditorUI()
         this.updateNodeOrbitInfo()
       }.bind(this))
 
