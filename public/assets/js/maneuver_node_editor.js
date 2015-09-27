@@ -95,9 +95,9 @@ var ManeuverNodeEditor = Class.create({
     var node = this.nodeCurrentlyEditing()
     if(node){
       this.options.ut.value = node["UT"]
-      this.options.prograde.value = node["deltaV"][0]
+      this.options.prograde.value = node["deltaV"][2]
       this.options.normal.value = node["deltaV"][1]
-      this.options.radial.value = node["deltaV"][2]
+      this.options.radial.value = node["deltaV"][0]
     } else{
       // Zero out the UI if the node doesn't exist
       this.options.ut.value = ""
