@@ -8,7 +8,7 @@ var ButtonIndicator = Class.create({
   },
 
   update: function(data){
-    if(data[this.apiButtonString] == "True"){
+    if(data[this.apiButtonString] == true){
       this.indicator.addClassName("on")
     } else{
       this.indicator.removeClassName("on")
