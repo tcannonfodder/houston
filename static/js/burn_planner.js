@@ -37,8 +37,7 @@ var BurnPlanner = Class.create({
     // If the stage was found, do the burn calculations
     if(this.stage){
       var burnedFuel = OrbitalMath.weightOfFuelUsedDuringBurn(
-        this.thrust(), this.stage["isp"], this.currentBody.surfaceGravity,
-        this.burnTime()
+        this.thrust(), this.stage["isp"], this.burnTime()
       )
 
       if(isNaN(burnedFuel)){

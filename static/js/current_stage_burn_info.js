@@ -65,8 +65,7 @@ var CurrentStageBurnInfo = Class.create({
     )
 
     stage["timeUntilEmpty"] = OrbitalMath.secondsToUseFuelAtCurrentThrust(
-      stage["resourceMass"], stage["currentThrust"], stage["isp"],
-      this.currentBody.surfaceGravity
+      stage["resourceMass"], stage["currentThrust"], stage["isp"]
     )
 
     return stage
