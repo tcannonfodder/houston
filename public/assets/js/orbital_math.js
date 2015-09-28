@@ -211,7 +211,7 @@ var OrbitalMath = {
   },
 
   secondsToUseFuelAtCurrentThrust: function(massOfFuel, thrust, isp){
-    if(thrust <= 0 || isp <= 0 || surfaceGravity <= 0){ return -1}
+    if(thrust <= 0 || isp <= 0){ return -1}
     return (massOfFuel)/((thrust/isp) * (1/9.81))
   },
 
