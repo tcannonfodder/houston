@@ -68,9 +68,11 @@ var Telemachus = Class.create({
 
   convertData: function(rawData){
     var data = {}
+    var startBracesRegexp = /\{/g
+    var endBracesRegexp = /\}/g
 
     Object.keys(rawData).forEach(function(key){
-      var convertedFieldName = key.replace("{", "[").replace("}", "]")
+      var convertedFieldName = key.replace(startBracesRegexp, "[").replace(endBracesRegexp, "]")
       data[convertedFieldName] = rawData[key]
     })
 
