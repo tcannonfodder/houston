@@ -2,13 +2,29 @@ var OrbitalPositionData = Class.create({
   initialize: function(datalink, options){
     this.datalink = datalink
     this.initializeDatalink()
+    this.timeoutRate = 5000 //times out every 5 seconds
+    this.mutexTimestamp = null
     this.options = Object.extend({
       onRecalculate: null,
       numberOfSegments: 120
     }, options)
   },
 
+  isLocked: function(){
+    this.mutexTimestamp && this.mutexTimestamp < ((Date.now() / 1000 | 0) + this.timeoutRate)
+  },
+
+  mutexLock: function(){
+    this.mutexTimestamp = Date.now()
+  },
+
+  mutexUnlock: function(){
+    this.mutexTimestamp = null
+  },
+
   recalculate: function(data){
+    if(this.isLocked()){return}
+    this.mutexLock()
     Object.extend(data, {
       "referenceBodies" : {}, "universalTime": data['t.universalTime'],
       "vesselBody": data['v.body'],
@@ -58,7 +74,9 @@ var OrbitalPositionData = Class.create({
       // console.log(data)
       var deserializedData = this.deserializePositionData(data);
       console.log(deserializedData)
-      console.log("DETAILS GOT")
+      // console.log("DETAILS GOT")
+      this.options.onRecalculate && this.options.onRecalculate(dataForPositions, deserializedData)
+      this.mutexUnlock()
     }.bind(this))
   },
 
