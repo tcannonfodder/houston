@@ -26,6 +26,7 @@ var OrbitalMap = Class.create({
 
   render: function(positionData){
     this.currentVessel = positionData["vesselCurrentPosition"]
+    this.targetVessel = positionData["targetCurrentPosition"]
     this.rootReferenceBody["radius"] = positionData["currentReferenceBodyRadius"]
     this.rootReferenceBody["currentTruePosition"] = positionData["currentReferenceBodyTruePosition"]
     this.KSPCoordinateCenter = this.rootReferenceBody["currentTruePosition"]
@@ -95,6 +96,24 @@ var OrbitalMap = Class.create({
         strokeWidth: 5
       })
     };
+
+    var targetVesselPosition = this.positionOnCanvasForRelativePosition(
+      this.targetVessel["relativePosition"],
+      this.rootReferenceBody["currentTruePosition"]
+    )
+
+    this.targetVesselSVG = this.targetVesselSVG || this.snapSVG.circle(targetVesselPosition[0],
+      targetVesselPosition[1],
+      5
+    );
+
+    this.targetVesselSVG.attr({
+        cx: targetVesselPosition[0],
+        cy: targetVesselPosition[1],
+        fill: "purple",
+        stroke: "#000",
+        strokeWidth: 5
+    });
 
     if(positionData['tar.o.orbitPatches']){
       for (var i = 0; i < positionData["tar.o.orbitPatches"].length; i++) {

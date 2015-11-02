@@ -29,6 +29,7 @@ var NewOrbitalPositionData = Class.create({
       "currentUniversalTime": this.adjustUniversalTime(data['t.universalTime']),
       "vesselBody": data['v.body'],
       "vesselCurrentPosition": { "trueAnomaly" : null, "relativePosition": null },
+      "targetCurrentPosition": { "trueAnomaly" : null, "relativePosition": null },
     })
     this.getTrueAnomaliesAndReferenceBodies(data)
   },
@@ -43,8 +44,10 @@ var NewOrbitalPositionData = Class.create({
     requestParams["vesselCurrentPositionTrueAnomaly"] = "o.trueAnomalyAtUTForOrbitPatch[" + 0 +","+ positionData["currentUniversalTime"] + "]"
 
     this.buildTrueAnomalyRequestsForOrbitPatches(requestParams, "vesselCurrentOrbit", positionData['o.orbitPatches'])
+
     if(positionData['tar.o.orbitPatches']){
       this.buildTrueAnomalyRequestsForOrbitPatches(requestParams, "targetCurrentOrbit", positionData['tar.o.orbitPatches'], 'tar.o')
+      requestParams["targetCurrentPositionTrueAnomaly"] = "tar.o.trueAnomalyAtUTForOrbitPatch[" + 0 +","+ positionData["currentUniversalTime"] + "]"
     }
 
     this.datalink.sendMessage(requestParams, function(data){
@@ -55,6 +58,7 @@ var NewOrbitalPositionData = Class.create({
 
       if(positionData['tar.o.orbitPatches']){
         this.buildTrueAnomalyPositionDataForOrbitPatches(data, positionData, "targetCurrentOrbit", "tar.o.orbitPatches")
+        positionData["targetCurrentPosition"]["trueAnomaly"] = data["targetCurrentPositionTrueAnomaly"]
       }
 
       this.buildReferenceBodyPositionData(data, positionData)
@@ -72,6 +76,7 @@ var NewOrbitalPositionData = Class.create({
 
     if(positionData['tar.o.orbitPatches']){
       this.buildRelativePositionRequestsForOrbitPatches(requestParams, "targetCurrentOrbit", positionData['tar.o.orbitPatches'], 'tar.o')
+      requestParams["targetCurrentPositionRelativePosition"] = "tar.o.relativePositionAtTrueAnomalyForOrbitPatch[" + 0 +","+ positionData["vesselCurrentPosition"]["trueAnomaly"] + "]"
     }
 
     this.datalink.sendMessage(requestParams, function(data){
@@ -80,6 +85,7 @@ var NewOrbitalPositionData = Class.create({
 
       if(positionData['tar.o.orbitPatches']){
         this.buildRelativePositionPositionDataForOrbitPatches(data, positionData, "targetCurrentOrbit", 'tar.o.orbitPatches', 'tar.o')
+        positionData["targetCurrentPosition"]["relativePosition"] = data["targetCurrentPositionRelativePosition"]
       }
       this.mutexUnlock()
       this.options.onRecalculate && this.options.onRecalculate(positionData)
