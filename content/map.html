@@ -1,0 +1,16 @@
+---
+title: Orbital Map
+---
+
+<svg id="map" style="width: 1000px; height: 1000px;">
+</svg>
+
+<% content_for :dom_loaded do %>
+
+window.mapDatalink = new Telemachus(settings.getHost(), settings.getPort())
+window.mapDatalink.rate = 2000
+var orbitalPositionData = new NewOrbitalPositionData(window.mapDatalink)
+
+window.orbitalMap = new OrbitalMap(orbitalPositionData, window.mapDatalink, "map")
+
+<% end %>

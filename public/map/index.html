@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title></title>
+  <title>Orbital Map</title>
   <script src="../assets/js/math_polyfill.js"></script>
   <script src="../assets/js/math.js"></script>
   <script src="../assets/js/numeric.js"></script>
@@ -49,26 +49,26 @@
   <link rel="stylesheet" type="text/css" href="../assets/stylesheets/leafletksp.css" />
   <link rel="stylesheet" type="text/css" href="../assets/stylesheets/application.css" />
 
-  <link rel="apple-touch-icon-precomposed" sizes="57x57" href="../assets/icons///apple-touch-icon-57x57.png" />
-  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../assets/icons///apple-touch-icon-114x114.png" />
-  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../assets/icons///apple-touch-icon-72x72.png" />
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../assets/icons///apple-touch-icon-144x144.png" />
-  <link rel="apple-touch-icon-precomposed" sizes="60x60" href="../assets/icons///apple-touch-icon-60x60.png" />
-  <link rel="apple-touch-icon-precomposed" sizes="120x120" href="../assets/icons///apple-touch-icon-120x120.png" />
-  <link rel="apple-touch-icon-precomposed" sizes="76x76" href="../assets/icons///apple-touch-icon-76x76.png" />
-  <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../assets/icons///apple-touch-icon-152x152.png" />
-  <link rel="icon" type="image/png" href="../assets/icons///favicon-196x196.png" sizes="196x196" />
-  <link rel="icon" type="image/png" href="../assets/icons///favicon-96x96.png" sizes="96x96" />
-  <link rel="icon" type="image/png" href="../assets/icons///favicon-32x32.png" sizes="32x32" />
-  <link rel="icon" type="image/png" href="../assets/icons///favicon-16x16.png" sizes="16x16" />
-  <link rel="icon" type="image/png" href="../assets/icons///favicon-128.png" sizes="128x128" />
-  <meta name="application-name" content="../assets/icons/"/>
+  <link rel="apple-touch-icon-precomposed" sizes="57x57" href="../assets/icons//map//apple-touch-icon-57x57.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../assets/icons//map//apple-touch-icon-114x114.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../assets/icons//map//apple-touch-icon-72x72.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../assets/icons//map//apple-touch-icon-144x144.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="60x60" href="../assets/icons//map//apple-touch-icon-60x60.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="120x120" href="../assets/icons//map//apple-touch-icon-120x120.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="76x76" href="../assets/icons//map//apple-touch-icon-76x76.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../assets/icons//map//apple-touch-icon-152x152.png" />
+  <link rel="icon" type="image/png" href="../assets/icons//map//favicon-196x196.png" sizes="196x196" />
+  <link rel="icon" type="image/png" href="../assets/icons//map//favicon-96x96.png" sizes="96x96" />
+  <link rel="icon" type="image/png" href="../assets/icons//map//favicon-32x32.png" sizes="32x32" />
+  <link rel="icon" type="image/png" href="../assets/icons//map//favicon-16x16.png" sizes="16x16" />
+  <link rel="icon" type="image/png" href="../assets/icons//map//favicon-128.png" sizes="128x128" />
+  <meta name="application-name" content="../assets/icons/Orbital Map"/>
   <meta name="msapplication-TileColor" content="#FFFFFF" />
-  <meta name="msapplication-TileImage" content="../assets/icons///mstile-144x144.png" />
-  <meta name="msapplication-square70x70logo" content="../assets/icons///mstile-70x70.png" />
-  <meta name="msapplication-square150x150logo" content="../assets/icons///mstile-150x150.png" />
-  <meta name="msapplication-wide310x150logo" content="../assets/icons///mstile-310x150.png" />
-  <meta name="msapplication-square310x310logo" content="../assets/icons///mstile-310x310.png" />
+  <meta name="msapplication-TileImage" content="../assets/icons//map//mstile-144x144.png" />
+  <meta name="msapplication-square70x70logo" content="../assets/icons//map//mstile-70x70.png" />
+  <meta name="msapplication-square150x150logo" content="../assets/icons//map//mstile-150x150.png" />
+  <meta name="msapplication-wide310x150logo" content="../assets/icons//map//mstile-310x150.png" />
+  <meta name="msapplication-square310x310logo" content="../assets/icons//map//mstile-310x310.png" />
 
 
   
@@ -162,7 +162,7 @@
       <span id="mission-time">T+12:34:14 MET</span>
     </div>
 
-    <h1></h1>
+    <h1>Orbital Map</h1>
 
     <div id="world-clock" class="readout-display">
       Year 1, Day 1 00:23:13 UT
@@ -170,9 +170,11 @@
   </header>
 
   <div id="content">
-    <script>
-window.location.href="ascension/index.html"
-</script
+    
+<svg id="map" style="width: 1000px; height: 1000px;">
+</svg>
+
+
   </div>
 
 
@@ -226,6 +228,14 @@ window.location.href="ascension/index.html"
     })
 
     
+
+window.mapDatalink = new Telemachus(settings.getHost(), settings.getPort())
+window.mapDatalink.rate = 2000
+var orbitalPositionData = new NewOrbitalPositionData(window.mapDatalink)
+
+window.orbitalMap = new OrbitalMap(orbitalPositionData, window.mapDatalink, "map")
+
+
   })
 
   </script>
