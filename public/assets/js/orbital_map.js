@@ -101,6 +101,7 @@ var OrbitalMap = Class.create({
 
     for (var i = 0; i < positionData['o.maneuverNodes'].length; i++) {
       var maneuverNode = positionData['o.maneuverNodes'][i]
+      var firstUniversalTimeOfLastOrbitPatch = null
 
       for (var j = 0; j < maneuverNode["orbitPatches"].length; j++) {
         var orbitPatch = maneuverNode["orbitPatches"][j]
@@ -108,12 +109,17 @@ var OrbitalMap = Class.create({
         var orbitPatchPositionData = orbitPatch["positionData"]
         var referenceBody = orbitPatch["referenceBody"]
         var universalTimes = Object.keys(orbitPatchPositionData)
+        var sortedUniversalTimes = universalTimes.map(function(x){return parseFloat(x)}).sort()
 
         for (var k = 0; k < universalTimes.length; k++) {
           var universalTime = universalTimes[k]
+          var universalTimeFloat = parseFloat(universalTime)
           var relativePosition = orbitPatchPositionData[universalTime]["relativePosition"]
           var truePositionOfReferenceBody = positionData["referenceBodies"][referenceBody]["positionData"][universalTime]["truePosition"]
 
+          if(firstUniversalTimeOfLastOrbitPatch && universalTimeFloat < firstUniversalTimeOfLastOrbitPatch){
+            continue
+          }
 
           var point = this.positionOnCanvasForRelativePosition(
             relativePosition,
@@ -122,6 +128,10 @@ var OrbitalMap = Class.create({
 
           orbitPatchPoints.push(point)
         };
+
+        //Now that all the universal times for this orbit patch have been set to plot, we can tell the next orbit patch to not render
+        //anything before this patch (creating a continuous line in the orbital map)
+        firstUniversalTimeOfLastOrbitPatch = sortedUniversalTimes[0]
 
         var svgIndex = this.currentVesselManeuverNodeSVGs.length
 
