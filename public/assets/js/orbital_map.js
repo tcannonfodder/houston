@@ -13,6 +13,7 @@ var OrbitalMap = Class.create({
 
     this.currentVesselSVG = null
     this.currentVesselOrbitSVGs = []
+    this.currentVesselManeuverNodeSVGs = []
 
     this.targetVesselSVG = null
     this.targetVesselOrbitSVGs = []
@@ -25,7 +26,6 @@ var OrbitalMap = Class.create({
   },
 
   render: function(positionData){
-    debugger
     this.currentVessel = positionData["vesselCurrentPosition"]
     this.targetVessel = positionData["targetCurrentPosition"]
     this.rootReferenceBody["radius"] = positionData["currentReferenceBodyRadius"]
@@ -68,8 +68,6 @@ var OrbitalMap = Class.create({
         strokeWidth: 5
     });
 
-    debugger
-
     for (var i = 0; i < positionData["o.orbitPatches"].length; i++) {
       var orbitPatch = positionData["o.orbitPatches"][i]
       var orbitPatchPoints = []
@@ -77,8 +75,8 @@ var OrbitalMap = Class.create({
       var referenceBody = orbitPatch["referenceBody"]
       var universalTimes = Object.keys(orbitPatchPositionData)
 
-      for (var i = 0; i < universalTimes.length; i++) {
-        var universalTime = universalTimes[i]
+      for (var j = 0; j < universalTimes.length; j++) {
+        var universalTime = universalTimes[j]
         var relativePosition = orbitPatchPositionData[universalTime]["relativePosition"]
         var truePositionOfReferenceBody = positionData["referenceBodies"][referenceBody]["positionData"][universalTime]["truePosition"]
 
@@ -99,6 +97,43 @@ var OrbitalMap = Class.create({
         strokeWidth: 5
       })
     };
+
+
+    for (var i = 0; i < positionData['o.maneuverNodes'].length; i++) {
+      var maneuverNode = positionData['o.maneuverNodes'][i]
+
+      for (var j = 0; j < maneuverNode["orbitPatches"].length; j++) {
+        var orbitPatch = maneuverNode["orbitPatches"][j]
+        var orbitPatchPoints = []
+        var orbitPatchPositionData = orbitPatch["positionData"]
+        var referenceBody = orbitPatch["referenceBody"]
+        var universalTimes = Object.keys(orbitPatchPositionData)
+
+        for (var k = 0; k < universalTimes.length; k++) {
+          var universalTime = universalTimes[k]
+          var relativePosition = orbitPatchPositionData[universalTime]["relativePosition"]
+          var truePositionOfReferenceBody = positionData["referenceBodies"][referenceBody]["positionData"][universalTime]["truePosition"]
+
+
+          var point = this.positionOnCanvasForRelativePosition(
+            relativePosition,
+            this.rootReferenceBody["currentTruePosition"] //truePositionOfReferenceBody
+          )
+
+          orbitPatchPoints.push(point)
+        };
+
+        var svgIndex = this.currentVesselManeuverNodeSVGs.length
+
+        this.currentVesselManeuverNodeSVGs[svgIndex] = this.currentVesselManeuverNodeSVGs[svgIndex] || this.snapSVG.polyline(orbitPatchPoints)
+        this.currentVesselManeuverNodeSVGs[svgIndex].attr({
+          points: orbitPatchPoints,
+          fill: 'none',
+          stroke: 'green',
+          strokeWidth: 5
+        })
+      };
+    }
 
     var targetVesselPosition = this.positionOnCanvasForRelativePosition(
       this.targetVessel["relativePosition"],
