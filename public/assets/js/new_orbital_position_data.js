@@ -44,6 +44,7 @@ var NewOrbitalPositionData = Class.create({
     requestParams["vesselCurrentPositionTrueAnomaly"] = "o.trueAnomalyAtUTForOrbitPatch[" + 0 +","+ positionData["currentUniversalTime"] + "]"
 
     this.buildTrueAnomalyRequestsForOrbitPatches(requestParams, "vesselCurrentOrbit", positionData['o.orbitPatches'])
+    this.buildTrueAnomalyRequestsForManeuverNodeOrbitPatches(requestParams, "vesselManeuverNodes", positionData['o.maneuverNodes'])
 
     if(positionData['tar.o.orbitPatches']){
       this.buildTrueAnomalyRequestsForOrbitPatches(requestParams, "targetCurrentOrbit", positionData['tar.o.orbitPatches'], 'tar.o')
@@ -55,6 +56,10 @@ var NewOrbitalPositionData = Class.create({
       positionData["currentReferenceBodyTruePosition"] = data["currentReferenceBodyTruePosition"]
       positionData["vesselCurrentPosition"]["trueAnomaly"] = data["vesselCurrentPositionTrueAnomaly"]
       this.buildTrueAnomalyPositionDataForOrbitPatches(data, positionData, "vesselCurrentOrbit", "o.orbitPatches")
+
+      if(positionData['o.maneuverNodes']){
+        this.buildTrueAnomalyPositionDataForManeuverNodeOrbitPatches(data, positionData, "vesselManeuverNodes", "o.maneuverNodes")
+      }
 
       if(positionData['tar.o.orbitPatches']){
         this.buildTrueAnomalyPositionDataForOrbitPatches(data, positionData, "targetCurrentOrbit", "tar.o.orbitPatches")
@@ -74,6 +79,10 @@ var NewOrbitalPositionData = Class.create({
 
     this.buildRelativePositionRequestsForOrbitPatches(requestParams, "vesselCurrentOrbit", positionData['o.orbitPatches'])
 
+    if(positionData['o.maneuverNodes']){
+      this.buildRelativePositionRequestsForManeuverNodeOrbitPatches(requestParams, "vesselManeuverNodes", positionData['o.maneuverNodes'])
+    }
+
     if(positionData['tar.o.orbitPatches']){
       this.buildRelativePositionRequestsForOrbitPatches(requestParams, "targetCurrentOrbit", positionData['tar.o.orbitPatches'], 'tar.o')
       requestParams["targetCurrentPositionRelativePosition"] = "tar.o.relativePositionAtTrueAnomalyForOrbitPatch[" + 0 +","+ positionData["vesselCurrentPosition"]["trueAnomaly"] + "]"
@@ -82,6 +91,10 @@ var NewOrbitalPositionData = Class.create({
     this.datalink.sendMessage(requestParams, function(data){
       positionData["vesselCurrentPosition"]["relativePosition"] = data["vesselCurrentPositionRelativePosition"]
       this.buildRelativePositionPositionDataForOrbitPatches(data, positionData, "vesselCurrentOrbit", 'o.orbitPatches')
+
+      if(positionData['o.maneuverNodes']){
+        this.buildRelativePositionPositionDataForManeuverNodeOrbitPatches(data, positionData, "vesselManeuverNodes", 'o.maneuverNodes')
+      }
 
       if(positionData['tar.o.orbitPatches']){
         this.buildRelativePositionPositionDataForOrbitPatches(data, positionData, "targetCurrentOrbit", 'tar.o.orbitPatches', 'tar.o')
@@ -117,6 +130,47 @@ var NewOrbitalPositionData = Class.create({
     }
   },
 
+  buildTrueAnomalyRequestsForManeuverNodeOrbitPatches: function(requestParams, maneuverNodeType, maneuverNodes){
+    var requestPrefix = "o.maneuverNodes.trueAnomalyAtUTForManeuverNodesOrbitPatch"
+    for (var i = 0; i < maneuverNodes.length; i++) {
+      var maneuverNode = maneuverNodes[i]
+
+      /*
+      "apistring": "o.maneuverNodes.trueAnomalyAtUTForManeuverNodesOrbitPatch",
+      "name": "For a maneuver node, The orbit patch's True Anomaly at Universal Time [int id, orbit patch index, universal time]",
+      "units": "DEG",
+      "plotable": true
+      */
+
+      var labelPrefix = maneuverNodeType + "[" + i + "]"
+
+      for (var j = 0; j < maneuverNode['orbitPatches'].length; j++) {
+        var orbitPatch = maneuverNode['orbitPatches'][j]
+
+        // get the start and the end universal times for the patch
+        var startUT = this.adjustUniversalTime(orbitPatch["startUT"])
+        var endUT = this.adjustUniversalTime(orbitPatch["endUT"])
+
+        //ask for the true position for the current body right now and the radius
+        var referenceBody = this.datalink.getOrbitalBodyInfo(orbitPatch["referenceBody"])
+
+        var timeInterval = (endUT-startUT)/this.options.numberOfSegments
+        var UTForInterval = null
+        for(var k = 0; k < this.options.numberOfSegments; k++){
+          UTForInterval = this.adjustUniversalTime(startUT  + (timeInterval * k))
+          if(UTForInterval > endUT){
+            UTForInterval = endUT
+          }
+
+          var arguments = [i,j,UTForInterval]
+
+          requestParams[labelPrefix + "[" + j + "][" + UTForInterval + "]TrueAnomaly"] = requestPrefix + "[" + arguments.join(',') + "]"
+          requestParams[orbitPatch["referenceBody"] + "["+ UTForInterval +"]TruePosition"] = 'b.o.truePositionAtUT[' + referenceBody.id + ',' + UTForInterval + ']'
+        }
+      };
+    };
+  },
+
   buildRelativePositionRequestsForOrbitPatches: function(requestParams, orbitPatchType, orbitPatches, requestPrefix){
     requestPrefix = requestPrefix || 'o'
     for (var i = 0; i < orbitPatches.length; i++) {
@@ -128,6 +182,36 @@ var NewOrbitalPositionData = Class.create({
         var universalTime = universalTimes[j]
         var trueAnomaly = orbitPatch["positionData"][universalTime]["trueAnomaly"]
         requestParams[orbitPatchType + "[" + i + "][" + universalTime + "]RelativePosition"] = requestPrefix + ".relativePositionAtTrueAnomalyForOrbitPatch[" + i +","+ trueAnomaly + "]"
+      }
+    }
+  },
+
+  buildRelativePositionRequestsForManeuverNodeOrbitPatches: function(requestParams, maneuverNodeType, maneuverNodes){
+    var requestPrefix = "o.maneuverNodes.relativePositionAtTrueAnomalyForManeuverNodesOrbitPatch"
+    for (var i = 0; i < maneuverNodes.length; i++) {
+      var maneuverNode = maneuverNodes[i]
+
+      /*
+        "apistring": "o.maneuverNodes.relativePositionAtTrueAnomalyForManeuverNodesOrbitPatch",
+        "name": "For a maneuver node, The orbit patch's predicted displacement from the center of the main body at the given true anomaly [int id, orbit patch index, true anomaly]",
+        "units": "UNITLESS",
+        "plotable": true
+      */
+
+      var labelPrefix = maneuverNodeType + "[" + i + "]"
+
+      for (var j = 0; j < maneuverNode['orbitPatches'].length; j++) {
+        var orbitPatch = maneuverNode['orbitPatches'][j]
+
+        var universalTimes = Object.keys(orbitPatch["positionData"])
+
+        for (var k = universalTimes.length - 1; k >= 0; k--) {
+          var universalTime = universalTimes[k]
+          var trueAnomaly = orbitPatch["positionData"][universalTime]["trueAnomaly"]
+
+          var arguments = [i,j,trueAnomaly]
+          requestParams[labelPrefix + "[" + j + "][" + universalTime + "]RelativePosition"] = requestPrefix + "[" + arguments.join(',') + "]"
+        }
       }
     }
   },
@@ -152,6 +236,28 @@ var NewOrbitalPositionData = Class.create({
     };
   },
 
+  buildTrueAnomalyPositionDataForManeuverNodeOrbitPatches: function(rawData, positionData, maneuverNodeType, maneuverNodesKey){
+    var trueAnomalyFieldRegex = new RegExp(maneuverNodeType + "\\[(\\d+)\\]\\[(\\d+)\\]\\[([\\d\\.]+)\\]TrueAnomaly")
+    var maneuverNodes = positionData[maneuverNodesKey] = positionData[maneuverNodesKey] || {}
+
+    var rawDataKeys = Object.keys(rawData)
+    for (var i = rawDataKeys.length - 1; i >= 0; i--) {
+      var key = rawDataKeys[i]
+      if(trueAnomalyFieldRegex.test(key)){
+        var matchParts = trueAnomalyFieldRegex.exec(key)
+        var maneuverNodeIndex = parseInt(matchParts[1])
+        var orbitPatchIndex = parseInt(matchParts[2])
+        var universalTime = matchParts[3]
+        var trueAnomaly = rawData[key]
+
+        var orbitPatch = maneuverNodes[maneuverNodeIndex]['orbitPatches'][orbitPatchIndex] = maneuverNodes[maneuverNodeIndex]['orbitPatches'][orbitPatchIndex] || {}
+        var orbitPatchPositionData = orbitPatch["positionData"] = orbitPatch["positionData"] || {}
+        orbitPatchPositionData[universalTime] = orbitPatch[universalTime] || {}
+        orbitPatchPositionData[universalTime]["trueAnomaly"] = trueAnomaly
+      }
+    };
+  },
+
   buildRelativePositionPositionDataForOrbitPatches: function(rawData, positionData, orbitPatchType, orbitPatchesKey){
     var relativePositionFieldRegex = new RegExp(orbitPatchType + "\\[(\\d+)\\]\\[([\\d\\.]+)\\]RelativePosition")
     var orbitPatches = positionData[orbitPatchesKey] = positionData[orbitPatchesKey] || {}
@@ -166,6 +272,28 @@ var NewOrbitalPositionData = Class.create({
         var relativePosition = rawData[key]
 
         var orbitPatch = orbitPatches[orbitPatchIndex] = orbitPatches[orbitPatchIndex] || {}
+        var orbitPatchPositionData = orbitPatch["positionData"] = orbitPatch["positionData"] || {}
+        orbitPatchPositionData[universalTime] = orbitPatchPositionData[universalTime] || {}
+        orbitPatchPositionData[universalTime]["relativePosition"] = relativePosition
+      }
+    };
+  },
+
+  buildRelativePositionPositionDataForManeuverNodeOrbitPatches: function(rawData, positionData, maneuverNodeType, maneuverNodesKey){
+    var relativePositionFieldRegex = new RegExp(maneuverNodeType + "\\[(\\d+)\\]\\[(\\d+)\\]\\[([\\d\\.]+)\\]RelativePosition")
+    var maneuverNodes = positionData[maneuverNodesKey] = positionData[maneuverNodesKey] || {}
+
+    var rawDataKeys = Object.keys(rawData)
+    for (var i = rawDataKeys.length - 1; i >= 0; i--) {
+      var key = rawDataKeys[i]
+      if(relativePositionFieldRegex.test(key)){
+        var matchParts = relativePositionFieldRegex.exec(key)
+        var maneuverNodeIndex = parseInt(matchParts[1])
+        var orbitPatchIndex = parseInt(matchParts[2])
+        var universalTime = matchParts[3]
+        var relativePosition = rawData[key]
+
+        var orbitPatch = maneuverNodes[maneuverNodeIndex]['orbitPatches'][orbitPatchIndex] = maneuverNodes[maneuverNodeIndex]['orbitPatches'][orbitPatchIndex] || {}
         var orbitPatchPositionData = orbitPatch["positionData"] = orbitPatch["positionData"] || {}
         orbitPatchPositionData[universalTime] = orbitPatchPositionData[universalTime] || {}
         orbitPatchPositionData[universalTime]["relativePosition"] = relativePosition
@@ -201,7 +329,7 @@ var NewOrbitalPositionData = Class.create({
   initializeDatalink: function(){
     this.datalink.subscribeToData([
       'o.orbitPatches', 't.universalTime', 'v.body',
-      'tar.o.orbitPatches'
+      'tar.o.orbitPatches', 'o.maneuverNodes'
     ])
 
     this.datalink.addReceiverFunction(this.recalculate.bind(this))

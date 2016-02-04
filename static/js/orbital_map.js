@@ -25,6 +25,7 @@ var OrbitalMap = Class.create({
   },
 
   render: function(positionData){
+    debugger
     this.currentVessel = positionData["vesselCurrentPosition"]
     this.targetVessel = positionData["targetCurrentPosition"]
     this.rootReferenceBody["radius"] = positionData["currentReferenceBodyRadius"]
@@ -66,6 +67,8 @@ var OrbitalMap = Class.create({
         stroke: "#000",
         strokeWidth: 5
     });
+
+    debugger
 
     for (var i = 0; i < positionData["o.orbitPatches"].length; i++) {
       var orbitPatch = positionData["o.orbitPatches"][i]
