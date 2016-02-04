@@ -98,6 +98,11 @@ var OrbitalMap = Class.create({
       })
     };
 
+    //clear out all the maneuver node plots before we render them again in case the
+    //points have changed or patches have been added/removed
+    for (var i = this.currentVesselManeuverNodeSVGs.length - 1; i >= 0; i--) {
+      this.currentVesselManeuverNodeSVGs[i].attr({points: []})
+    };
 
     for (var i = 0; i < positionData['o.maneuverNodes'].length; i++) {
       var maneuverNode = positionData['o.maneuverNodes'][i]
