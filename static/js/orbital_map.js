@@ -109,11 +109,11 @@ var OrbitalMap = Class.create({
       for (var j = 0; j < universalTimes.length; j++) {
         var universalTime = universalTimes[j]
         var relativePosition = orbitPatchPositionData[universalTime]["relativePosition"]
-        var truePositionOfReferenceBody = positionData["referenceBodies"][referenceBody]["positionData"][universalTime]["truePosition"]
+        var truePositionOfReferenceBody = positionData["referenceBodies"][referenceBody]["currentTruePosition"]
 
         var point = this.positionOnCanvasForRelativePosition(
           relativePosition,
-          this.rootReferenceBody["currentTruePosition"] //truePositionOfReferenceBody
+          truePositionOfReferenceBody
         )
 
         orbitPatchPoints.push(point)
@@ -209,11 +209,11 @@ var OrbitalMap = Class.create({
         for (var i = 0; i < universalTimes.length; i++) {
           var universalTime = universalTimes[i]
           var relativePosition = orbitPatchPositionData[universalTime]["relativePosition"]
-          var truePositionOfReferenceBody = positionData["referenceBodies"][referenceBody]["positionData"][universalTime]["truePosition"]
+          var truePositionOfReferenceBody = positionData["referenceBodies"][referenceBody]["currentTruePosition"]
 
           var point = this.positionOnCanvasForRelativePosition(
             relativePosition,
-            this.rootReferenceBody["currentTruePosition"] //truePositionOfReferenceBody
+            truePositionOfReferenceBody
           )
 
           orbitPatchPoints.push(point)
