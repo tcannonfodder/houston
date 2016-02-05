@@ -43,11 +43,11 @@ var NewOrbitalPositionData = Class.create({
     //ask for the true anomaly of the vessel in the current orbit patch at the current time
     requestParams["vesselCurrentPositionTrueAnomaly"] = "o.trueAnomalyAtUTForOrbitPatch[" + 0 +","+ positionData["currentUniversalTime"] + "]"
 
-    this.buildTrueAnomalyRequestsForOrbitPatches(requestParams, "vesselCurrentOrbit", positionData['o.orbitPatches'])
-    this.buildTrueAnomalyRequestsForManeuverNodeOrbitPatches(requestParams, "vesselManeuverNodes", positionData['o.maneuverNodes'])
+    this.buildTrueAnomalyRequestsForOrbitPatches(requestParams, "vesselCurrentOrbit", positionData['o.orbitPatches'], positionData["currentUniversalTime"])
+    this.buildTrueAnomalyRequestsForManeuverNodeOrbitPatches(requestParams, "vesselManeuverNodes", positionData['o.maneuverNodes'], positionData["currentUniversalTime"])
 
     if(positionData['tar.o.orbitPatches']){
-      this.buildTrueAnomalyRequestsForOrbitPatches(requestParams, "targetCurrentOrbit", positionData['tar.o.orbitPatches'], 'tar.o')
+      this.buildTrueAnomalyRequestsForOrbitPatches(requestParams, "targetCurrentOrbit", positionData['tar.o.orbitPatches'], 'tar.o', positionData["currentUniversalTime"])
       requestParams["targetCurrentPositionTrueAnomaly"] = "tar.o.trueAnomalyAtUTForOrbitPatch[" + 0 +","+ positionData["currentUniversalTime"] + "]"
     }
 
@@ -67,6 +67,7 @@ var NewOrbitalPositionData = Class.create({
       }
 
       this.buildReferenceBodyPositionData(data, positionData)
+      this.buildReferenceBodyMetadata(data, positionData)
       this.getRelativePositionsAndRecalculate(positionData)
     }.bind(this))
   },
@@ -105,7 +106,7 @@ var NewOrbitalPositionData = Class.create({
     }.bind(this))
   },
 
-  buildTrueAnomalyRequestsForOrbitPatches: function(requestParams, orbitPatchType, orbitPatches, requestPrefix){
+  buildTrueAnomalyRequestsForOrbitPatches: function(requestParams, orbitPatchType, orbitPatches, currentUniversalTime, requestPrefix){
     requestPrefix = requestPrefix || 'o'
     for (var i = 0; i < orbitPatches.length; i++) {
       var orbitPatch = orbitPatches[i]
@@ -127,10 +128,13 @@ var NewOrbitalPositionData = Class.create({
         requestParams[orbitPatchType + "[" + i + "][" + UTForInterval + "]TrueAnomaly"] = requestPrefix + ".trueAnomalyAtUTForOrbitPatch[" + i +","+ UTForInterval + "]"
         requestParams[orbitPatch["referenceBody"] + "["+ UTForInterval +"]TruePosition"] = 'b.o.truePositionAtUT[' + referenceBody.id + ',' + UTForInterval + ']'
       }
+
+      requestParams[orbitPatch["referenceBody"] + "[metadata]radius"] = 'b.radius[' + referenceBody.id + ']'
+      requestParams[orbitPatch["referenceBody"] + "[metadata]currentTruePosition"] = 'b.o.truePositionAtUT[' + referenceBody.id + ',' + currentUniversalTime + ']'
     }
   },
 
-  buildTrueAnomalyRequestsForManeuverNodeOrbitPatches: function(requestParams, maneuverNodeType, maneuverNodes){
+  buildTrueAnomalyRequestsForManeuverNodeOrbitPatches: function(requestParams, maneuverNodeType, maneuverNodes, currentUniversalTime){
     var requestPrefix = "o.maneuverNodes.trueAnomalyAtUTForManeuverNodesOrbitPatch"
     for (var i = 0; i < maneuverNodes.length; i++) {
       var maneuverNode = maneuverNodes[i]
@@ -167,7 +171,10 @@ var NewOrbitalPositionData = Class.create({
           requestParams[labelPrefix + "[" + j + "][" + UTForInterval + "]TrueAnomaly"] = requestPrefix + "[" + arguments.join(',') + "]"
           requestParams[orbitPatch["referenceBody"] + "["+ UTForInterval +"]TruePosition"] = 'b.o.truePositionAtUT[' + referenceBody.id + ',' + UTForInterval + ']'
         }
-      };
+
+        requestParams[orbitPatch["referenceBody"] + "[metadata]radius"] = 'b.radius[' + referenceBody.id + ']'
+        requestParams[orbitPatch["referenceBody"] + "[metadata]currentTruePosition"] = 'b.o.truePositionAtUT[' + referenceBody.id + ',' + currentUniversalTime + ']'
+      }
     };
   },
 
@@ -318,6 +325,25 @@ var NewOrbitalPositionData = Class.create({
         referenceBodyObject["positionData"] = referenceBodyObject["positionData"] || {}
         referenceBodyObject["positionData"][universalTime] = referenceBodyObject["positionData"][universalTime] || {}
         referenceBodyObject["positionData"][universalTime]["truePosition"] = truePosition
+      }
+    }
+  },
+
+  buildReferenceBodyMetadata: function(rawData, positionData){
+    var referenceBodyTruePositionRegex = new RegExp(/(\w+)\[metadata\](\w+)$/)
+
+    var rawDataKeys = Object.keys(rawData)
+    for (var i = rawDataKeys.length - 1; i >= 0; i--) {
+      var key = rawDataKeys[i]
+      if(referenceBodyTruePositionRegex.test(key)){
+        var matchParts = referenceBodyTruePositionRegex.exec(key)
+        var referenceBodyName = matchParts[1]
+        var field = matchParts[2]
+        var data = rawData[key]
+
+        var referenceBodies = positionData["referenceBodies"] = positionData["referenceBodies"] || {}
+        var referenceBodyObject = referenceBodies[referenceBodyName] = referenceBodies[referenceBodyName] || {}
+        referenceBodyObject[field] = data
       }
     }
   },
