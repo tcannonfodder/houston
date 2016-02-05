@@ -3,11 +3,11 @@ var OrbitalMap = Class.create({
     this.svgCanvasID = svgCanvasID
     this.svgCanvas = $(svgCanvasID)
     this.initializeSVGCanvas()
-    this.scale = 5000
+    this.scale = 30000
 
     this.now = null
     this.currentVessel = null
-    this.rootReferenceBody = {"radius": null, "currentTruePosition": null}
+    this.rootReferenceBody = {"radius": null, "currentTruePosition": null, "name": null}
 
     this.KSPCoordinateCenter = null
 
@@ -19,6 +19,7 @@ var OrbitalMap = Class.create({
     this.targetVesselOrbitSVGs = []
 
     this.rootReferenceBodySVG = null
+    this.referenceBodySVGs = {}
 
     this.datalink = datalink
     this.orbitalPositionData = orbitalPositionData;
@@ -28,6 +29,7 @@ var OrbitalMap = Class.create({
   render: function(positionData){
     this.currentVessel = positionData["vesselCurrentPosition"]
     this.targetVessel = positionData["targetCurrentPosition"]
+    this.rootReferenceBody["name"] = positionData["vesselBody"]
     this.rootReferenceBody["radius"] = positionData["currentReferenceBodyRadius"]
     this.rootReferenceBody["currentTruePosition"] = positionData["currentReferenceBodyTruePosition"]
     this.KSPCoordinateCenter = this.rootReferenceBody["currentTruePosition"]
@@ -45,6 +47,35 @@ var OrbitalMap = Class.create({
       cx: referenceBodyPosition[0],
       cy: referenceBodyPosition[1],
     })
+
+    //Render any other planetary bodies
+    var referenceBodyNames = Object.keys(positionData["referenceBodies"])
+    for (var i = referenceBodyNames.length - 1; i >= 0; i--) {
+      var name = referenceBodyNames[i]
+      if(this.rootReferenceBody["name"] == name){
+        continue
+      }
+      var referenceBody = positionData["referenceBodies"][name]
+
+      var radius = referenceBody["radius"]
+      var currentTruePosition = referenceBody["currentTruePosition"]
+
+      var referenceBodyPosition = this.positionOnCanvas(currentTruePosition)
+
+      var referenceBodySVG = this.referenceBodySVGs[name] = this.referenceBodySVGs[name] || this.snapSVG.circle(referenceBodyPosition[0],
+        referenceBodyPosition[1],
+        this.scaleDownKSPValue(radius)
+      );
+
+      referenceBodySVG.attr({
+        fill: 'blue',
+        stroke: "#000",
+        strokeWidth: 5,
+        cx: referenceBodyPosition[0],
+        cy: referenceBodyPosition[1],
+      })
+
+    }
 
     console.log(this.currentVessel["relativePosition"])
 
@@ -80,7 +111,6 @@ var OrbitalMap = Class.create({
         var relativePosition = orbitPatchPositionData[universalTime]["relativePosition"]
         var truePositionOfReferenceBody = positionData["referenceBodies"][referenceBody]["positionData"][universalTime]["truePosition"]
 
-        // debugger
         var point = this.positionOnCanvasForRelativePosition(
           relativePosition,
           this.rootReferenceBody["currentTruePosition"] //truePositionOfReferenceBody
@@ -120,7 +150,7 @@ var OrbitalMap = Class.create({
           var universalTime = universalTimes[k]
           var universalTimeFloat = parseFloat(universalTime)
           var relativePosition = orbitPatchPositionData[universalTime]["relativePosition"]
-          var truePositionOfReferenceBody = positionData["referenceBodies"][referenceBody]["positionData"][universalTime]["truePosition"]
+          var truePositionOfReferenceBody = positionData["referenceBodies"][referenceBody]["currentTruePosition"]
 
           if(firstUniversalTimeOfLastOrbitPatch && universalTimeFloat < firstUniversalTimeOfLastOrbitPatch){
             continue
@@ -128,7 +158,7 @@ var OrbitalMap = Class.create({
 
           var point = this.positionOnCanvasForRelativePosition(
             relativePosition,
-            this.rootReferenceBody["currentTruePosition"] //truePositionOfReferenceBody
+            truePositionOfReferenceBody
           )
 
           orbitPatchPoints.push(point)
