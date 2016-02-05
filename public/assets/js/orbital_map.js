@@ -3,6 +3,7 @@ var OrbitalMap = Class.create({
     this.svgCanvasID = svgCanvasID
     this.svgCanvas = $(svgCanvasID)
     this.initializeSVGCanvas()
+    this.buildGroups()
     this.scale = 30000
 
     this.now = null
@@ -31,6 +32,8 @@ var OrbitalMap = Class.create({
 
     this.buildMarkers()
 
+    this.mapAlignmentDetails = {width: 0, height: 0}
+
     this.datalink = datalink
     this.orbitalPositionData = orbitalPositionData;
     this.orbitalPositionData.options.onRecalculate = this.render.bind(this)
@@ -57,6 +60,8 @@ var OrbitalMap = Class.create({
       cx: referenceBodyPosition[0],
       cy: referenceBodyPosition[1],
     })
+
+    this.referenceBodiesGroup.add(this.rootReferenceBodySVG)
 
     //Render any other planetary bodies
     var referenceBodyNames = Object.keys(positionData["referenceBodies"])
@@ -85,16 +90,17 @@ var OrbitalMap = Class.create({
         cy: referenceBodyPosition[1],
       })
 
+      this.referenceBodiesGroup.add(referenceBodySVG)
     }
 
-    console.log(this.currentVessel["relativePosition"])
+    // console.log(this.currentVessel["relativePosition"])
 
     var currentVesselPosition = this.positionOnCanvasForRelativePosition(
       this.currentVessel["relativePosition"],
       this.rootReferenceBody["currentTruePosition"]
     )
 
-    console.log(currentVesselPosition)
+    // console.log(currentVesselPosition)
 
     this.currentVesselSVG = this.currentVesselSVG || this.snapSVG.circle(currentVesselPosition[0],
       currentVesselPosition[1],
@@ -108,6 +114,8 @@ var OrbitalMap = Class.create({
         stroke: "#000",
         strokeWidth: 5
     });
+
+    this.vesselsGroup.add(this.currentVesselSVG)
 
     for (var i = 0; i < positionData["o.orbitPatches"].length; i++) {
       var orbitPatch = positionData["o.orbitPatches"][i]
@@ -136,6 +144,8 @@ var OrbitalMap = Class.create({
         stroke: this.currentVesselOrbitPathColors[i],
         strokeWidth: 3
       })
+
+      this.currentVesselOrbitPathsGroup.add(this.currentVesselOrbitSVGs[i])
     };
 
     //clear out all the maneuver node plots before we render them again in case the
@@ -191,8 +201,28 @@ var OrbitalMap = Class.create({
           "marker-end": this.maneuverNodeOrbitPathMarkers[svgIndex],
         })
 
+        this.maneuverNodesOrbitPathsGroup.add(this.currentVesselManeuverNodeSVGs[svgIndex])
         svgIndex++;
       };
+    }
+
+    if(this.needsRealigned()){
+      var scaleFactor = 0
+      if(this.canvasHeight()/orbitalMap.mapGroup.getBBox().height < 1.0){
+        scaleFactor = this.canvasHeight()/orbitalMap.mapGroup.getBBox().height
+      }
+
+      if(this.canvasWidth()/orbitalMap.mapGroup.getBBox().width < 1.0){
+        scaleFactor = this.canvasWidth()/orbitalMap.mapGroup.getBBox().width
+      }
+
+      var t = new Snap.Matrix()
+      t.scale(scaleFactor - .1)
+      t.translate(-this.mapGroup.getBBox().x, -this.mapGroup.getBBox().y);
+      this.mapGroup.transform(t);
+
+      this.mapAlignmentDetails.width = this.mapGroup.getBBox().width
+      this.mapAlignmentDetails.height = this.mapGroup.getBBox().height
     }
 
     var targetVesselPosition = this.positionOnCanvasForRelativePosition(
@@ -313,5 +343,28 @@ var OrbitalMap = Class.create({
         fill: color
       }).marker(0,0,7,7, 2, 4).attr({'orient': 'auto', 'markerUnits': 'strokeWidth', 'viewBox': ""}))
     }
+  },
+
+  needsRealigned: function(){
+    return Math.ceil(this.mapAlignmentDetails.width) != Math.ceil(this.mapGroup.getBBox().width) ||
+      Math.ceil(this.mapAlignmentDetails.height) != Math.ceil(this.mapGroup.getBBox().height)
+  },
+
+  buildGroups: function(){
+    this.mapGroup = this.snapSVG.g()
+    this.referenceBodiesGroup = this.snapSVG.g()
+    this.vesselsGroup = this.snapSVG.g()
+    this.currentVesselOrbitPathsGroup = this.snapSVG.g()
+    this.maneuverNodesOrbitPathsGroup = this.snapSVG.g()
+    this.targetVesselOrbitPathsGroup = this.snapSVG.g()
+
+    //Add all the other groups to the mapGroup
+    this.mapGroup.add(
+      this.referenceBodiesGroup,
+      this.vesselsGroup,
+      this.currentVesselOrbitPathsGroup,
+      this.maneuverNodesOrbitPathsGroup,
+      this.targetVesselOrbitPathsGroup
+    )
   }
 })
