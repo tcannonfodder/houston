@@ -21,6 +21,16 @@ var OrbitalMap = Class.create({
     this.rootReferenceBodySVG = null
     this.referenceBodySVGs = {}
 
+    this.currentVesselOrbitPathColors = ["#efbc92", "#b4c6f7", "#987cf9", "#6baedb", "#d0f788", "#f774dd", "#9dc3f9", "#edef70", "#f97292", "#adffb6", "#efc9ff", "#bfc0ff", "#ffe3c4", "#8eb2f9", "#83f7b7", "#8cfc8a", "#97f4b5", "#96dff7", "#ffaabe", "#eda371"]
+    this.maneuverNodeOrbitPathColors = ["#b4f489", "#f48e77", "#a4d1f2", "#99ffc6", "#fcc2e7", "#99ffc6", "#9d67e5", "#f49ab2", "#ffcc99", "#b7fca4", "#ff7cd1", "#ffc9de", "#a4f9ac", "#b6ff77", "#80e6f2", "#f9bdbb", "#e79bef", "#85f7d5", "#88c4ea", "#68a9d8"]
+    this.targetOrbitPathColors = ["#f28cac", "#f7d2a5", "#b4f489", "#f28cac", "#f7d2a5", "#a3ceed", "#f26dd5", "#fcb5fa", "#f77183", "#a7d5ef", "#b4f489", "#9ca6f4", "#f7cea8", "#f9bbc2", "#f48dc1", "#f4ca6e", "#f48e77", "#928be8", "#ef6b8f", "#b074ed"]
+
+    this.currentVesselOrbitPathMarkers = []
+    this.maneuverNodeOrbitPathMarkers = []
+    this.targetVesselOrbitPathMarkers = []
+
+    this.buildMarkers()
+
     this.datalink = datalink
     this.orbitalPositionData = orbitalPositionData;
     this.orbitalPositionData.options.onRecalculate = this.render.bind(this)
@@ -68,7 +78,7 @@ var OrbitalMap = Class.create({
       );
 
       referenceBodySVG.attr({
-        fill: 'blue',
+        fill: 'none',
         stroke: "#000",
         strokeWidth: 5,
         cx: referenceBodyPosition[0],
@@ -123,8 +133,8 @@ var OrbitalMap = Class.create({
       this.currentVesselOrbitSVGs[i].attr({
         points: orbitPatchPoints,
         fill: 'none',
-        stroke: 'teal',
-        strokeWidth: 5
+        stroke: this.currentVesselOrbitPathColors[i],
+        strokeWidth: 3
       })
     };
 
@@ -133,6 +143,8 @@ var OrbitalMap = Class.create({
     for (var i = this.currentVesselManeuverNodeSVGs.length - 1; i >= 0; i--) {
       this.currentVesselManeuverNodeSVGs[i].attr({points: []})
     };
+
+    var svgIndex = 0
 
     for (var i = 0; i < positionData['o.maneuverNodes'].length; i++) {
       var maneuverNode = positionData['o.maneuverNodes'][i]
@@ -146,8 +158,8 @@ var OrbitalMap = Class.create({
         var universalTimes = Object.keys(orbitPatchPositionData)
         var sortedUniversalTimes = universalTimes.map(function(x){return parseFloat(x)}).sort()
 
-        for (var k = 0; k < universalTimes.length; k++) {
-          var universalTime = universalTimes[k]
+        for (var k = 0; k < sortedUniversalTimes.length; k++) {
+          var universalTime = sortedUniversalTimes[k].toString()
           var universalTimeFloat = parseFloat(universalTime)
           var relativePosition = orbitPatchPositionData[universalTime]["relativePosition"]
           var truePositionOfReferenceBody = positionData["referenceBodies"][referenceBody]["currentTruePosition"]
@@ -168,15 +180,18 @@ var OrbitalMap = Class.create({
         //anything before this patch (creating a continuous line in the orbital map)
         firstUniversalTimeOfLastOrbitPatch = sortedUniversalTimes[0]
 
-        var svgIndex = this.currentVesselManeuverNodeSVGs.length
-
         this.currentVesselManeuverNodeSVGs[svgIndex] = this.currentVesselManeuverNodeSVGs[svgIndex] || this.snapSVG.polyline(orbitPatchPoints)
         this.currentVesselManeuverNodeSVGs[svgIndex].attr({
           points: orbitPatchPoints,
           fill: 'none',
-          stroke: 'green',
-          strokeWidth: 5
+          stroke: this.maneuverNodeOrbitPathColors[svgIndex],
+          "stroke-dasharray": '2',
+          strokeWidth: 3,
+          "marker-start": this.maneuverNodeOrbitPathMarkers[svgIndex-1],
+          "marker-end": this.maneuverNodeOrbitPathMarkers[svgIndex],
         })
+
+        svgIndex++;
       };
     }
 
@@ -289,5 +304,14 @@ var OrbitalMap = Class.create({
 
   initializeSVGCanvas: function(){
     this.snapSVG = Snap("#" + this.svgCanvasID)
+  },
+
+  buildMarkers: function(){
+    for (var i = 0; i < this.maneuverNodeOrbitPathColors.length; i++) {
+      var color = this.maneuverNodeOrbitPathColors[i];
+      this.maneuverNodeOrbitPathMarkers.push(this.snapSVG.rect(1,1,2,5).attr({
+        fill: color
+      }).marker(0,0,7,7, 2, 4).attr({'orient': 'auto', 'markerUnits': 'strokeWidth', 'viewBox': ""}))
+    }
   }
 })

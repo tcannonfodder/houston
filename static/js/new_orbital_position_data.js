@@ -2,7 +2,7 @@ var NewOrbitalPositionData = Class.create({
   initialize: function(datalink, options){
     this.datalink = datalink
     this.initializeDatalink()
-    this.timeoutRate = 5000 //times out every 5 seconds
+    this.timeoutRate = 1000 //times out every 5 seconds
     this.mutexTimestamp = null
     this.options = Object.extend({
       onRecalculate: null,
