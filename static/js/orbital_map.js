@@ -217,7 +217,9 @@ var OrbitalMap = Class.create({
       }
 
       var t = new Snap.Matrix()
-      t.scale(scaleFactor - .1)
+      if(scaleFactor > 0){
+        t.scale(scaleFactor - .1)
+      }
       t.translate(-this.mapGroup.getBBox().x, -this.mapGroup.getBBox().y);
       this.mapGroup.transform(t);
 
