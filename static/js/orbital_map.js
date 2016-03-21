@@ -206,27 +206,6 @@ var OrbitalMap = Class.create({
       };
     }
 
-    if(this.needsRealigned()){
-      var scaleFactor = 0
-      if(this.canvasHeight()/orbitalMap.mapGroup.getBBox().height < 1.0){
-        scaleFactor = this.canvasHeight()/orbitalMap.mapGroup.getBBox().height
-      }
-
-      if(this.canvasWidth()/orbitalMap.mapGroup.getBBox().width < 1.0){
-        scaleFactor = this.canvasWidth()/orbitalMap.mapGroup.getBBox().width
-      }
-
-      var t = new Snap.Matrix()
-      if(scaleFactor > 0){
-        t.scale(scaleFactor - .1)
-      }
-      t.translate(-this.mapGroup.getBBox().x, -this.mapGroup.getBBox().y);
-      this.mapGroup.transform(t);
-
-      this.mapAlignmentDetails.width = this.mapGroup.getBBox().width
-      this.mapAlignmentDetails.height = this.mapGroup.getBBox().height
-    }
-
     var targetVesselPosition = this.positionOnCanvasForRelativePosition(
       this.targetVessel["relativePosition"],
       this.rootReferenceBody["currentTruePosition"]
@@ -345,11 +324,6 @@ var OrbitalMap = Class.create({
         fill: color
       }).marker(0,0,7,7, 2, 4).attr({'orient': 'auto', 'markerUnits': 'strokeWidth', 'viewBox': ""}))
     }
-  },
-
-  needsRealigned: function(){
-    return Math.ceil(this.mapAlignmentDetails.width) != Math.ceil(this.mapGroup.getBBox().width) ||
-      Math.ceil(this.mapAlignmentDetails.height) != Math.ceil(this.mapGroup.getBBox().height)
   },
 
   buildGroups: function(){
