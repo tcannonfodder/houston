@@ -101,7 +101,7 @@ var Telemachus = Class.create({
   sendMessage: function(params, callback){
     new Ajax.Request(this.url(), {
       method: "post",
-      postBody: JSON.stringify(params),
+      parameters: params,
       onSuccess: function(response){
         var rawData = JSON.parse(response.responseText)
         var data = this.convertData(rawData)

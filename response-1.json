@@ -1,0 +1,108 @@
+http://localhost:8085/telemachus/datalink?o.maneuverNodes=o.maneuverNodes&tar.o.orbitPatches=tar.o.orbitPatches&v.body=v.body&t.universalTime=t.universalTime&o.orbitPatches=o.orbitPatches
+
+
+----
+
+{
+    "o.maneuverNodes": [{
+        "UT": 15922.0003275617,
+        "deltaV": [0, 0.694157919903284, 851.845789448009],
+        "PeA": 98534.246284569614,
+        "ApA": 13183420.758304799,
+        "inclination": 1.5758710666040283,
+        "eccentricity": 0.90353039405754232,
+        "epoch": 15922.0003275617,
+        "period": 65146.323489590613,
+        "argumentOfPeriapsis": 14.319021962350822,
+        "sma": 7240977.5022946838,
+        "lan": 19.78553518131946,
+        "maae": 6.282575297494609,
+        "referenceBody": "Kerbin",
+        "closestEncounterBody": "Mun",
+        "orbitPatches": [{
+            "startUT": 15922.0003275617,
+            "endUT": 38368.591771749743,
+            "patchEndTransition": "ENCOUNTER",
+            "PeA": 98534.246284569614,
+            "ApA": 13183420.758304799,
+            "inclination": 1.5758710666040283,
+            "eccentricAnomaly": 0.90353039405754232,
+            "eccentricity": 0.90353039405754232,
+            "epoch": 15922.0003275617,
+            "period": 65146.323489590613,
+            "argumentOfPeriapsis": 14.319021962350822,
+            "sma": 7240977.5022946838,
+            "lan": 19.78553518131946,
+            "maae": 6.282575297494609,
+            "referenceBody": "Kerbin",
+            "semiLatusRectum": 1329681.1690927581,
+            "semiMinorAxis": 3102932.71448569,
+            "closestEncounterBody": "Mun"
+        }, {
+            "startUT": 38368.591771749743,
+            "endUT": 49645.118064064271,
+            "patchEndTransition": "ESCAPE",
+            "PeA": 1142719.8290854243,
+            "ApA": - 3049476.084608437,
+            "inclination": 177.20238000011975,
+            "eccentricAnomaly": 2.7822654781271843,
+            "eccentricity": 2.7822654781271843,
+            "epoch": 38368.591771749743,
+            "period": 16098.330695666726,
+            "argumentOfPeriapsis": 269.59875269306445,
+            "sma": - 753378.12776150648,
+            "lan": 112.89468549346877,
+            "maae": - 2.2006154201950494,
+            "referenceBody": "Mun",
+            "semiLatusRectum": 5078522.8563466333,
+            "semiMinorAxis": - 1956028.6402065908,
+            "closestEncounterBody": null
+        }, {
+            "startUT": 49645.118064064271,
+            "endUT": 121215.72277317915,
+            "patchEndTransition": "FINAL",
+            "PeA": 299682.62246335705,
+            "ApA": 13919347.039428545,
+            "inclination": 1.1369391399278324,
+            "eccentricAnomaly": 0.8833023034274432,
+            "eccentricity": 0.8833023034274432,
+            "epoch": 49645.118064064271,
+            "period": 71570.604709114879,
+            "argumentOfPeriapsis": 156.12622788428871,
+            "sma": 7709514.8309459509,
+            "lan": 225.7605751517649,
+            "maae": 4.6383668890278944,
+            "referenceBody": "Kerbin",
+            "semiLatusRectum": 1694374.3552388854,
+            "semiMinorAxis": 3614250.1602529748,
+            "closestEncounterBody": null
+        }
+        ]
+    }
+    ],
+    "tar.o.orbitPatches": [],
+    "v.body": "Kerbin",
+    "t.universalTime": 35428.864117791483,
+    "o.orbitPatches": [{
+        "startUT": 35428.864117791483,
+        "endUT": 37386.031955979815,
+        "patchEndTransition": "FINAL",
+        "PeA": 90443.425334993866,
+        "ApA": 109098.67247116298,
+        "inclination": 1.5633653913091341,
+        "eccentricAnomaly": 0.01332953625718877,
+        "eccentricity": 0.01332953625718877,
+        "epoch": 35428.864117791483,
+        "period": 1957.1678381883339,
+        "argumentOfPeriapsis": 96.523106487340286,
+        "sma": 699771.04890307842,
+        "lan": 19.682125818238546,
+        "maae": 4.640549916992537,
+        "referenceBody": "Kerbin",
+        "semiLatusRectum": 699646.71600653452,
+        "semiMinorAxis": 699708.87969318114,
+        "closestEncounterBody": null
+    }
+    ]
+}
+

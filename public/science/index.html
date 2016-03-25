@@ -43,6 +43,9 @@
   <script src="../assets/js/maneuver_node_editor.js"></script>
 
   <script src="../assets/js/new_orbital_position_data.js"></script>
+  <script src="../assets/js/new_map_data_processor.js"></script>
+  <script src="../assets/js/position_data_formatter.js"></script>
+  <script src="../assets/js/new_orbital_map.js"></script>
   <script src="../assets/js/orbital_map.js"></script>
 
   <link rel="stylesheet" type="text/css" href="../assets/stylesheets/chartist.min.css" />
@@ -252,8 +255,8 @@
       $('settings_overlay').removeClassName('open')
     })
 
-    window.datalink = new Telemachus(settings.getHost(), settings.getPort())
-    window.titleBar = new TitleBar(datalink, 'title-bar')
+    //window.datalink = new Telemachus(settings.getHost(), settings.getPort())
+   // window.titleBar = new TitleBar(datalink, 'title-bar')
 
     $('nav_toggle').observe("click", function(e){
       var nav = $$('nav')[0]

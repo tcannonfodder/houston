@@ -1,0 +1,19 @@
+---
+title: 3D Orbital Map
+---
+
+<% content_for :head do %>
+  <link rel="stylesheet" type="text/css" href="../assets/stylesheets/3dmap.css" />
+<% end %>
+
+<div id="map"></div>
+
+<% content_for :dom_loaded do %>
+  window.mapDatalink = new Telemachus(settings.getHost(), settings.getPort())
+  window.mapDatalink.rate = 2000
+  var orbitalPositionData = new NewOrbitalPositionData(window.mapDatalink)
+  window.positionDataFormatter = new PositionDataFormatter(orbitalPositionData, window.mapDatalink)
+
+  window.NewOrbitalMap = new NewOrbitalMap(positionDataFormatter, window.mapDatalink, "map")
+
+<% end %>
