@@ -5,6 +5,9 @@ var NewOrbitalMap = Class.create({
     this.buildSceneCameraAndRenderer()
     // this.buildGeometry()
 
+    this.distanceScaleFactor = 0.3
+    this.referenceBodyScaleFactor = 0.9
+
     this.referenceBodyGeometry = {}
 
     this.colors = ["#b4f489", "#f48e77", "#a4d1f2", "#99ffc6", "#fcc2e7", "#99ffc6", "#9d67e5", "#f49ab2", "#ffcc99", "#b7fca4", "#ff7cd1", "#ffc9de", "#a4f9ac", "#b6ff77", "#80e6f2", "#f9bdbb", "#e79bef", "#85f7d5", "#88c4ea", "#68a9d8"]
@@ -27,7 +30,7 @@ var NewOrbitalMap = Class.create({
 
   buildGeometry: function(formattedData){
     var geometry = new THREE.BoxGeometry( 1, 1, 1 )
-    var material = new THREE.MeshBasicMaterial( { color: '#C5DCAB', 'wireframe': true } )
+    var material = new THREE.MeshBasicMaterial( { color: '#C5DCAB', 'wireframe': false } )
 
     // this.cube = new THREE.Mesh( geometry, material )
     // this.scene.add( this.cube )
@@ -52,7 +55,7 @@ var NewOrbitalMap = Class.create({
 
       var material = new THREE.MeshBasicMaterial( { color: this.colors[i], 'wireframe': true } )
       console.log(info.radius)
-      var sphereGeometry = new THREE.SphereGeometry(info.radius, 20, 20)
+      var sphereGeometry = new THREE.SphereGeometry(info.radius * this.referenceBodyScaleFactor, 20, 20)
       var sphere = new THREE.Mesh( sphereGeometry, material )
       this.setPosition(sphere, info.truePosition)
       // debugger
@@ -119,7 +122,7 @@ var NewOrbitalMap = Class.create({
   },
 
   buildVector: function(vector){
-    return new THREE.Vector3( vector[0], vector[2], vector[1] );
+    return new THREE.Vector3( vector[0] * this.distanceScaleFactor, vector[2] * this.distanceScaleFactor, vector[1] * this.distanceScaleFactor );
   },
 
   render: function (formattedData) {
