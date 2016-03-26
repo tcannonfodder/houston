@@ -6,7 +6,7 @@ var NewOrbitalMap = Class.create({
     // this.buildGeometry()
 
     this.distanceScaleFactor = 0.3
-    this.referenceBodyScaleFactor = 0.9
+    this.referenceBodyScaleFactor = 0.6
 
     this.referenceBodyGeometry = {}
 
@@ -100,7 +100,7 @@ var NewOrbitalMap = Class.create({
 
     //this.getMiddle(boundingBox.min.y, boundingBox.max.y) // boundingBox.max.y - Math.abs(boundingBox.min.y)
 
-    this.camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, cameraZ * 2)// 700000 * 2 )
+    this.camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, cameraY * 2)// 700000 * 2 )
     // this.camera = new THREE.OrthographicCamera(
     //   boundingBox.min.x,
     //   boundingBox.max.x,
