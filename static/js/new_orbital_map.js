@@ -101,7 +101,7 @@ var NewOrbitalMap = Class.create({
 
       //this.getMiddle(boundingBox.min.y, boundingBox.max.y) // boundingBox.max.y - Math.abs(boundingBox.min.y)
 
-      this.camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, cameraY * 2)// 700000 * 2 )
+      this.camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, Number.MAX_SAFE_INTEGER)// 700000 * 2 )
       // this.camera = new THREE.OrthographicCamera(
       //   boundingBox.min.x,
       //   boundingBox.max.x,
