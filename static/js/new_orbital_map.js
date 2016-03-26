@@ -101,6 +101,9 @@ var NewOrbitalMap = Class.create({
     this.camera.position.z =  cameraZ
 
     this.camera.lookAt(boundingBox.center())
+
+    console.log(this.camera.rotation.z)
+    this.camera.rotation.z = Math.PI /2
   },
 
   getMiddle: function(min, max){
