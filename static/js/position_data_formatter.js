@@ -40,8 +40,7 @@ var PositionDataFormatter = Class.create({
   formatVessels: function(positionData, formattedData){
     //current vessel
     // debugger
-    var x = positionData["vesselCurrentPosition"]["relativePosition"]
-    var currentVesselTruePosition = math.add(x,positionData.referenceBodies[positionData["vesselBody"]].radius)
+    var currentVesselTruePosition = positionData["vesselCurrentPosition"]["relativePosition"]
 
     formattedData.vessels.push(
       this.buildVessel({
