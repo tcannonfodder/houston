@@ -39,11 +39,9 @@ var PositionDataFormatter = Class.create({
 
   formatVessels: function(positionData, formattedData){
     //current vessel
-    var currentVesselTruePosition = [
-      -positionData["vesselCurrentPosition"]["relativePosition"][0],
-      -positionData["vesselCurrentPosition"]["relativePosition"][1],
-      -positionData["vesselCurrentPosition"]["relativePosition"][2],
-    ]
+    // debugger
+    var x = positionData["vesselCurrentPosition"]["relativePosition"]
+    var currentVesselTruePosition = math.add(x,positionData.referenceBodies[positionData["vesselBody"]].radius)
 
     formattedData.vessels.push(
       this.buildVessel({
@@ -53,6 +51,14 @@ var PositionDataFormatter = Class.create({
         referenceBodyName: positionData["vesselBody"]
       })
     )
+  },
+
+  truePositionForRelativePosition: function(relativePositionVector, frameOfReferenceVector){
+    return [
+      frameOfReferenceVector[0] + relativePositionVector[0],
+      frameOfReferenceVector[1] + relativePositionVector[1],
+      frameOfReferenceVector[2] + relativePositionVector[2],
+    ]
   },
 
   buildReferenceBody: function(options){
