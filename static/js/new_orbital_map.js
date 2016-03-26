@@ -42,6 +42,7 @@ var NewOrbitalMap = Class.create({
     // this.camera.position.z = 100
 
     this.buildReferenceBodyGeometry(formattedData)
+    this.buildVesselGeometry(formattedData)
   },
 
   buildReferenceBodyGeometry: function(formattedData){
@@ -61,6 +62,21 @@ var NewOrbitalMap = Class.create({
       // debugger
       this.group.add(sphere)
     }
+  },
+
+  buildVesselGeometry: function(formattedData){
+    var material = new THREE.MeshBasicMaterial( { color: 'white', 'wireframe': false } )
+
+    var info = formattedData.vessels[0]
+
+    var length = formattedData.referenceBodies[0].radius * .2
+
+    var geometry = new THREE.BoxGeometry( length, length, length )
+    var cube = new THREE.Mesh( geometry, material )
+
+    this.setPosition(cube, info.truePosition)
+    // debugger
+    this.group.add(cube)
   },
 
   positionCamera: function(){

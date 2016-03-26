@@ -12,10 +12,12 @@ var PositionDataFormatter = Class.create({
 
   format: function(positionData){
     var formattedData = {
-      "referenceBodies": []
+      "referenceBodies": [],
+      "vessels": []
     }
 
     this.formatReferenceBodies(positionData, formattedData)
+    this.formatVessels(positionData, formattedData)
     this.options.onFormat && this.options.onFormat(formattedData)
   },
 
@@ -35,12 +37,39 @@ var PositionDataFormatter = Class.create({
     }
   },
 
+  formatVessels: function(positionData, formattedData){
+    //current vessel
+    var currentVesselTruePosition = [
+      -positionData["vesselCurrentPosition"]["relativePosition"][0],
+      -positionData["vesselCurrentPosition"]["relativePosition"][1],
+      -positionData["vesselCurrentPosition"]["relativePosition"][2],
+    ]
+
+    formattedData.vessels.push(
+      this.buildVessel({
+        name: "current vessel",
+        type: "currentVessel",
+        truePosition: currentVesselTruePosition,
+        referenceBodyName: positionData["vesselBody"]
+      })
+    )
+  },
+
   buildReferenceBody: function(options){
     return {
       name: options.name,
       radius: options.radius,
       truePosition: options.truePosition,
       //truePositions: options.truePositions
+    }
+  },
+
+  buildVessel: function(options){
+    return {
+      name: options.name,
+      type: options.type,
+      truePosition: options.truePosition,
+      referenceBodyName: options.referenceBodyName
     }
   }
 })
