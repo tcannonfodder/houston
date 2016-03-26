@@ -80,49 +80,56 @@ var NewOrbitalMap = Class.create({
   },
 
   positionCamera: function(){
-    var boundingBox = new THREE.Box3().setFromObject(this.group)
-    // debugger
-    console.log(boundingBox)
+      var boundingBox = new THREE.Box3().setFromObject(this.group)
+      // debugger
+      console.log(boundingBox)
 
-    var hex  = 0xff0000;
-    var bbox = new THREE.BoundingBoxHelper( this.group, hex );
-    bbox.update();
-    this.scene.add( bbox );
+      var hex  = 0xff0000;
+      var bbox = new THREE.BoundingBoxHelper( this.group, hex );
+      bbox.update();
+      this.scene.add( bbox );
 
-    // debugger
+      // debugger
 
-    var cameraX = this.getMiddle(boundingBox.min.x, boundingBox.max.x) - 100000 //boundingBox.max.x - Math.abs(boundingBox.min.x)
-    // debugger
-    var cameraZ = this.getMiddle(boundingBox.min.z, boundingBox.max.z) //boundingBox.max.z * 1.05
+    if(!this.camera){
+      var cameraX = this.getMiddle(boundingBox.min.x, boundingBox.max.x) - 100000 //boundingBox.max.x - Math.abs(boundingBox.min.x)
+      // debugger
+      var cameraZ = this.getMiddle(boundingBox.min.z, boundingBox.max.z) //boundingBox.max.z * 1.05
 
-    var y1 = this.getMiddle(boundingBox.min.z, boundingBox.max.z) * Math.tan(0.785)
-    var cameraY = boundingBox.max.y + y1
+      var y1 = this.getMiddle(boundingBox.min.z, boundingBox.max.z) * Math.tan(0.785)
+      var cameraY = boundingBox.max.y + y1
 
-    //this.getMiddle(boundingBox.min.y, boundingBox.max.y) // boundingBox.max.y - Math.abs(boundingBox.min.y)
+      //this.getMiddle(boundingBox.min.y, boundingBox.max.y) // boundingBox.max.y - Math.abs(boundingBox.min.y)
 
-    this.camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, cameraY * 2)// 700000 * 2 )
-    // this.camera = new THREE.OrthographicCamera(
-    //   boundingBox.min.x,
-    //   boundingBox.max.x,
-    //   boundingBox.max.z,
-    //   boundingBox.min.x,
-    //   0.1,
-    //   cameraY * 2
-    // )
-    // debugger
+      this.camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, cameraY * 2)// 700000 * 2 )
+      // this.camera = new THREE.OrthographicCamera(
+      //   boundingBox.min.x,
+      //   boundingBox.max.x,
+      //   boundingBox.max.z,
+      //   boundingBox.min.x,
+      //   0.1,
+      //   cameraY * 2
+      // )
+      // debugger
 
-    console.log(cameraX)
+      console.log(cameraX)
 
-    // debugger
+      // debugger
 
-    this.camera.position.x =  cameraX
-    this.camera.position.y =  cameraY
-    this.camera.position.z =  cameraZ
+      this.camera.position.set(cameraX, cameraY, cameraZ)
 
-    this.camera.lookAt(boundingBox.center())
+      this.camera.lookAt(boundingBox.center())
 
-    console.log(this.camera.rotation.z)
-    this.camera.rotation.z = Math.PI /2
+      console.log(this.camera.rotation.z)
+      this.camera.rotation.z = Math.PI /2
+
+
+      this.controls = new THREE.OrbitControls( this.camera, this.renderer.domElement );
+      this.controls.addEventListener( 'change', function(){this.renderer.render(this.scene, this.camera)}.bind(this) ); // add this only if there is no animation loop (requestAnimationFrame)
+      // this.controls.enableDamping = true;
+      // this.controls.dampingFactor = 0.25;
+      // this.controls.enableZoom = false;
+    }
   },
 
   getMiddle: function(min, max){
@@ -142,6 +149,7 @@ var NewOrbitalMap = Class.create({
   },
 
   render: function (formattedData) {
+    // if(this.rendered){ return }
     requestAnimationFrame( function(){
       console.log(formattedData)
       this.buildScene()
@@ -149,6 +157,8 @@ var NewOrbitalMap = Class.create({
       this.positionCamera()
       // this.sphere.rotation.y += 0.01
       this.renderer.render(this.scene, this.camera)
+
+      this.rendered = true
     }.bind(this))
 
     // this.sphere.rotation.x += 0.01
