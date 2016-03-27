@@ -14,12 +14,14 @@ var PositionDataFormatter = Class.create({
     var formattedData = {
       "referenceBodies": [],
       "vessels": [],
-      "orbitPaths": []
+      "orbitPatches": [],
+      "maneuverNodes": []
     }
 
     this.formatReferenceBodies(positionData, formattedData)
     this.formatVessels(positionData, formattedData)
-    this.formatOrbitalPath(positionData, formattedData)
+    this.formatOrbitalPatches(positionData, formattedData)
+    this.formatManeuverNodes(positionData, formattedData)
     this.options.onFormat && this.options.onFormat(formattedData)
   },
 
@@ -54,7 +56,7 @@ var PositionDataFormatter = Class.create({
     )
   },
 
-  formatOrbitalPath: function(positionData, formattedData){
+  formatOrbitalPatches: function(positionData, formattedData){
     for (var i = positionData["o.orbitPatches"].length - 1; i >= 0; i--) {
       var orbitPatch = positionData["o.orbitPatches"][i]
       var positionDataKeys = Object.keys(orbitPatch.positionData)
@@ -71,11 +73,49 @@ var PositionDataFormatter = Class.create({
         ))
       }
 
-      formattedData.orbitPaths.push(this.buildOrbitPath({
+      formattedData.orbitPatches.push(this.buildOrbitPatch({
         type: "orbitPath",
         parentType: "vessel",
         parentName: "current vessel",
         truePositions: positions
+      }))
+    }
+  },
+
+  formatManeuverNodes: function(positionData, formattedData){
+    for (var i = positionData["o.maneuverNodes"].length - 1; i >= 0; i--) {
+      var maneuverNode = positionData["o.maneuverNodes"][i]
+      var orbitPatches = []
+
+      for (var j = maneuverNode.orbitPatches.length - 1; j >= 0; j--) {
+        var orbitPatch = maneuverNode.orbitPatches[j]
+        var positionDataKeys = Object.keys(orbitPatch.positionData)
+        var referenceBody = positionData.referenceBodies[orbitPatch.referenceBody]
+        var positions = []
+
+        for (var k = positionDataKeys.length - 1; k >= 0; k--) {
+          var key = positionDataKeys[k]
+          var frameOfReferenceVector = referenceBody.currentTruePosition
+          var relativePositionVector = orbitPatch.positionData[key].relativePosition
+
+          positions.push(this.truePositionForRelativePosition(
+            relativePositionVector, frameOfReferenceVector
+          ))
+        }
+
+        orbitPatches.push(this.buildOrbitPatch({
+          type: "orbitPath",
+          parentType: "vessel",
+          parentName: "current vessel",
+          truePositions: positions
+        }))
+      }
+
+      formattedData.maneuverNodes.push(this.buildManeuverNode({
+        type: "maneuverNode",
+        parentType: "vessel",
+        parentName: "current vessel",
+        orbitPatches: orbitPatches
       }))
     }
   },
@@ -103,12 +143,21 @@ var PositionDataFormatter = Class.create({
     }
   },
 
-  buildOrbitPath: function(options){
+  buildOrbitPatch: function(options){
     return {
       type: options.type,
       parentType: options.parentType,
       parentName: options.parentName,
       truePositions: options.truePositions
+    }
+  },
+
+  buildManeuverNode: function(options){
+    return {
+      type: options.type,
+      parentType: options.parentType,
+      parentName: options.parentName,
+      orbitPatches: options.orbitPatches
     }
   }
 })
