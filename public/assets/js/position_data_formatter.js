@@ -4,6 +4,8 @@ var PositionDataFormatter = Class.create({
     this.orbitalPositionData = orbitalPositionData;
     this.orbitalPositionData.options.onRecalculate = this.format.bind(this)
 
+    this.rootReferenceBodyName = null
+
     this.options = Object.extend({
       onFormat: null,
       numberOfSegments: 120
@@ -76,6 +78,8 @@ var PositionDataFormatter = Class.create({
     // debugger
     var currentVesselTruePosition = positionData["vesselCurrentPosition"]["relativePosition"]
 
+    this.rootReferenceBodyName = positionData["vesselBody"]
+
     formattedData.vessels.push(
       this.buildVessel({
         name: "current vessel",
@@ -113,19 +117,31 @@ var PositionDataFormatter = Class.create({
   },
 
   formatManeuverNodes: function(positionData, formattedData){
-    for (var i = positionData["o.maneuverNodes"].length - 1; i >= 0; i--) {
+    for (var i = 0; i < positionData["o.maneuverNodes"].length; i++){
       var maneuverNode = positionData["o.maneuverNodes"][i]
       var orbitPatches = []
 
-      for (var j = maneuverNode.orbitPatches.length - 1; j >= 0; j--) {
+
+      for (var j = 0; j < maneuverNode.orbitPatches.length; j++){
         var orbitPatch = maneuverNode.orbitPatches[j]
         var positionDataKeys = Object.keys(orbitPatch.positionData)
         var referenceBody = positionData.referenceBodies[orbitPatch.referenceBody]
+        var sortedUniversalTimes = positionDataKeys.map(function(x){return parseFloat(x)}).reverse()
+        console.log(orbitPatch.referenceBody)
+        // debugger
+        console.log(sortedUniversalTimes)
         var positions = []
 
-        for (var k = positionDataKeys.length - 1; k >= 0; k--) {
-          var key = positionDataKeys[k]
+        // if(orbitPatch.referenceBody == this.rootReferenceBodyName){
           var frameOfReferenceVector = referenceBody.currentTruePosition
+        // } else{
+        //   // debugger
+        //   var frameOfReferenceVector = referenceBody.positionData[sortedUniversalTimes[0].toString()].truePosition
+        // }
+
+        for (var k = 0; k < sortedUniversalTimes.length; k++){
+          var key = sortedUniversalTimes[k].toString()
+          // var frameOfReferenceVector = referenceBody.currentTruePosition
           var relativePositionVector = orbitPatch.positionData[key].relativePosition
 
           positions.push(this.truePositionForRelativePosition(
