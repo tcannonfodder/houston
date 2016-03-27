@@ -47,6 +47,7 @@ var NewOrbitalMap = Class.create({
     this.buildVesselGeometry(formattedData)
     this.buildOrbitPathGeometry(formattedData)
     this.buildManeuverNodeGeometry(formattedData)
+    this.buildReferenceBodyOrbitPaths(formattedData)
   },
 
   buildReferenceBodyGeometry: function(formattedData){
@@ -112,6 +113,17 @@ var NewOrbitalMap = Class.create({
 
         this.group.add(spline)
       }
+    }
+  },
+
+  buildReferenceBodyOrbitPaths: function(formattedData){
+    for (var i = formattedData.referenceBodyPaths.length - 1; i >= 0; i--) {
+      var points = formattedData.referenceBodyPaths[i].truePositions.map(function(x){ return this.buildVector(x) }.bind(this))
+      var material = new THREE.LineBasicMaterial( { color : 'white', linewidth: formattedData.referenceBodies[0].radius * .1 } );
+
+      var spline = this.buildSplineWithMaterial(points, material)
+
+      this.group.add(spline)
     }
   },
 
