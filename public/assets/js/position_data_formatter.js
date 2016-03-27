@@ -13,11 +13,13 @@ var PositionDataFormatter = Class.create({
   format: function(positionData){
     var formattedData = {
       "referenceBodies": [],
-      "vessels": []
+      "vessels": [],
+      "orbitPaths": []
     }
 
     this.formatReferenceBodies(positionData, formattedData)
     this.formatVessels(positionData, formattedData)
+    this.formatOrbitalPath(positionData, formattedData)
     this.options.onFormat && this.options.onFormat(formattedData)
   },
 
@@ -52,12 +54,35 @@ var PositionDataFormatter = Class.create({
     )
   },
 
+  formatOrbitalPath: function(positionData, formattedData){
+    for (var i = positionData["o.orbitPatches"].length - 1; i >= 0; i--) {
+      var orbitPatch = positionData["o.orbitPatches"][i]
+      var positionDataKeys = Object.keys(orbitPatch.positionData)
+      var referenceBody = positionData.referenceBodies[orbitPatch.referenceBody]
+      var positions = []
+
+      for (var i = positionDataKeys.length - 1; i >= 0; i--) {
+        var key = positionDataKeys[i]
+        var frameOfReferenceVector = referenceBody.currentTruePosition
+        var relativePositionVector = orbitPatch.positionData[key].relativePosition
+
+        positions.push(this.truePositionForRelativePosition(
+          relativePositionVector, frameOfReferenceVector
+        ))
+      }
+
+      formattedData.orbitPaths.push(this.buildOrbitPath({
+        type: "orbitPath",
+        parentType: "vessel",
+        parentName: "current vessel",
+        truePositions: positions
+      }))
+    }
+  },
+
   truePositionForRelativePosition: function(relativePositionVector, frameOfReferenceVector){
-    return [
-      frameOfReferenceVector[0] + relativePositionVector[0],
-      frameOfReferenceVector[1] + relativePositionVector[1],
-      frameOfReferenceVector[2] + relativePositionVector[2],
-    ]
+    var z = math.add(relativePositionVector, frameOfReferenceVector)
+    return math.add(relativePositionVector, z)
   },
 
   buildReferenceBody: function(options){
@@ -75,6 +100,15 @@ var PositionDataFormatter = Class.create({
       type: options.type,
       truePosition: options.truePosition,
       referenceBodyName: options.referenceBodyName
+    }
+  },
+
+  buildOrbitPath: function(options){
+    return {
+      type: options.type,
+      parentType: options.parentType,
+      parentName: options.parentName,
+      truePositions: options.truePositions
     }
   }
 })
