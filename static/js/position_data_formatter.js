@@ -15,13 +15,15 @@ var PositionDataFormatter = Class.create({
       "referenceBodies": [],
       "vessels": [],
       "orbitPatches": [],
-      "maneuverNodes": []
+      "maneuverNodes": [],
+      "referenceBodyPaths": []
     }
 
     this.formatReferenceBodies(positionData, formattedData)
     this.formatVessels(positionData, formattedData)
     this.formatOrbitalPatches(positionData, formattedData)
     this.formatManeuverNodes(positionData, formattedData)
+    this.formatReferenceBodyPaths(positionData, formattedData)
     this.options.onFormat && this.options.onFormat(formattedData)
   },
 
@@ -38,6 +40,34 @@ var PositionDataFormatter = Class.create({
       })
 
       formattedData["referenceBodies"].push(x)
+    }
+  },
+
+  formatReferenceBodyPaths: function(positionData, formattedData){
+    referenceBodyNames = Object.keys(positionData.referenceBodies)
+    // debugger
+    for (var i = referenceBodyNames.length - 1; i >= 0; i--) {
+      var name = referenceBodyNames[i]
+
+      // if(name == this.rootReferenceBodyName){ continue; }
+      var info = positionData.referenceBodies[name]
+      var positionDataKeys = Object.keys(info.positionData)
+      var sortedUniversalTimes = positionDataKeys.map(function(x){return parseFloat(x)}).reverse()
+
+      var positions = []
+
+      for (var j = 0; j < sortedUniversalTimes.length; j++) {
+        var key = sortedUniversalTimes[j].toString()
+
+        positions.push(info.positionData[key].truePosition)
+      }
+
+      var x = this.buildReferenceBodyPath({
+        referenceBodyName: name,
+        truePositions: positions
+      })
+
+      formattedData.referenceBodyPaths.push(x)
     }
   },
 
@@ -131,6 +161,13 @@ var PositionDataFormatter = Class.create({
       radius: options.radius,
       truePosition: options.truePosition,
       //truePositions: options.truePositions
+    }
+  },
+
+  buildReferenceBodyPath: function(options){
+    return {
+      referenceBodyName: options.referenceBodyName,
+      truePositions: options.truePositions
     }
   },
 
