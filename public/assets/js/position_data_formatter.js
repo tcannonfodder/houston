@@ -18,7 +18,8 @@ var PositionDataFormatter = Class.create({
       "vessels": [],
       "orbitPatches": [],
       "maneuverNodes": [],
-      "referenceBodyPaths": []
+      "referenceBodyPaths": [],
+      "distancesFromRootReferenceBody": []
     }
 
     this.formatReferenceBodies(positionData, formattedData)
@@ -26,6 +27,8 @@ var PositionDataFormatter = Class.create({
     this.formatOrbitalPatches(positionData, formattedData)
     this.formatManeuverNodes(positionData, formattedData)
     this.formatReferenceBodyPaths(positionData, formattedData)
+    this.formatDistancesFromRootReferenceBody(positionData, formattedData)
+
     this.options.onFormat && this.options.onFormat(formattedData)
   },
 
@@ -70,6 +73,38 @@ var PositionDataFormatter = Class.create({
       })
 
       formattedData.referenceBodyPaths.push(x)
+    }
+  },
+
+  formatDistancesFromRootReferenceBody: function(positionData, formattedData){
+    referenceBodyNames = Object.keys(positionData.referenceBodies)
+    var rootReferenceBody = positionData.referenceBodies[this.rootReferenceBodyName]
+
+    for (var i = referenceBodyNames.length - 1; i >= 0; i--) {
+      var name = referenceBodyNames[i]
+      if(name == this.rootReferenceBodyName){ continue; }
+
+      var body = positionData.referenceBodies[name]
+      var sortedUniversalTimes = this.sortedUniversalTimes(body.positionData)
+
+      // for (var j = 0; j < sortedUniversalTimes.length; j++) {
+        // debugger
+        var firstUniversalTime = sortedUniversalTimes.first()
+
+        var projectedPositionOfReferenceBody = this.findProjectedPositionOfReferenceBody(rootReferenceBody, body, firstUniversalTime)
+
+        var positions = [
+          rootReferenceBody.currentTruePosition,
+          projectedPositionOfReferenceBody
+        ]
+
+        var x = this.buildDistanceFromRootReferenceBody({
+          referenceBodyName: name,
+          truePositions: positions
+        })
+
+        formattedData.distancesFromRootReferenceBody.push(x)
+      // }
     }
   },
 
@@ -124,24 +159,25 @@ var PositionDataFormatter = Class.create({
 
       for (var j = 0; j < maneuverNode.orbitPatches.length; j++){
         var orbitPatch = maneuverNode.orbitPatches[j]
-        var positionDataKeys = Object.keys(orbitPatch.positionData)
         var referenceBody = positionData.referenceBodies[orbitPatch.referenceBody]
-        var sortedUniversalTimes = positionDataKeys.map(function(x){return parseFloat(x)}).reverse()
+        var sortedUniversalTimes = this.sortedUniversalTimes(orbitPatch.positionData)
         console.log(orbitPatch.referenceBody)
         // debugger
         console.log(sortedUniversalTimes)
         var positions = []
 
-        // if(orbitPatch.referenceBody == this.rootReferenceBodyName){
-          var frameOfReferenceVector = referenceBody.currentTruePosition
-        // } else{
-        //   // debugger
-        //   var frameOfReferenceVector = referenceBody.positionData[sortedUniversalTimes[0].toString()].truePosition
-        // }
-
         for (var k = 0; k < sortedUniversalTimes.length; k++){
           var key = sortedUniversalTimes[k].toString()
-          // var frameOfReferenceVector = referenceBody.currentTruePosition
+
+          if(orbitPatch.referenceBody == this.rootReferenceBodyName){
+            var frameOfReferenceVector = referenceBody.currentTruePosition
+          } else{
+            var frameOfReferenceVector = this.findProjectedPositionOfReferenceBody(
+              this.rootReferenceBody(positionData), referenceBody, sortedUniversalTimes.last()
+            )
+            // var frameOfReferenceVector = referenceBody.positionData[sortedUniversalTimes[0].toString()].truePosition
+          }
+
           var relativePositionVector = orbitPatch.positionData[key].relativePosition
 
           positions.push(this.truePositionForRelativePosition(
@@ -166,9 +202,50 @@ var PositionDataFormatter = Class.create({
     }
   },
 
+  findDistanceVectorBetweenBodiesAtTime: function(rootBody, targetBody, universalTime){
+    var closestUniversalTime = this.findTruePositionClosestToRelativeTime(universalTime, rootBody.positionData)
+
+    return [
+      rootBody.positionData[closestUniversalTime].truePosition,
+      targetBody.positionData[universalTime].truePosition
+    ]
+  },
+
+  findProjectedPositionOfReferenceBody: function(rootReferenceBody, body, universalTime){
+    var distancePoints = this.findDistanceVectorBetweenBodiesAtTime(rootReferenceBody, body, universalTime)
+    var distanceVector = math.add(distancePoints[1], math.multiply(-1, distancePoints[0]))
+
+    var currentTruePositionForReferenceBody = body.currentTruePosition
+    var currentDistanceVector = math.add(currentTruePositionForReferenceBody, math.multiply(-1, rootReferenceBody.currentTruePosition))
+
+    return math.add(currentDistanceVector, math.add(rootReferenceBody.currentTruePosition, distanceVector))
+  },
+
   truePositionForRelativePosition: function(relativePositionVector, frameOfReferenceVector){
     var z = math.add(relativePositionVector, frameOfReferenceVector)
     return math.add(relativePositionVector, z)
+  },
+
+  findTruePositionClosestToRelativeTime: function(universalTime, positionData){
+    var positionDataKeys = Object.keys(positionData)
+    var sortedUniversalTimes = positionDataKeys.map(function(x){return parseFloat(x)}).sortBy(function(s) {
+      return s;
+    })
+
+    var closestTime = null
+    var closestDistance = null
+
+    for (var i = 0; i < sortedUniversalTimes.length; i++) {
+      var time = sortedUniversalTimes[i]
+      var distance = Math.abs(universalTime - time)
+
+      if((closestTime == null && closestDistance == null) || distance < closestDistance ){
+        closestTime = time
+        closestDistance = distance
+      }
+    }
+
+    return closestTime
   },
 
   buildReferenceBody: function(options){
@@ -212,5 +289,21 @@ var PositionDataFormatter = Class.create({
       parentName: options.parentName,
       orbitPatches: options.orbitPatches
     }
+  },
+
+  buildDistanceFromRootReferenceBody: function(options){
+    return {
+      referenceBodyName: options.referenceBodyName,
+      truePositions: options.truePositions
+    }
+  },
+
+  sortedUniversalTimes: function(positionData){
+    var positionDataKeys = Object.keys(positionData)
+    return positionDataKeys.map(function(x){return parseFloat(x)}).sortBy(function(x){ x })
+  },
+
+  rootReferenceBody: function(positionData){
+    return positionData.referenceBodies[this.rootReferenceBodyName]
   }
 })
