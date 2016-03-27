@@ -11,6 +11,8 @@ var NewOrbitalMap = Class.create({
     this.referenceBodyGeometry = {}
 
     this.colors = ["#b4f489", "#f48e77", "#a4d1f2", "#99ffc6", "#fcc2e7", "#99ffc6", "#9d67e5", "#f49ab2", "#ffcc99", "#b7fca4", "#ff7cd1", "#ffc9de", "#a4f9ac", "#b6ff77", "#80e6f2", "#f9bdbb", "#e79bef", "#85f7d5", "#88c4ea", "#68a9d8"]
+    this.orbitPathColors = ["orange", "#b4c6f7", "#987cf9", "#6baedb", "#d0f788", "#f774dd", "#9dc3f9", "#edef70", "#f97292", "#adffb6", "#efc9ff", "#bfc0ff", "#ffe3c4", "#8eb2f9", "#83f7b7", "#8cfc8a", "#97f4b5", "#96dff7", "#ffaabe", "#eda371"]
+
 
     this.datalink = datalink
     this.positionDataFormatter = positionDataFormatter
@@ -85,19 +87,14 @@ var NewOrbitalMap = Class.create({
   },
 
   buildOrbitPathGeometry: function(formattedData){
-    //Create a closed bent a sine-like wave
-    var points = formattedData.orbitPaths[0].truePositions.map(function(x){ return this.buildVector(x) }.bind(this))
-    var curve = new THREE.SplineCurve3(points);
+    for (var i = formattedData.orbitPaths.length - 1; i >= 0; i--) {
+      var points = formattedData.orbitPaths[i].truePositions.map(function(x){ return this.buildVector(x) }.bind(this))
+      var material = new THREE.LineBasicMaterial( { color : this.orbitPathColors[i], linewidth: formattedData.referenceBodies[0].radius * .1 } );
 
-    var geometry = new THREE.Geometry();
-    geometry.vertices = curve.getPoints( 120 );
+      var spline = this.buildSplineWithMaterial(points, material)
 
-    var material = new THREE.LineBasicMaterial( { color : 'orange', linewidth: formattedData.referenceBodies[0].radius * .1 } );
-
-    //Create the final Object3d to add to the scene
-    var splineObject = new THREE.Line( geometry, material );
-
-    this.group.add(splineObject)
+      this.group.add(spline)
+    }
   },
 
   positionCamera: function(){
@@ -168,6 +165,16 @@ var NewOrbitalMap = Class.create({
 
   buildVector: function(vector){
     return new THREE.Vector3( vector[0] * this.distanceScaleFactor, vector[2] * this.distanceScaleFactor, vector[1] * this.distanceScaleFactor );
+  },
+
+  buildSplineWithMaterial: function(points, material){
+    var curve = new THREE.SplineCurve3(points);
+
+    var geometry = new THREE.Geometry();
+    geometry.vertices = curve.getPoints( 120 );
+
+    //Create the final Object3d to add to the scene
+    return new THREE.Line( geometry, material );
   },
 
   render: function (formattedData) {
