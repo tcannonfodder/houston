@@ -46,6 +46,7 @@ var NewOrbitalMap = Class.create({
     this.buildReferenceBodyGeometry(formattedData)
     this.buildVesselGeometry(formattedData)
     this.buildOrbitPathGeometry(formattedData)
+    this.buildManeuverNodeGeometry(formattedData)
   },
 
   buildReferenceBodyGeometry: function(formattedData){
@@ -87,13 +88,30 @@ var NewOrbitalMap = Class.create({
   },
 
   buildOrbitPathGeometry: function(formattedData){
-    for (var i = formattedData.orbitPaths.length - 1; i >= 0; i--) {
-      var points = formattedData.orbitPaths[i].truePositions.map(function(x){ return this.buildVector(x) }.bind(this))
+    for (var i = formattedData.orbitPatches.length - 1; i >= 0; i--) {
+      var points = formattedData.orbitPatches[i].truePositions.map(function(x){ return this.buildVector(x) }.bind(this))
       var material = new THREE.LineBasicMaterial( { color : this.orbitPathColors[i], linewidth: formattedData.referenceBodies[0].radius * .1 } );
 
       var spline = this.buildSplineWithMaterial(points, material)
 
       this.group.add(spline)
+    }
+  },
+
+  buildManeuverNodeGeometry: function(formattedData){
+    for (var i = formattedData.maneuverNodes.length - 1; i >= 0; i--) {
+      var maneuverNode = formattedData.maneuverNodes[i]
+
+      for (var j = maneuverNode.orbitPatches.length - 1; j >= 0; j--) {
+        var orbitPatch = maneuverNode.orbitPatches[j]
+
+        var points = orbitPatch.truePositions.map(function(x){ return this.buildVector(x) }.bind(this))
+        var material = new THREE.LineBasicMaterial( { color : this.orbitPathColors[j], linewidth: formattedData.referenceBodies[0].radius * .1 } );
+
+        var spline = this.buildSplineWithMaterial(points, material)
+
+        this.group.add(spline)
+      }
     }
   },
 
