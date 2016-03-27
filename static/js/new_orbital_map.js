@@ -43,6 +43,7 @@ var NewOrbitalMap = Class.create({
 
     this.buildReferenceBodyGeometry(formattedData)
     this.buildVesselGeometry(formattedData)
+    this.buildOrbitPathGeometry(formattedData)
   },
 
   buildReferenceBodyGeometry: function(formattedData){
@@ -81,6 +82,22 @@ var NewOrbitalMap = Class.create({
     this.setPosition(cube, info.truePosition)
     // debugger
     this.group.add(cube)
+  },
+
+  buildOrbitPathGeometry: function(formattedData){
+    //Create a closed bent a sine-like wave
+    var points = formattedData.orbitPaths[0].truePositions.map(function(x){ return this.buildVector(x) }.bind(this))
+    var curve = new THREE.SplineCurve3(points);
+
+    var geometry = new THREE.Geometry();
+    geometry.vertices = curve.getPoints( 120 );
+
+    var material = new THREE.LineBasicMaterial( { color : 'orange', linewidth: formattedData.referenceBodies[0].radius * .1 } );
+
+    //Create the final Object3d to add to the scene
+    var splineObject = new THREE.Line( geometry, material );
+
+    this.group.add(splineObject)
   },
 
   positionCamera: function(){
