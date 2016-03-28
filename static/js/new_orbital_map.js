@@ -49,7 +49,6 @@ var NewOrbitalMap = Class.create({
     this.buildManeuverNodeGeometry(formattedData)
     // this.buildReferenceBodyOrbitPaths(formattedData)
     // this.buildDistancesFromRootReferenceBodyPaths(formattedData)
-    // this.buildTestDistanceFromRootReferenceBodyPath(formattedData)
   },
 
   buildReferenceBodyGeometry: function(formattedData){
@@ -135,40 +134,6 @@ var NewOrbitalMap = Class.create({
     for (var i = formattedData.distancesFromRootReferenceBody.length - 1; i >= 0; i--) {
       var points = formattedData.distancesFromRootReferenceBody[i].truePositions.map(function(x){ return this.buildVector(x) }.bind(this))
       var material = new THREE.LineBasicMaterial( { color : colors[i], linewidth: formattedData.referenceBodies[0].radius * .1 } );
-
-      var spline = this.buildSplineWithMaterial(points, material)
-
-      this.group.add(spline)
-    }
-  },
-
-  buildTestDistanceFromRootReferenceBodyPath: function(formattedData){
-    var renderingPoints = [
-      // formattedData.distancesFromRootReferenceBody.first(),
-      formattedData.distancesFromRootReferenceBody.last()
-    ]
-
-    for (var i = 0; i < renderingPoints.length; i++) {
-      var distanceProperties = renderingPoints[i]
-      var points = distanceProperties.truePositions
-      var distanceVector = math.add(points[1], math.multiply(-1, points[0]))
-
-      var info = formattedData.referenceBodies[1]
-
-      var currentPositionOfReferenceBody = formattedData.referenceBodies.find(function(x){ return x.name == distanceProperties.referenceBodyName })
-      var currentTruePositionForReferenceBody = currentPositionOfReferenceBody.truePosition
-      var currentDistanceVector =  math.add(currentTruePositionForReferenceBody, math.multiply(-1, info.truePosition))
-
-
-      var projectedPositionOfReferenceBody = this.buildVector(math.add(currentDistanceVector, math.add(info.truePosition, distanceVector)))
-      // var projectedPositionOfReferenceBody = this.buildVector(math.multiply(2, math.add(info.truePosition, distanceVector)))
-
-      var points = [
-        this.buildVector(info.truePosition),
-        projectedPositionOfReferenceBody
-      ]
-
-      var material = new THREE.LineBasicMaterial( { color : 'yellow', linewidth: formattedData.referenceBodies[0].radius * .1 } );
 
       var spline = this.buildSplineWithMaterial(points, material)
 
