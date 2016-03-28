@@ -48,7 +48,7 @@ var NewOrbitalMap = Class.create({
     this.buildOrbitPathGeometry(formattedData)
     this.buildManeuverNodeGeometry(formattedData)
     // this.buildReferenceBodyOrbitPaths(formattedData)
-    this.buildDistancesFromRootReferenceBodyPaths(formattedData)
+    // this.buildDistancesFromRootReferenceBodyPaths(formattedData)
     // this.buildTestDistanceFromRootReferenceBodyPath(formattedData)
   },
 
