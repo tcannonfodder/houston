@@ -223,10 +223,9 @@ var NewOrbitalMap = Class.create({
 
       this.controls = new THREE.OrbitControls( this.camera, this.renderer.domElement );
       this.controls.addEventListener( 'change', function(){this.renderer.render(this.scene, this.camera)}.bind(this) ); // add this only if there is no animation loop (requestAnimationFrame)
-      this.controls.target = boundingBox.center()// this.currentVesselGeometry.position
+      this.controls.target = this.currentVesselGeometry.position
       // this.controls.enableDamping = true;
       // this.controls.dampingFactor = 0.25;
-      // this.controls.enableZoom = false;
     }
   },
 
