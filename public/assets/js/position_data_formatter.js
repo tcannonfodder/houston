@@ -164,28 +164,18 @@ var PositionDataFormatter = Class.create({
         var orbitPatch = maneuverNode.orbitPatches[j]
         var referenceBody = positionData.referenceBodies[orbitPatch.referenceBody]
         var sortedUniversalTimes = this.sortedUniversalTimes(orbitPatch.positionData)
-        // console.log(orbitPatch.referenceBody)
-        // debugger
-        // console.log(sortedUniversalTimes)
         var positions = []
         var distanceFromLastPatchesPoint = null
 
-        if(j == 1){
-          var renderPoints = sortedUniversalTimes// [sortedUniversalTimes[0], sortedUniversalTimes[50], sortedUniversalTimes[119] ]
-        } else{
-          var renderPoints = sortedUniversalTimes
-        }
-
-        for (var k = 0; k < renderPoints.length; k++){
-          var key = renderPoints[k].toString()
+        for (var k = 0; k < sortedUniversalTimes.length; k++){
+          var key = sortedUniversalTimes[k].toString()
 
           if(orbitPatch.referenceBody == this.rootReferenceBodyName){
             var frameOfReferenceVector = referenceBody.currentTruePosition
           } else{
             var frameOfReferenceVector = this.findProjectedPositionOfReferenceBody(
-              this.rootReferenceBody(positionData), referenceBody, renderPoints[k]
+              this.rootReferenceBody(positionData), referenceBody, sortedUniversalTimes[k]
             )
-            // var frameOfReferenceVector = referenceBody.positionData[sortedUniversalTimes[0].toString()].truePosition
           }
 
           var relativePositionVector = orbitPatch.positionData[key].relativePosition
@@ -194,55 +184,22 @@ var PositionDataFormatter = Class.create({
             relativePositionVector, frameOfReferenceVector
           )
 
-          // if(k == 0){
-            firstPointInPatch = projectedTruePosition
-
-            if(lastPatchesPoint != null){
-
-              if(k == 0){
-
-                distanceFromLastPatchesPoint = [
-                  lastPatchesPoint[0] - firstPointInPatch[0],
-                  lastPatchesPoint[1] - firstPointInPatch[1],
-                  lastPatchesPoint[2] - firstPointInPatch[2],
-                ]
-              }
-
-              var projectedTruePosition = [
-                projectedTruePosition[0] + distanceFromLastPatchesPoint[0],
-                projectedTruePosition[1] + distanceFromLastPatchesPoint[1],
-                projectedTruePosition[2] + distanceFromLastPatchesPoint[2],
+          if(lastPatchesPoint != null){
+            if(k == 0){
+              firstPointInPatch = projectedTruePosition
+              distanceFromLastPatchesPoint = [
+                lastPatchesPoint[0] - firstPointInPatch[0],
+                lastPatchesPoint[1] - firstPointInPatch[1],
+                lastPatchesPoint[2] - firstPointInPatch[2],
               ]
-
-              // formattedData.distancesFromRootReferenceBody.push(this.buildDistanceFromRootReferenceBody({
-              //   referenceBodyName: "blah",
-              //   truePositions: [firstPointInPatch, lastPatchesPoint]
-              // }))
-
-              // formattedData.distancesFromRootReferenceBody.push(this.buildDistanceFromRootReferenceBody({
-              //   referenceBodyName: "blah",
-              //   truePositions: [firstPointInPatch, projectedTruePosition]
-              // }))
-
-              // offsetVector = math.add(firstPointInPatch, distanceFromLastPatchesPoint)
-              // projectedTruePosition = math.add(relativePositionVector, math.multiply(-1, distanceFromLastPatchesPoint))
-
-              // offsetVector = math.multiply(-1, distanceFromLastPatchesPoint)
-
-              // var relativePositionVector = math.add(relativePositionVector, distanceFromLastPatchesPoint)
-              // relativePositionVector = math.add(relativePositionVector, lastPatchesPoint)
             }
-          // }
 
-          // relativePositionVector = math.add(relativePositionVector, math.multiply(-1,offsetVector))
-
-          // if(distanceFromLastPatchesPoint != null){
-          //   projectedTruePosition = [
-          //     projectedTruePosition[0] + distanceFromLastPatchesPoint[0],
-          //     projectedTruePosition[1] + distanceFromLastPatchesPoint[1],
-          //     projectedTruePosition[2] + distanceFromLastPatchesPoint[2],
-          //   ]
-          // }
+            var projectedTruePosition = [
+              projectedTruePosition[0] + distanceFromLastPatchesPoint[0],
+              projectedTruePosition[1] + distanceFromLastPatchesPoint[1],
+              projectedTruePosition[2] + distanceFromLastPatchesPoint[2],
+            ]
+          }
 
           positions.push(projectedTruePosition)
         }
