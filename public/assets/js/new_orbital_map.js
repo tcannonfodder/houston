@@ -32,7 +32,7 @@ var NewOrbitalMap = Class.create({
   buildGeometry: function(formattedData){
     this.buildReferenceBodyGeometry(formattedData)
     this.buildVesselGeometry(formattedData)
-    this.buildOrbitPathGeometry(formattedData)
+    // this.buildOrbitPathGeometry(formattedData)
     this.buildManeuverNodeGeometry(formattedData)
     // this.buildReferenceBodyOrbitPaths(formattedData)
     // this.buildDistancesFromRootReferenceBodyPaths(formattedData)
@@ -88,7 +88,9 @@ var NewOrbitalMap = Class.create({
   buildOrbitPathGeometry: function(formattedData){
     for (var i = formattedData.orbitPatches.length - 1; i >= 0; i--) {
       var points = formattedData.orbitPatches[i].truePositions.map(function(x){ return this.buildVector(x) }.bind(this))
-      var material = new THREE.LineBasicMaterial( { color : this.orbitPathColors[i], linewidth: formattedData.referenceBodies[0].radius * .1 } );
+      var material = new THREE.MeshLambertMaterial({
+        color:  this.orbitPathColors[i]
+      })
 
       var spline = this.buildSplineWithMaterial(points, material)
 
@@ -104,9 +106,14 @@ var NewOrbitalMap = Class.create({
         var orbitPatch = maneuverNode.orbitPatches[j]
 
         var points = orbitPatch.truePositions.map(function(x){ return this.buildVector(x) }.bind(this))
-        var material = new THREE.LineBasicMaterial( { color : this.orbitPathColors[j], linewidth: formattedData.referenceBodies[0].radius * .1 } );
 
-        var spline = this.buildSplineWithMaterial(points, material)
+        var material = new THREE.MeshBasicMaterial({
+            color: this.orbitPathColors[j]
+        })
+
+        var radius = formattedData.referenceBodies[0].radius * .1
+
+        var spline = this.buildSplineWithMaterial(points, material, radius)
 
         this.group.add(spline)
       }
@@ -185,14 +192,29 @@ var NewOrbitalMap = Class.create({
     return new THREE.Vector3( vector[0] * this.distanceScaleFactor, vector[2] * this.distanceScaleFactor, vector[1] * this.distanceScaleFactor );
   },
 
-  buildSplineWithMaterial: function(points, material){
-    var curve = new THREE.SplineCurve3(points);
+  buildSplineWithMaterial: function(points, material, radius){
+    var curve = new THREE.CatmullRomCurve3(points);
 
-    var geometry = new THREE.Geometry();
-    geometry.vertices = curve.getPoints( 120 );
+    var geometry = new THREE.TubeGeometry(
+      curve,
+      200,    //segments
+      radius,     //radius
+      8,     //radiusSegments
+      false  //closed
+    );
+
+    var tubeMesh = THREE.SceneUtils.createMultiMaterialObject( geometry, [
+      material
+    ]);
+
+    // tubeMesh.scale.set(2,1,1)
+
+    return tubeMesh
+
+    // geometry.vertices = curve.getPoints( 360 );
 
     //Create the final Object3d to add to the scene
-    return new THREE.Line( geometry, material );
+    // return new THREE.Line( geometry, material );
   },
 
   render: function (formattedData) {
