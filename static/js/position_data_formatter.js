@@ -128,91 +128,21 @@ var PositionDataFormatter = Class.create({
   },
 
   formatOrbitalPatches: function(positionData, formattedData){
-    for (var i = positionData["o.orbitPatches"].length - 1; i >= 0; i--) {
-      var orbitPatch = positionData["o.orbitPatches"][i]
-      var positionDataKeys = Object.keys(orbitPatch.positionData)
-      var referenceBody = positionData.referenceBodies[orbitPatch.referenceBody]
-      var positions = []
-
-      for (var i = positionDataKeys.length - 1; i >= 0; i--) {
-        var key = positionDataKeys[i]
-        var frameOfReferenceVector = referenceBody.currentTruePosition
-        var relativePositionVector = orbitPatch.positionData[key].relativePosition
-
-        positions.push(this.truePositionForRelativePosition(
-          relativePositionVector, frameOfReferenceVector
-        ))
-      }
-
-      formattedData.orbitPatches.push(this.buildOrbitPatch({
-        type: "orbitPath",
+    formattedData.orbitPatches = this.formatOrbitPatches(
+      positionData, positionData["o.orbitPatches"],{
+        type: "orbitPatch",
         parentType: "vessel",
-        parentName: "current vessel",
-        truePositions: positions
-      }))
-    }
+        parentName: "current vessel"
+      }
+    )
   },
 
   formatManeuverNodes: function(positionData, formattedData){
     for (var i = 0; i < positionData["o.maneuverNodes"].length; i++){
       var maneuverNode = positionData["o.maneuverNodes"][i]
-      var orbitPatches = []
-      var lastPatchesPoint = null
-      var firstPointInPatch = null
-
-      for (var j = 0; j < maneuverNode.orbitPatches.length; j++){
-        var orbitPatch = maneuverNode.orbitPatches[j]
-        var referenceBody = positionData.referenceBodies[orbitPatch.referenceBody]
-        var sortedUniversalTimes = this.sortedUniversalTimes(orbitPatch.positionData)
-        var positions = []
-        var distanceFromLastPatchesPoint = null
-
-        for (var k = 0; k < sortedUniversalTimes.length; k++){
-          var key = sortedUniversalTimes[k].toString()
-
-          if(orbitPatch.referenceBody == this.rootReferenceBodyName){
-            var frameOfReferenceVector = referenceBody.currentTruePosition
-          } else{
-            var frameOfReferenceVector = this.findProjectedPositionOfReferenceBody(
-              this.rootReferenceBody(positionData), referenceBody, sortedUniversalTimes[k]
-            )
-          }
-
-          var relativePositionVector = orbitPatch.positionData[key].relativePosition
-
-          var projectedTruePosition = this.truePositionForRelativePosition(
-            relativePositionVector, frameOfReferenceVector
-          )
-
-          if(lastPatchesPoint != null){
-            if(k == 0){
-              firstPointInPatch = projectedTruePosition
-              distanceFromLastPatchesPoint = [
-                lastPatchesPoint[0] - firstPointInPatch[0],
-                lastPatchesPoint[1] - firstPointInPatch[1],
-                lastPatchesPoint[2] - firstPointInPatch[2],
-              ]
-            }
-
-            var projectedTruePosition = [
-              projectedTruePosition[0] + distanceFromLastPatchesPoint[0],
-              projectedTruePosition[1] + distanceFromLastPatchesPoint[1],
-              projectedTruePosition[2] + distanceFromLastPatchesPoint[2],
-            ]
-          }
-
-          positions.push(projectedTruePosition)
-        }
-
-        lastPatchesPoint = positions.last()
-
-        orbitPatches.push(this.buildOrbitPatch({
-          type: "orbitPath",
-          parentType: "vessel",
-          parentName: "current vessel",
-          truePositions: positions
-        }))
-      }
+      var orbitPatches = this.formatOrbitPatches(positionData, maneuverNode.orbitPatches, {
+        type: "maneuverNode", parentType: "vessel", parentName: "current vessel"
+      })
 
       formattedData.maneuverNodes.push(this.buildManeuverNode({
         type: "maneuverNode",
@@ -268,6 +198,65 @@ var PositionDataFormatter = Class.create({
 
     console.log(closestDistance)
     return closestTime
+  },
+
+  formatOrbitPatches: function(positionData, rawOrbitPatches, orbitPatchOptions){
+    var formattedOrbitPatches = []
+    var lastPatchesPoint = null
+    var firstPointInPatch = null
+
+    for (var j = 0; j < rawOrbitPatches.length; j++){
+      var orbitPatch = rawOrbitPatches[j]
+      var referenceBody = positionData.referenceBodies[orbitPatch.referenceBody]
+      var sortedUniversalTimes = this.sortedUniversalTimes(orbitPatch.positionData)
+      var positions = []
+      var distanceFromLastPatchesPoint = null
+
+      for (var k = 0; k < sortedUniversalTimes.length; k++){
+        var key = sortedUniversalTimes[k].toString()
+
+        if(orbitPatch.referenceBody == this.rootReferenceBodyName){
+          var frameOfReferenceVector = referenceBody.currentTruePosition
+        } else{
+          var frameOfReferenceVector = this.findProjectedPositionOfReferenceBody(
+            this.rootReferenceBody(positionData), referenceBody, sortedUniversalTimes[k]
+          )
+        }
+
+        var relativePositionVector = orbitPatch.positionData[key].relativePosition
+
+        var projectedTruePosition = this.truePositionForRelativePosition(
+          relativePositionVector, frameOfReferenceVector
+        )
+
+        if(lastPatchesPoint != null){
+          if(k == 0){
+            firstPointInPatch = projectedTruePosition
+            distanceFromLastPatchesPoint = [
+              lastPatchesPoint[0] - firstPointInPatch[0],
+              lastPatchesPoint[1] - firstPointInPatch[1],
+              lastPatchesPoint[2] - firstPointInPatch[2],
+            ]
+          }
+
+          var projectedTruePosition = [
+            projectedTruePosition[0] + distanceFromLastPatchesPoint[0],
+            projectedTruePosition[1] + distanceFromLastPatchesPoint[1],
+            projectedTruePosition[2] + distanceFromLastPatchesPoint[2],
+          ]
+        }
+
+        positions.push(projectedTruePosition)
+      }
+
+      lastPatchesPoint = positions.last()
+
+      formattedOrbitPatches.push(this.buildOrbitPatch(Object.extend({
+        truePositions: positions
+      }, orbitPatchOptions)))
+    }
+
+    return formattedOrbitPatches
   },
 
   buildReferenceBody: function(options){
