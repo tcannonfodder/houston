@@ -46,7 +46,20 @@ var NewOrbitalMap = Class.create({
     for (var i = formattedData.referenceBodies.length - 1; i >= 0; i--) {
       var info = formattedData.referenceBodies[i]
 
-      var material = new THREE.MeshBasicMaterial( { color: this.colors[i], 'wireframe': true } )
+      var color = this.colors[i]
+
+      if(info.type == "currentPosition"){
+        var material = new THREE.MeshBasicMaterial( { color: color, 'wireframe': false } )
+      } else{
+        if(info.linkedPatchType == "maneuverNode"){
+          color = this.orbitPathColors[info.linkedPatchID]
+        } else{
+          color = this.orbitPathColors[info.linkedPatchID]
+        }
+
+        var material = new THREE.MeshBasicMaterial( { color: color, 'wireframe': true } )
+      }
+
       var sphereGeometry = new THREE.SphereGeometry(info.radius * this.referenceBodyScaleFactor, 20, 20)
       var sphere = new THREE.Mesh( sphereGeometry, material )
       this.setPosition(sphere, info.truePosition)
