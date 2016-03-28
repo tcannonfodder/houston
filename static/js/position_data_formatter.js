@@ -87,9 +87,11 @@ var PositionDataFormatter = Class.create({
       var body = positionData.referenceBodies[name]
       var sortedUniversalTimes = this.sortedUniversalTimes(body.positionData)
 
-      // for (var j = 0; j < sortedUniversalTimes.length; j++) {
+      var renderPoints = [sortedUniversalTimes.first(),sortedUniversalTimes.last(), sortedUniversalTimes[59]]
+
+      for (var j = 0; j < renderPoints.length; j++) {
         // debugger
-        var firstUniversalTime = sortedUniversalTimes.first()
+        var firstUniversalTime = renderPoints[j]
 
         var projectedPositionOfReferenceBody = this.findProjectedPositionOfReferenceBody(rootReferenceBody, body, firstUniversalTime)
 
@@ -104,7 +106,7 @@ var PositionDataFormatter = Class.create({
         })
 
         formattedData.distancesFromRootReferenceBody.push(x)
-      // }
+      }
     }
   },
 
@@ -155,35 +157,97 @@ var PositionDataFormatter = Class.create({
     for (var i = 0; i < positionData["o.maneuverNodes"].length; i++){
       var maneuverNode = positionData["o.maneuverNodes"][i]
       var orbitPatches = []
-
+      var lastPatchesPoint = null
+      var firstPointInPatch = null
 
       for (var j = 0; j < maneuverNode.orbitPatches.length; j++){
         var orbitPatch = maneuverNode.orbitPatches[j]
         var referenceBody = positionData.referenceBodies[orbitPatch.referenceBody]
         var sortedUniversalTimes = this.sortedUniversalTimes(orbitPatch.positionData)
-        console.log(orbitPatch.referenceBody)
+        // console.log(orbitPatch.referenceBody)
         // debugger
-        console.log(sortedUniversalTimes)
+        // console.log(sortedUniversalTimes)
         var positions = []
+        var distanceFromLastPatchesPoint = null
 
-        for (var k = 0; k < sortedUniversalTimes.length; k++){
-          var key = sortedUniversalTimes[k].toString()
+        if(j == 1){
+          var renderPoints = sortedUniversalTimes// [sortedUniversalTimes[0], sortedUniversalTimes[50], sortedUniversalTimes[119] ]
+        } else{
+          var renderPoints = sortedUniversalTimes
+        }
+
+        for (var k = 0; k < renderPoints.length; k++){
+          var key = renderPoints[k].toString()
 
           if(orbitPatch.referenceBody == this.rootReferenceBodyName){
             var frameOfReferenceVector = referenceBody.currentTruePosition
           } else{
             var frameOfReferenceVector = this.findProjectedPositionOfReferenceBody(
-              this.rootReferenceBody(positionData), referenceBody, sortedUniversalTimes.last()
+              this.rootReferenceBody(positionData), referenceBody, renderPoints[k]
             )
             // var frameOfReferenceVector = referenceBody.positionData[sortedUniversalTimes[0].toString()].truePosition
           }
 
           var relativePositionVector = orbitPatch.positionData[key].relativePosition
 
-          positions.push(this.truePositionForRelativePosition(
+          var projectedTruePosition = this.truePositionForRelativePosition(
             relativePositionVector, frameOfReferenceVector
-          ))
+          )
+
+          // if(k == 0){
+            firstPointInPatch = projectedTruePosition
+
+            if(lastPatchesPoint != null){
+
+              if(k == 0){
+
+                distanceFromLastPatchesPoint = [
+                  lastPatchesPoint[0] - firstPointInPatch[0],
+                  lastPatchesPoint[1] - firstPointInPatch[1],
+                  lastPatchesPoint[2] - firstPointInPatch[2],
+                ]
+              }
+
+              var projectedTruePosition = [
+                projectedTruePosition[0] + distanceFromLastPatchesPoint[0],
+                projectedTruePosition[1] + distanceFromLastPatchesPoint[1],
+                projectedTruePosition[2] + distanceFromLastPatchesPoint[2],
+              ]
+
+              // formattedData.distancesFromRootReferenceBody.push(this.buildDistanceFromRootReferenceBody({
+              //   referenceBodyName: "blah",
+              //   truePositions: [firstPointInPatch, lastPatchesPoint]
+              // }))
+
+              // formattedData.distancesFromRootReferenceBody.push(this.buildDistanceFromRootReferenceBody({
+              //   referenceBodyName: "blah",
+              //   truePositions: [firstPointInPatch, projectedTruePosition]
+              // }))
+
+              // offsetVector = math.add(firstPointInPatch, distanceFromLastPatchesPoint)
+              // projectedTruePosition = math.add(relativePositionVector, math.multiply(-1, distanceFromLastPatchesPoint))
+
+              // offsetVector = math.multiply(-1, distanceFromLastPatchesPoint)
+
+              // var relativePositionVector = math.add(relativePositionVector, distanceFromLastPatchesPoint)
+              // relativePositionVector = math.add(relativePositionVector, lastPatchesPoint)
+            }
+          // }
+
+          // relativePositionVector = math.add(relativePositionVector, math.multiply(-1,offsetVector))
+
+          // if(distanceFromLastPatchesPoint != null){
+          //   projectedTruePosition = [
+          //     projectedTruePosition[0] + distanceFromLastPatchesPoint[0],
+          //     projectedTruePosition[1] + distanceFromLastPatchesPoint[1],
+          //     projectedTruePosition[2] + distanceFromLastPatchesPoint[2],
+          //   ]
+          // }
+
+          positions.push(projectedTruePosition)
         }
+
+        lastPatchesPoint = positions.last()
 
         orbitPatches.push(this.buildOrbitPatch({
           type: "orbitPath",
@@ -245,6 +309,7 @@ var PositionDataFormatter = Class.create({
       }
     }
 
+    console.log(closestDistance)
     return closestTime
   },
 
@@ -300,7 +365,7 @@ var PositionDataFormatter = Class.create({
 
   sortedUniversalTimes: function(positionData){
     var positionDataKeys = Object.keys(positionData)
-    return positionDataKeys.map(function(x){return parseFloat(x)}).sortBy(function(x){ x })
+    return positionDataKeys.map(function(x){return parseFloat(x)}).sortBy(function(x){ x }).reverse()
   },
 
   rootReferenceBody: function(positionData){

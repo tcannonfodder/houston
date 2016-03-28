@@ -4,6 +4,7 @@ var NewOrbitalPositionData = Class.create({
     this.initializeDatalink()
     this.timeoutRate = 1000 //times out every 5 seconds
     this.mutexTimestamp = null
+    this.rootReferenceBody = null
     this.options = Object.extend({
       onRecalculate: null,
       numberOfSegments: 120
@@ -38,6 +39,7 @@ var NewOrbitalPositionData = Class.create({
     var requestParams = {};
     //ask for the true position for the current body right now and the radius
     var referenceBody = this.datalink.getOrbitalBodyInfo(positionData["vesselBody"])
+    this.rootReferenceBody = referenceBody
     requestParams["currentReferenceBodyRadius"] = 'b.radius[' + referenceBody.id + ']'
     requestParams["currentReferenceBodyTruePosition"] = 'b.o.truePositionAtUT[' + referenceBody.id + ',' + positionData["currentUniversalTime"] + ']'
     //ask for the true anomaly of the vessel in the current orbit patch at the current time
@@ -125,6 +127,10 @@ var NewOrbitalPositionData = Class.create({
         if(UTForInterval > endUT){
           UTForInterval = endUT
         }
+
+        //get the true position of the root reference body at this UT as well
+        requestParams[this.rootReferenceBody.name + "["+ UTForInterval +"]TruePosition"] = 'b.o.truePositionAtUT[' + this.rootReferenceBody.id + ',' + UTForInterval + ']'
+
         requestParams[orbitPatchType + "[" + i + "][" + UTForInterval + "]TrueAnomaly"] = requestPrefix + ".trueAnomalyAtUTForOrbitPatch[" + i +","+ UTForInterval + "]"
         requestParams[orbitPatch["referenceBody"] + "["+ UTForInterval +"]TruePosition"] = 'b.o.truePositionAtUT[' + referenceBody.id + ',' + UTForInterval + ']'
       }
@@ -167,6 +173,9 @@ var NewOrbitalPositionData = Class.create({
           }
 
           var arguments = [i,j,UTForInterval]
+
+          //get the true position of the root reference body at this UT as well
+          requestParams[this.rootReferenceBody.name + "["+ UTForInterval +"]TruePosition"] = 'b.o.truePositionAtUT[' + this.rootReferenceBody.id + ',' + UTForInterval + ']'
 
           requestParams[labelPrefix + "[" + j + "][" + UTForInterval + "]TrueAnomaly"] = requestPrefix + "[" + arguments.join(',') + "]"
           requestParams[orbitPatch["referenceBody"] + "["+ UTForInterval +"]TruePosition"] = 'b.o.truePositionAtUT[' + referenceBody.id + ',' + UTForInterval + ']'

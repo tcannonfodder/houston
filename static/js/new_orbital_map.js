@@ -47,9 +47,9 @@ var NewOrbitalMap = Class.create({
     this.buildVesselGeometry(formattedData)
     this.buildOrbitPathGeometry(formattedData)
     this.buildManeuverNodeGeometry(formattedData)
-    this.buildReferenceBodyOrbitPaths(formattedData)
+    // this.buildReferenceBodyOrbitPaths(formattedData)
     this.buildDistancesFromRootReferenceBodyPaths(formattedData)
-    this.buildTestDistanceFromRootReferenceBodyPath(formattedData)
+    // this.buildTestDistanceFromRootReferenceBodyPath(formattedData)
   },
 
   buildReferenceBodyGeometry: function(formattedData){
@@ -130,9 +130,11 @@ var NewOrbitalMap = Class.create({
   },
 
   buildDistancesFromRootReferenceBodyPaths: function(formattedData){
+    var colors = ['teal', 'magenta','purple', 'green', 'blue', 'red']
+
     for (var i = formattedData.distancesFromRootReferenceBody.length - 1; i >= 0; i--) {
       var points = formattedData.distancesFromRootReferenceBody[i].truePositions.map(function(x){ return this.buildVector(x) }.bind(this))
-      var material = new THREE.LineBasicMaterial( { color : 'green', linewidth: formattedData.referenceBodies[0].radius * .1 } );
+      var material = new THREE.LineBasicMaterial( { color : colors[i], linewidth: formattedData.referenceBodies[0].radius * .1 } );
 
       var spline = this.buildSplineWithMaterial(points, material)
 
@@ -221,7 +223,7 @@ var NewOrbitalMap = Class.create({
 
       this.controls = new THREE.OrbitControls( this.camera, this.renderer.domElement );
       this.controls.addEventListener( 'change', function(){this.renderer.render(this.scene, this.camera)}.bind(this) ); // add this only if there is no animation loop (requestAnimationFrame)
-      this.controls.target = this.currentVesselGeometry.position
+      this.controls.target = boundingBox.center()// this.currentVesselGeometry.position
       // this.controls.enableDamping = true;
       // this.controls.dampingFactor = 0.25;
       // this.controls.enableZoom = false;
