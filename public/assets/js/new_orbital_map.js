@@ -3,7 +3,6 @@ var NewOrbitalMap = Class.create({
     this.container = $(containerID)
 
     this.buildSceneCameraAndRenderer()
-    // this.buildGeometry()
 
     this.distanceScaleFactor = 0.3
     this.referenceBodyScaleFactor = 0.6
@@ -31,18 +30,6 @@ var NewOrbitalMap = Class.create({
   },
 
   buildGeometry: function(formattedData){
-    var geometry = new THREE.BoxGeometry( 1, 1, 1 )
-    var material = new THREE.MeshBasicMaterial( { color: '#C5DCAB', 'wireframe': false } )
-
-    // this.cube = new THREE.Mesh( geometry, material )
-    // this.scene.add( this.cube )
-
-    // var sphereGeometry = new THREE.SphereGeometry(50, 20, 20)
-    // this.sphere = new THREE.Mesh( sphereGeometry, material )
-    // this.scene.add( this.sphere )
-
-    // this.camera.position.z = 100
-
     this.buildReferenceBodyGeometry(formattedData)
     this.buildVesselGeometry(formattedData)
     this.buildOrbitPathGeometry(formattedData)
@@ -52,7 +39,6 @@ var NewOrbitalMap = Class.create({
   },
 
   buildReferenceBodyGeometry: function(formattedData){
-    // debugger
     this.group = new THREE.Group()
     this.scene.add(this.group)
 
@@ -61,11 +47,9 @@ var NewOrbitalMap = Class.create({
       var info = formattedData.referenceBodies[i]
 
       var material = new THREE.MeshBasicMaterial( { color: this.colors[i], 'wireframe': true } )
-      // console.log(info.radius)
       var sphereGeometry = new THREE.SphereGeometry(info.radius * this.referenceBodyScaleFactor, 20, 20)
       var sphere = new THREE.Mesh( sphereGeometry, material )
       this.setPosition(sphere, info.truePosition)
-      // debugger
       this.group.add(sphere)
     }
   },
@@ -85,7 +69,6 @@ var NewOrbitalMap = Class.create({
     }
 
     this.setPosition(cube, info.truePosition)
-    // debugger
     this.group.add(cube)
   },
 
@@ -142,47 +125,26 @@ var NewOrbitalMap = Class.create({
   },
 
   positionCamera: function(){
-      var boundingBox = new THREE.Box3().setFromObject(this.group)
-      // debugger
-      // console.log(boundingBox)
+    var boundingBox = new THREE.Box3().setFromObject(this.group)
 
-      var hex  = 0xff0000;
-      var bbox = new THREE.BoundingBoxHelper( this.group, hex );
-      bbox.update();
-      this.scene.add( bbox );
-
-      // debugger
+    var hex  = 0xff0000;
+    var bbox = new THREE.BoundingBoxHelper( this.group, hex );
+    bbox.update();
+    this.scene.add( bbox );
 
     if(!this.camera){
       var cameraX = this.getMiddle(boundingBox.min.x, boundingBox.max.x) - 100000 //boundingBox.max.x - Math.abs(boundingBox.min.x)
-      // debugger
       var cameraZ = this.getMiddle(boundingBox.min.z, boundingBox.max.z) //boundingBox.max.z * 1.05
 
       var y1 = this.getMiddle(boundingBox.min.z, boundingBox.max.z) * Math.tan(0.785)
       var cameraY = boundingBox.max.y + y1
 
-      //this.getMiddle(boundingBox.min.y, boundingBox.max.y) // boundingBox.max.y - Math.abs(boundingBox.min.y)
-
       this.camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, Number.MAX_SAFE_INTEGER)// 700000 * 2 )
-      // this.camera = new THREE.OrthographicCamera(
-      //   boundingBox.min.x,
-      //   boundingBox.max.x,
-      //   boundingBox.max.z,
-      //   boundingBox.min.x,
-      //   0.1,
-      //   cameraY * 2
-      // )
-      // debugger
-
-      // console.log(cameraX)
-
-      // debugger
 
       this.camera.position.set(cameraX, cameraY, cameraZ)
 
       this.camera.lookAt(boundingBox.center())
 
-      // console.log(this.camera.rotation.z)
       this.camera.rotation.z = Math.PI /2
 
 
@@ -221,20 +183,11 @@ var NewOrbitalMap = Class.create({
   },
 
   render: function (formattedData) {
-    // if(this.rendered){ return }
     requestAnimationFrame( function(){
-      // console.log(formattedData)
       this.buildScene()
       this.buildGeometry(formattedData)
       this.positionCamera()
-      // this.sphere.rotation.y += 0.01
       this.renderer.render(this.scene, this.camera)
-
-      this.rendered = true
     }.bind(this))
-
-    // this.sphere.rotation.x += 0.01
-    // this.sphere.rotation.y += 0.001
-    
   }
 })
