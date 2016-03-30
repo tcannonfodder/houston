@@ -116,86 +116,103 @@ var Telemachus = Class.create({
       "Kerbol" : {
         id: 0,
         mapBody: null,
+        atmosphericRadius: 0,
         surfaceGravity: 17.1 //m/s^2
       },
       "Kerbin" : {
         id: 1,
         mapBody: L.KSP.CelestialBody.KERBIN,
+        atmosphericRadius: 70000,
         surfaceGravity: 9.81 //m/s^2
       },
       "Mun" : {
         id: 2,
         mapBody: L.KSP.CelestialBody.MUN,
+        atmosphericRadius: 0,
         surfaceGravity: 1.63 //m/s^2
       },
       "Minmus" : {
         id: 3,
         mapBody: L.KSP.CelestialBody.MINMUS,
+        atmosphericRadius: 0,
         surfaceGravity: 0.491 //m/s^2
       },
       "Moho" : {
         id: 4,
         mapBody: L.KSP.CelestialBody.MOHO,
+        atmosphericRadius: 0,
         surfaceGravity: 2.70 //m/s^2
       },
       "Eve" : {
         id: 5,
         mapBody: L.KSP.CelestialBody.EVE,
+        atmosphericRadius: 90000,
         surfaceGravity: 16.7 //m/s^2
       },
       "Duna" : {
         id: 6,
         mapBody: L.KSP.CelestialBody.DUNA,
+        atmosphericRadius: 50000,
         surfaceGravity: 2.94 //m/s^2
       },
       "Ike" : {
         id: 7,
         mapBody: L.KSP.CelestialBody.IKE,
+        atmosphericRadius: 0,
         surfaceGravity: 1.10 //m/s^2
       },
       "Jool" : {
         id: 8,
         mapBody: L.KSP.CelestialBody.JOOL,
+        atmosphericRadius: 200000,
         surfaceGravity: 7.85 //m/s^2
       },
       "Laythe" : {
         id: 9,
         mapBody: L.KSP.CelestialBody.LAYTHE,
+        atmosphericRadius: 50000,
         surfaceGravity: 7.85 //m/s^2
       },
       "Vall" : {
         id: 10,
         mapBody: L.KSP.CelestialBody.VALL,
+        atmosphericRadius: 0,
         surfaceGravity: 2.31 //m/s^2
       },
       "Bop" : {
         id: 11,
         mapBody: L.KSP.CelestialBody.BOP,
+        atmosphericRadius: 0,
         surfaceGravity: 0.589 //m/s^2
       },
       "Tylo" : {
         id: 12,
         mapBody: L.KSP.CelestialBody.TYLO,
+        atmosphericRadius: 0,
         surfaceGravity: 7.85 //m/s^2
       },
       "Gilly" : {
         id: 13,
         mapBody: L.KSP.CelestialBody.GILLY,
+        atmosphericRadius: 0,
         surfaceGravity: 0.049 //m/s^2
       },
       "Pol" : {
         id: 14,
         mapBody: L.KSP.CelestialBody.POL,
+        atmosphericRadius: 0,
         surfaceGravity: 0.373 //m/s^2
       },
       "Dres" : {
         id: 15,
         mapBody: L.KSP.CelestialBody.DRES,
+        atmosphericRadius: 0,
         surfaceGravity: 1.13 //m/s^2
       },
       "Eeloo" : {
         id: 16,
         mapBody: L.KSP.CelestialBody.EELOO,
+        atmosphericRadius: 0,
         surfaceGravity: 1.69 //m/s^2
       }
     }
