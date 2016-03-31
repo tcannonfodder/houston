@@ -6,6 +6,7 @@ var NewOrbitalMap = Class.create({
 
     this.distanceScaleFactor = 0.3
     this.referenceBodyScaleFactor = 0.6
+    this.dashedLineLength = 100000
 
     this.referenceBodyGeometry = {}
 
@@ -88,11 +89,14 @@ var NewOrbitalMap = Class.create({
   buildOrbitPathGeometry: function(formattedData){
     for (var i = formattedData.orbitPatches.length - 1; i >= 0; i--) {
       var points = formattedData.orbitPatches[i].truePositions.map(function(x){ return this.buildVector(x) }.bind(this))
-      var material = new THREE.MeshLambertMaterial({
-        color:  this.orbitPathColors[i]
+
+      var geometry = this.buildCurveGeometryFromPoints(points)
+      var material = new THREE.LineBasicMaterial({
+        color: this.orbitPathColors[i],
+        linewidth: 3
       })
 
-      var spline = this.buildSplineWithMaterial(points, material)
+      var spline = new THREE.Line( geometry, material )
 
       this.group.add(spline)
     }
@@ -104,16 +108,21 @@ var NewOrbitalMap = Class.create({
 
       for (var j = maneuverNode.orbitPatches.length - 1; j >= 0; j--) {
         var orbitPatch = maneuverNode.orbitPatches[j]
-
         var points = orbitPatch.truePositions.map(function(x){ return this.buildVector(x) }.bind(this))
 
-        var material = new THREE.MeshBasicMaterial({
-            color: this.orbitPathColors[j]
+        var geometry = this.buildCurveGeometryFromPoints(points)
+
+        geometry.computeBoundingBox()
+        var dashSize = geometry.boundingBox.size().x/Math.ceil(geometry.boundingBox.size().x/this.dashedLineLength)
+
+        var material = new THREE.LineDashedMaterial({
+          color: this.orbitPathColors[j],
+          dashSize: dashSize,
+          gapSize: dashSize,
+          linewidth: 3
         })
 
-        var radius = formattedData.referenceBodies[0].radius * .1
-
-        var spline = this.buildSplineWithMaterial(points, material, radius)
+        var spline = new THREE.Line( geometry, material )
 
         this.group.add(spline)
       }
@@ -192,29 +201,12 @@ var NewOrbitalMap = Class.create({
     return new THREE.Vector3( vector[0] * this.distanceScaleFactor, vector[2] * this.distanceScaleFactor, vector[1] * this.distanceScaleFactor );
   },
 
-  buildSplineWithMaterial: function(points, material, radius){
+  buildCurveGeometryFromPoints: function(points){
     var curve = new THREE.CatmullRomCurve3(points);
-
-    var geometry = new THREE.TubeGeometry(
-      curve,
-      200,    //segments
-      radius,     //radius
-      8,     //radiusSegments
-      false  //closed
-    );
-
-    var tubeMesh = THREE.SceneUtils.createMultiMaterialObject( geometry, [
-      material
-    ]);
-
-    // tubeMesh.scale.set(2,1,1)
-
-    return tubeMesh
-
-    // geometry.vertices = curve.getPoints( 360 );
-
-    //Create the final Object3d to add to the scene
-    // return new THREE.Line( geometry, material );
+    var geometry = new THREE.Geometry()
+    geometry.vertices = curve.getPoints( 360 );
+    geometry.computeLineDistances()
+    return geometry
   },
 
   render: function (formattedData) {
