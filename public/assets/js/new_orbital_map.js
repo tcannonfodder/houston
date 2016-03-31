@@ -33,7 +33,7 @@ var NewOrbitalMap = Class.create({
   buildGeometry: function(formattedData){
     this.buildReferenceBodyGeometry(formattedData)
     this.buildVesselGeometry(formattedData)
-    // this.buildOrbitPathGeometry(formattedData)
+    this.buildOrbitPathGeometry(formattedData)
     this.buildManeuverNodeGeometry(formattedData)
     // this.buildReferenceBodyOrbitPaths(formattedData)
     // this.buildDistancesFromRootReferenceBodyPaths(formattedData)
