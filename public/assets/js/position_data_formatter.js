@@ -42,7 +42,8 @@ var PositionDataFormatter = Class.create({
         name: name,
         type: "currentPosition",
         radius: info.radius,
-        truePosition: info.currentTruePosition
+        truePosition: info.currentTruePosition,
+        atmosphericRadius: info.atmosphericRadius
       })
 
       formattedData["referenceBodies"].push(x)
