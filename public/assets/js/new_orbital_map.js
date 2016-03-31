@@ -19,7 +19,7 @@ var NewOrbitalMap = Class.create({
   },
 
   buildSceneCameraAndRenderer: function(){
-    this.renderer = new THREE.WebGLRenderer()
+    this.renderer = new THREE.WebGLRenderer({antialias: true})
 
     this.renderer.setSize( window.innerWidth, window.innerHeight )
     this.container.appendChild( this.renderer.domElement )
