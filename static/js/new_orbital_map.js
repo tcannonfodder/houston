@@ -66,6 +66,30 @@ var NewOrbitalMap = Class.create({
       var sphere = new THREE.Mesh( sphereGeometry, material )
       this.setPosition(sphere, info.truePosition)
       this.group.add(sphere)
+
+      if(info.atmosphericRadius > 0){
+        // Now to add the atmospheric glow
+        var customMaterial = new THREE.ShaderMaterial( 
+        {
+            uniforms: 
+          { 
+            "c":   { type: "f", value: 1 },
+            "p":   { type: "f", value: 1.5 },
+            glowColor: { type: "c", value: new THREE.Color('white') },
+            viewVector: { type: "v3", value: (this.camera && this.camera.position) || sphere.position }
+          },
+          vertexShader:   document.getElementById( 'vertexShader'   ).textContent,
+          fragmentShader: document.getElementById( 'fragmentShader' ).textContent,
+          side: THREE.FrontSide,
+          blending: THREE.AdditiveBlending,
+          transparent: true
+        }   );
+
+        var atmoGeometry = new THREE.SphereGeometry((info.radius + info.atmosphericRadius) * this.referenceBodyScaleFactor, 20, 20)
+        atmo = new THREE.Mesh( atmoGeometry, customMaterial );
+        this.setPosition(atmo, info.truePosition)
+        this.group.add( atmo );
+      }
     }
   },
 
@@ -182,8 +206,7 @@ var NewOrbitalMap = Class.create({
       var y1 = this.getMiddle(boundingBox.min.z, boundingBox.max.z) * Math.tan(0.785)
       var cameraY = boundingBox.max.y + y1
 
-      this.camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, Number.MAX_SAFE_INTEGER)// 700000 * 2 )
-
+      this.camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, Number.MAX_SAFE_INTEGER)
       this.camera.position.set(cameraX, cameraY, cameraZ)
 
       this.camera.lookAt(this.currentVesselGeometry.position)
