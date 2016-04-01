@@ -43,7 +43,7 @@ var PositionDataFormatter = Class.create({
         type: "currentPosition",
         radius: info.radius,
         truePosition: info.currentTruePosition,
-        atmosphericRadius: info.atmosphericRadius
+        atmosphericRadius: this.datalink.getOrbitalBodyInfo(name).atmosphericRadius
       })
 
       formattedData["referenceBodies"].push(x)
@@ -276,7 +276,8 @@ var PositionDataFormatter = Class.create({
               type: "projected",
               radius: referenceBody.radius,
               truePosition: positionOfReferenceBody,
-              linkedPatchID: j
+              linkedPatchID: j,
+              atmosphericRadius: this.datalink.getOrbitalBodyInfo(orbitPatch.referenceBody).atmosphericRadius
             }, referenceBodyOptions)))
           }
         }
@@ -301,7 +302,8 @@ var PositionDataFormatter = Class.create({
       radius: options.radius,
       truePosition: options.truePosition,
       linkedPatchID: options.linkedPatchID,
-      linkedPatchType: options.linkedPatchType
+      linkedPatchType: options.linkedPatchType,
+      atmosphericRadius: options.atmosphericRadius
     }
   },
 
