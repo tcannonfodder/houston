@@ -74,10 +74,15 @@ var NewOrbitalMap = Class.create({
 
     var info = formattedData.vessels[0]
 
-    var length = formattedData.referenceBodies[0].radius * .2
+    var length = 25000
 
-    var geometry = new THREE.BoxGeometry( length, length, length )
-    var cube = new THREE.Mesh( geometry, material )
+    var geometry = new THREE.BoxGeometry( length, length, length)
+
+    var materials = [
+      new THREE.MeshBasicMaterial( { color: 'white', 'wireframe': false } ),
+      new THREE.MeshBasicMaterial( { color: 'grey', 'wireframe': true } )
+    ];
+    var cube = THREE.SceneUtils.createMultiMaterialObject( geometry, materials );
 
     if(info.type == "currentVessel"){
       this.currentVesselGeometry = cube
