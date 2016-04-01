@@ -7,6 +7,7 @@ var NewOrbitalMap = Class.create({
     this.distanceScaleFactor = 0.3
     this.referenceBodyScaleFactor = 0.6
     this.dashedLineLength = 100000
+    this.maxLengthInThreeJS = 2000
 
     this.referenceBodyGeometry = {}
 
@@ -155,6 +156,14 @@ var NewOrbitalMap = Class.create({
 
   positionCamera: function(){
     var boundingBox = new THREE.Box3().setFromObject(this.group)
+    var scaleFactor = Math.max(
+      (this.maxLengthInThreeJS/boundingBox.max.x),
+      (this.maxLengthInThreeJS/boundingBox.max.y),
+      (this.maxLengthInThreeJS/boundingBox.max.z)
+    )
+
+    this.group.scale.set(scaleFactor, scaleFactor, scaleFactor)
+    var boundingBox = new THREE.Box3().setFromObject(this.group)
 
     var hex  = 0xff0000;
     var bbox = new THREE.BoundingBoxHelper( this.group, hex );
@@ -162,8 +171,8 @@ var NewOrbitalMap = Class.create({
     this.scene.add( bbox );
 
     if(!this.camera){
-      var cameraX = this.getMiddle(boundingBox.min.x, boundingBox.max.x) - 100000 //boundingBox.max.x - Math.abs(boundingBox.min.x)
-      var cameraZ = this.getMiddle(boundingBox.min.z, boundingBox.max.z) //boundingBox.max.z * 1.05
+      var cameraX = this.getMiddle(boundingBox.min.x, boundingBox.max.x)
+      var cameraZ = this.getMiddle(boundingBox.min.z, boundingBox.max.z)
 
       var y1 = this.getMiddle(boundingBox.min.z, boundingBox.max.z) * Math.tan(0.785)
       var cameraY = boundingBox.max.y + y1
@@ -172,14 +181,14 @@ var NewOrbitalMap = Class.create({
 
       this.camera.position.set(cameraX, cameraY, cameraZ)
 
-      this.camera.lookAt(boundingBox.center())
+      this.camera.lookAt(this.currentVesselGeometry.position)
 
       this.camera.rotation.z = Math.PI /2
 
 
-      this.controls = new THREE.OrbitControls( this.camera, this.renderer.domElement );
+      this.controls = new THREE.OrbitControls( this.camera, this.renderer.domElement);
       this.controls.addEventListener( 'change', function(){this.renderer.render(this.scene, this.camera)}.bind(this) ); // add this only if there is no animation loop (requestAnimationFrame)
-      this.controls.target = this.currentVesselGeometry.position
+      this.controls.target = this.currentVesselGeometry.position.scale(scaleFactor, scaleFactor, scaleFactor)
       // this.controls.enableDamping = true;
       // this.controls.dampingFactor = 0.25;
     }
