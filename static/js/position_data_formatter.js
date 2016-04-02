@@ -264,7 +264,7 @@ var PositionDataFormatter = Class.create({
             projectedTruePosition[2] + distanceFromLastPatchesPoint[2],
           ]
 
-          if(middleUniversalTime == sortedUniversalTimes[k] && orbitPatch.referenceBody != this.rootReferenceBodyName ){
+          if(middleUniversalTime == sortedUniversalTimes[k] && orbitPatch.referenceBody != this.rootReferenceBodyName && orbitPatch.referenceBody != "Sun" ){
             var positionOfReferenceBody = [
               frameOfReferenceVector[0] + distanceFromLastPatchesPoint[0],
               frameOfReferenceVector[1] + distanceFromLastPatchesPoint[1],
