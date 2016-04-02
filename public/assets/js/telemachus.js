@@ -113,7 +113,7 @@ var Telemachus = Class.create({
 
   getOrbitalBodies: function(){
     return {
-      "Kerbol" : {
+      "Sun" : {
         id: 0,
         mapBody: null,
         atmosphericRadius: 0,
