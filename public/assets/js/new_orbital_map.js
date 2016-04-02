@@ -6,6 +6,7 @@ var NewOrbitalMap = Class.create({
 
     this.distanceScaleFactor = 0.3
     this.referenceBodyScaleFactor = 0.6
+    this.sunBodyScaleFactor = 0.6
     this.dashedLineLength = 100000
     this.maxLengthInThreeJS = 2000
 
@@ -41,12 +42,16 @@ var NewOrbitalMap = Class.create({
     this.buildManeuverNodeGeometry(formattedData)
     // this.buildReferenceBodyOrbitPaths(formattedData)
     // this.buildDistancesFromRootReferenceBodyPaths(formattedData)
+    this.buildSunGeometryIfPresent(formattedData)
   },
 
   buildReferenceBodyGeometry: function(formattedData){
     var i = 0
     for (var i = formattedData.referenceBodies.length - 1; i >= 0; i--) {
       var info = formattedData.referenceBodies[i]
+
+      //render the sun last, and separately
+      if(info.name == "Sun"){ continue; }
 
       var color = this.colors[i]
 
@@ -90,6 +95,27 @@ var NewOrbitalMap = Class.create({
         this.setPosition(atmo, info.truePosition)
         this.group.add( atmo );
       }
+    }
+  },
+
+  buildSunGeometryIfPresent: function(formattedData){
+    var sunInfo = formattedData.referenceBodies.find(function(x){ return x.name == "Sun" })
+    // debugger
+    if(sunInfo){
+      var boundingBox = new THREE.Box3().setFromObject(this.group)
+      var color = 'yellow'
+      var material = new THREE.MeshBasicMaterial( { color: color, 'wireframe': true } )
+      var radius = (sunInfo.radius/1) * this.sunBodyScaleFactor
+      var sphereGeometry = new THREE.SphereGeometry(radius, 20, 20)
+      var sphere = new THREE.Mesh( sphereGeometry, material )
+
+      // debugger
+      var vector = this.buildVector(sunInfo.truePosition) // boundingBox.center()
+      sphere.position.x = vector.x
+      sphere.position.y = vector.y
+      sphere.position.z = vector.z
+
+      this.group.add(sphere)
     }
   },
 
