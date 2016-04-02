@@ -115,7 +115,10 @@ var PositionDataFormatter = Class.create({
   formatVessels: function(positionData, formattedData){
     //current vessel
     // debugger
-    var currentVesselTruePosition = positionData["vesselCurrentPosition"]["relativePosition"]
+    var currentVesselTruePosition = this.truePositionForRelativePosition(
+      positionData["vesselCurrentPosition"]["relativePosition"],
+      this.formatTruePositionVector(positionData.referenceBodies[positionData["vesselBody"]].currentTruePosition)
+    )
 
     this.rootReferenceBodyName = positionData["vesselBody"]
 
