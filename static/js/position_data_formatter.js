@@ -42,7 +42,7 @@ var PositionDataFormatter = Class.create({
         name: name,
         type: "currentPosition",
         radius: info.radius,
-        truePosition: info.currentTruePosition,
+        truePosition: this.formatTruePositionVector(info.currentTruePosition),
         atmosphericRadius: this.datalink.getOrbitalBodyInfo(name).atmosphericRadius
       })
 
@@ -66,7 +66,7 @@ var PositionDataFormatter = Class.create({
       for (var j = 0; j < sortedUniversalTimes.length; j++) {
         var key = sortedUniversalTimes[j].toString()
 
-        positions.push(info.positionData[key].truePosition)
+        positions.push(this.formatTruePositionVector(info.positionData[key].truePosition))
       }
 
       var x = this.buildReferenceBodyPath({
@@ -307,7 +307,7 @@ var PositionDataFormatter = Class.create({
       name: options.name,
       type: options.type,
       radius: options.radius,
-      truePosition: this.formatTruePositionVector(options.truePosition),
+      truePosition: options.truePosition,
       linkedPatchID: options.linkedPatchID,
       linkedPatchType: options.linkedPatchType,
       atmosphericRadius: options.atmosphericRadius
@@ -317,7 +317,7 @@ var PositionDataFormatter = Class.create({
   buildReferenceBodyPath: function(options){
     return {
       referenceBodyName: options.referenceBodyName,
-      truePositions: options.truePositions.map(function(x){ return this.formatTruePositionVector(x) }.bind(this))
+      truePositions: options.truePositions
     }
   },
 
