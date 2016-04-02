@@ -32,6 +32,9 @@ var NewOrbitalMap = Class.create({
   },
 
   buildGeometry: function(formattedData){
+    this.group = new THREE.Group()
+    this.scene.add(this.group)
+
     this.buildReferenceBodyGeometry(formattedData)
     this.buildVesselGeometry(formattedData)
     this.buildOrbitPathGeometry(formattedData)
@@ -41,9 +44,6 @@ var NewOrbitalMap = Class.create({
   },
 
   buildReferenceBodyGeometry: function(formattedData){
-    this.group = new THREE.Group()
-    this.scene.add(this.group)
-
     var i = 0
     for (var i = formattedData.referenceBodies.length - 1; i >= 0; i--) {
       var info = formattedData.referenceBodies[i]
