@@ -190,7 +190,9 @@ var NewOrbitalMap = Class.create({
       var points = formattedData.referenceBodyPaths[i].truePositions.map(function(x){ return this.buildVector(x) }.bind(this))
       var material = new THREE.LineBasicMaterial( { color : 'white', linewidth: formattedData.referenceBodies[0].radius * .1 } );
 
-      var spline = this.buildSplineWithMaterial(points, material)
+      var geometry = this.buildCurveGeometryFromPoints(points)
+
+      var spline = new THREE.Line( geometry, material )
 
       this.group.add(spline)
     }
