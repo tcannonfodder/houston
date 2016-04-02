@@ -183,10 +183,11 @@ var PositionDataFormatter = Class.create({
     var distancePoints = this.findDistanceVectorBetweenBodiesAtTime(rootReferenceBody, body, universalTime)
     var distanceVector = math.add(distancePoints[1], math.multiply(-1, distancePoints[0]))
 
-    var currentTruePositionForReferenceBody = body.currentTruePosition
-    var currentDistanceVector = math.add(currentTruePositionForReferenceBody, math.multiply(-1, rootReferenceBody.currentTruePosition))
+    var currentTruePositionForReferenceBody = this.formatTruePositionVector(body.currentTruePosition)
+    var currentTruePositionForRootReferenceBody = this.formatTruePositionVector(rootReferenceBody.currentTruePosition)
+    var currentDistanceVector = math.add(currentTruePositionForReferenceBody, math.multiply(-1, currentTruePositionForRootReferenceBody))
 
-    return math.add(currentDistanceVector, math.add(rootReferenceBody.currentTruePosition, distanceVector))
+    return math.add(currentDistanceVector, math.add(currentTruePositionForRootReferenceBody, distanceVector))
   },
 
   truePositionForRelativePosition: function(relativePositionVector, frameOfReferenceVector){
@@ -235,7 +236,7 @@ var PositionDataFormatter = Class.create({
         var key = sortedUniversalTimes[k].toString()
 
         if(orbitPatch.referenceBody == this.rootReferenceBodyName){
-          var frameOfReferenceVector = referenceBody.currentTruePosition
+          var frameOfReferenceVector = this.formatTruePositionVector(referenceBody.currentTruePosition)
         } else{
           var frameOfReferenceVector = this.findProjectedPositionOfReferenceBody(
             this.rootReferenceBody(positionData), referenceBody, sortedUniversalTimes[k]
@@ -295,12 +296,16 @@ var PositionDataFormatter = Class.create({
     return formattedOrbitPatches
   },
 
+  formatTruePositionVector: function(vector){
+    return math.multiply(1000, vector)
+  },
+
   buildReferenceBody: function(options){
     return {
       name: options.name,
       type: options.type,
       radius: options.radius,
-      truePosition: options.truePosition,
+      truePosition: this.formatTruePositionVector(options.truePosition),
       linkedPatchID: options.linkedPatchID,
       linkedPatchType: options.linkedPatchType,
       atmosphericRadius: options.atmosphericRadius
@@ -310,7 +315,7 @@ var PositionDataFormatter = Class.create({
   buildReferenceBodyPath: function(options){
     return {
       referenceBodyName: options.referenceBodyName,
-      truePositions: options.truePositions
+      truePositions: options.truePositions.map(function(x){ return this.formatTruePositionVector(x) }.bind(this))
     }
   },
 
