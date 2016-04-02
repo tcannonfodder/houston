@@ -272,7 +272,7 @@ var PositionDataFormatter = Class.create({
             ]
 
             formattedData["referenceBodies"].push(this.buildReferenceBody(Object.extend({
-              name: name,
+              name: orbitPatch.referenceBody,
               type: "projected",
               radius: referenceBody.radius,
               truePosition: positionOfReferenceBody,
