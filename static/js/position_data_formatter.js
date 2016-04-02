@@ -214,7 +214,6 @@ var PositionDataFormatter = Class.create({
       }
     }
 
-    console.log(closestDistance)
     return closestTime
   },
 
