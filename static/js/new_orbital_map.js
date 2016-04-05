@@ -105,7 +105,7 @@ var NewOrbitalMap = Class.create({
       var boundingBox = new THREE.Box3().setFromObject(this.group)
       var color = 'yellow'
       var material = new THREE.MeshBasicMaterial( { color: color, 'wireframe': true } )
-      var radius = (sunInfo.radius/1) * this.sunBodyScaleFactor
+      var radius = sunInfo.radius * this.sunBodyScaleFactor
       var sphereGeometry = new THREE.SphereGeometry(radius, 20, 20)
       var sphere = new THREE.Mesh( sphereGeometry, material )
 
