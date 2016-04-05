@@ -48,9 +48,13 @@ var NewOrbitalPositionData = Class.create({
     this.buildTrueAnomalyRequestsForOrbitPatches(requestParams, "vesselCurrentOrbit", positionData['o.orbitPatches'], positionData["currentUniversalTime"])
     this.buildTrueAnomalyRequestsForManeuverNodeOrbitPatches(requestParams, "vesselManeuverNodes", positionData['o.maneuverNodes'], positionData["currentUniversalTime"])
 
-    if(positionData['tar.o.orbitPatches']){
-      this.buildTrueAnomalyRequestsForOrbitPatches(requestParams, "targetCurrentOrbit", positionData['tar.o.orbitPatches'], 'tar.o', positionData["currentUniversalTime"])
+    if(positionData['tar.o.orbitPatches'].length > 0){
+      this.buildTrueAnomalyRequestsForOrbitPatches(requestParams, "targetCurrentOrbit", positionData['tar.o.orbitPatches'], positionData["currentUniversalTime"], 'tar.o')
       requestParams["targetCurrentPositionTrueAnomaly"] = "tar.o.trueAnomalyAtUTForOrbitPatch[" + 0 +","+ positionData["currentUniversalTime"] + "]"
+    } else{
+      var body = this.datalink.getOrbitalBodyInfo(positionData['tar.name'])
+      requestParams["targetBodyRadius"] = 'b.radius[' + body.id + ']'
+      requestParams["targetBodyTruePosition"] = 'b.o.truePositionAtUT[' + body.id + ',' + positionData["currentUniversalTime"] + ']'
     }
 
     this.datalink.sendMessage(requestParams, function(data){
@@ -63,9 +67,12 @@ var NewOrbitalPositionData = Class.create({
         this.buildTrueAnomalyPositionDataForManeuverNodeOrbitPatches(data, positionData, "vesselManeuverNodes", "o.maneuverNodes")
       }
 
-      if(positionData['tar.o.orbitPatches']){
+      if(positionData['tar.o.orbitPatches'].length > 0){
         this.buildTrueAnomalyPositionDataForOrbitPatches(data, positionData, "targetCurrentOrbit", "tar.o.orbitPatches")
         positionData["targetCurrentPosition"]["trueAnomaly"] = data["targetCurrentPositionTrueAnomaly"]
+      } else{
+        positionData["targetBodyRadius"] = data['targetBodyRadius']
+        positionData["targetBodyTruePosition"] = data['targetBodyTruePosition']
       }
 
       this.buildReferenceBodyPositionData(data, positionData)
@@ -364,6 +371,7 @@ var NewOrbitalPositionData = Class.create({
   initializeDatalink: function(){
     this.datalink.subscribeToData([
       'o.orbitPatches', 't.universalTime', 'v.body',
+      'tar.name', 'tar.type', 'tar.o.orbitingBody',
       'tar.o.orbitPatches', 'o.maneuverNodes'
     ])
 
