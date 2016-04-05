@@ -9,6 +9,8 @@ var NewOrbitalMap = Class.create({
     this.sunBodyScaleFactor = 1
     this.dashedLineLength = 100000
     this.maxLengthInThreeJS = 2000
+    this.vehicleLength = 25000
+    this.defaultZoomFactor = 40
 
     this.referenceBodyGeometry = {}
 
@@ -135,7 +137,7 @@ var NewOrbitalMap = Class.create({
         ];
       }
 
-      var length = 25000
+      var length = this.vehicleLength
 
       var geometry = new THREE.BoxGeometry( length, length, length)
       var cube = THREE.SceneUtils.createMultiMaterialObject( geometry, materials );
@@ -234,32 +236,36 @@ var NewOrbitalMap = Class.create({
     bbox.update();
     this.scene.add( bbox );
 
-    if(!this.camera){
-      var cameraX = this.getMiddle(boundingBox.min.x, boundingBox.max.x)
-      var cameraZ = this.getMiddle(boundingBox.min.z, boundingBox.max.z)
+    var vector = this.currentVesselGeometry.position.clone()
+    vector.multiplyScalar(scaleFactor)
+    var axisHelper = new THREE.AxisHelper(10);
+    axisHelper.position.set(vector.x, vector.y, vector.z)
 
-      var y1 = this.getMiddle(boundingBox.min.z, boundingBox.max.z) * Math.tan(0.785)
-      var cameraY = boundingBox.max.y + y1
+    this.scene.add( axisHelper );
+
+    if(!this.camera){
+      var cameraX = vector.x + ((this.vehicleLength * this.defaultZoomFactor) * scaleFactor)
+      var cameraY = vector.y + ((this.vehicleLength * this.defaultZoomFactor) * scaleFactor)
+      var cameraZ = vector.z + ((this.vehicleLength * this.defaultZoomFactor) * scaleFactor)
 
       this.camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, Number.MAX_SAFE_INTEGER)
       this.camera.position.set(cameraX, cameraY, cameraZ)
 
-      this.camera.lookAt(this.currentVesselGeometry.position)
+      this.camera.lookAt(vector)
+    }
 
-      this.camera.rotation.z = Math.PI /2
-
-
+    if(!this.controls){
       this.controls = new THREE.OrbitControls( this.camera, this.renderer.domElement);
       this.controls.addEventListener( 'change', function(){this.renderer.render(this.scene, this.camera)}.bind(this) ); // add this only if there is no animation loop (requestAnimationFrame)
-      this.controls.target = this.currentVesselGeometry.position.multiplyScalar(scaleFactor)
-      this.controls.maxDistance = cameraY * 4
-      // this.controls.enableDamping = true;
-      // this.controls.dampingFactor = 0.25;
+      this.controls.target = vector
+      this.camera.lookAt(vector)
     }
+
+    this.controls.maxDistance = this.maxLengthInThreeJS
+    this.controls.minDistance = this.vehicleLength * scaleFactor
   },
 
   getMiddle: function(min, max){
-    // debugger
     return min + ((Math.abs(min) + Math.abs(max))/2.0)
   },
 
