@@ -14,7 +14,7 @@ var NewOrbitalMap = Class.create({
 
     this.colors = ["#b4f489", "#f48e77", "#a4d1f2", "#99ffc6", "#fcc2e7", "#99ffc6", "#9d67e5", "#f49ab2", "#ffcc99", "#b7fca4", "#ff7cd1", "#ffc9de", "#a4f9ac", "#b6ff77", "#80e6f2", "#f9bdbb", "#e79bef", "#85f7d5", "#88c4ea", "#68a9d8"]
     this.orbitPathColors = ["orange", "#b4c6f7", "#987cf9", "#6baedb", "#d0f788", "#f774dd", "#9dc3f9", "#edef70", "#f97292", "#adffb6", "#efc9ff", "#bfc0ff", "#ffe3c4", "#8eb2f9", "#83f7b7", "#8cfc8a", "#97f4b5", "#96dff7", "#ffaabe", "#eda371"]
-
+    this.targetColor = '#ff7cd1'
 
     this.datalink = datalink
     this.positionDataFormatter = positionDataFormatter
@@ -120,26 +120,33 @@ var NewOrbitalMap = Class.create({
   },
 
   buildVesselGeometry: function(formattedData){
-    var material = new THREE.MeshBasicMaterial( { color: 'white', 'wireframe': false } )
+    for (var i = formattedData.vessels.length - 1; i >= 0; i--) {
+      var info = formattedData.vessels[i]
 
-    var info = formattedData.vessels[0]
+      if(info.type == "currentVessel"){
+        var materials = [
+          new THREE.MeshBasicMaterial( { color: 'white', 'wireframe': false } ),
+          new THREE.MeshBasicMaterial( { color: 'grey', 'wireframe': true } )
+        ];
+      } else{
+        var materials = [
+          new THREE.MeshBasicMaterial( { color: this.targetColor, 'wireframe': false } ),
+          new THREE.MeshBasicMaterial( { color: 'grey', 'wireframe': true } )
+        ];
+      }
 
-    var length = 25000
+      var length = 25000
 
-    var geometry = new THREE.BoxGeometry( length, length, length)
+      var geometry = new THREE.BoxGeometry( length, length, length)
+      var cube = THREE.SceneUtils.createMultiMaterialObject( geometry, materials );
 
-    var materials = [
-      new THREE.MeshBasicMaterial( { color: 'white', 'wireframe': false } ),
-      new THREE.MeshBasicMaterial( { color: 'grey', 'wireframe': true } )
-    ];
-    var cube = THREE.SceneUtils.createMultiMaterialObject( geometry, materials );
+      if(info.type == "currentVessel"){
+        this.currentVesselGeometry = cube
+      }
 
-    if(info.type == "currentVessel"){
-      this.currentVesselGeometry = cube
+      this.setPosition(cube, info.truePosition)
+      this.group.add(cube)
     }
-
-    this.setPosition(cube, info.truePosition)
-    this.group.add(cube)
   },
 
   buildOrbitPathGeometry: function(formattedData){
