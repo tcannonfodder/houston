@@ -27,6 +27,7 @@ var PositionDataFormatter = Class.create({
     this.formatTargetVessel(positionData, formattedData)
     this.formatOrbitalPatches(positionData, formattedData)
     this.formatManeuverNodes(positionData, formattedData)
+    this.formatTargetOrbitPatches(positionData, formattedData)
     this.formatReferenceBodyPaths(positionData, formattedData)
     this.formatDistancesFromRootReferenceBody(positionData, formattedData)
 
@@ -144,6 +145,18 @@ var PositionDataFormatter = Class.create({
         truePosition: targetCurrentTruePosition,
         referenceBodyName: positionData["tar.o.orbitingBody"]
       }))
+    }
+  },
+
+  formatTargetOrbitPatches: function(positionData, formattedData){
+    if(positionData["tar.o.orbitPatches"].length > 0){
+      formattedData.orbitPatches = formattedData.orbitPatches.concat(this.formatOrbitPatches(
+        formattedData, positionData, positionData["tar.o.orbitPatches"], {
+          type: "orbitPatch",
+          parentType: "targetVessel",
+          parentName: positionData["tar.name"]
+        },{ linkedPatchType: "orbitPatch" }
+      ))
     }
   },
 
