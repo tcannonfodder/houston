@@ -23,7 +23,8 @@ var PositionDataFormatter = Class.create({
     }
 
     this.formatReferenceBodies(positionData, formattedData)
-    this.formatVessels(positionData, formattedData)
+    this.formatCurrentVessel(positionData, formattedData)
+    this.formatTargetVessel(positionData, formattedData)
     this.formatOrbitalPatches(positionData, formattedData)
     this.formatManeuverNodes(positionData, formattedData)
     this.formatReferenceBodyPaths(positionData, formattedData)
@@ -112,9 +113,7 @@ var PositionDataFormatter = Class.create({
     }
   },
 
-  formatVessels: function(positionData, formattedData){
-    //current vessel
-    // debugger
+  formatCurrentVessel: function(positionData, formattedData){
     var currentVesselTruePosition = this.truePositionForRelativePosition(
       positionData["vesselCurrentPosition"]["relativePosition"],
       this.formatTruePositionVector(positionData.referenceBodies[positionData["vesselBody"]].currentTruePosition)
@@ -130,6 +129,22 @@ var PositionDataFormatter = Class.create({
         referenceBodyName: positionData["vesselBody"]
       })
     )
+  },
+
+  formatTargetVessel: function(positionData, formattedData){
+    if(positionData["tar.type"] == "Vessel"){
+      var targetCurrentTruePosition = this.truePositionForRelativePosition(
+        positionData["targetCurrentPosition"]["relativePosition"],
+        this.formatTruePositionVector(positionData.referenceBodies[positionData["tar.o.orbitingBody"]].currentTruePosition)
+      )
+
+      formattedData.vessels.push(this.buildVessel({
+        name: positionData["tar.name"],
+        type: "targetVessel",
+        truePosition: targetCurrentTruePosition,
+        referenceBodyName: positionData["tar.o.orbitingBody"]
+      }))
+    }
   },
 
   formatOrbitalPatches: function(positionData, formattedData){
