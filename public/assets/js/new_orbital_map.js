@@ -4,9 +4,9 @@ var NewOrbitalMap = Class.create({
 
     this.buildSceneCameraAndRenderer()
 
-    this.distanceScaleFactor = 0.3
-    this.referenceBodyScaleFactor = 0.6
-    this.sunBodyScaleFactor = 0.6
+    this.distanceScaleFactor = 1
+    this.referenceBodyScaleFactor = 1
+    this.sunBodyScaleFactor = 1
     this.dashedLineLength = 100000
     this.maxLengthInThreeJS = 2000
 
