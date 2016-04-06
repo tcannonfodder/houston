@@ -29,7 +29,7 @@ var PositionDataFormatter = Class.create({
     this.formatManeuverNodes(positionData, formattedData)
     this.formatTargetOrbitPatches(positionData, formattedData)
     this.formatReferenceBodyPaths(positionData, formattedData)
-    this.formatDistancesFromRootReferenceBody(positionData, formattedData)
+    // this.formatDistancesFromRootReferenceBody(positionData, formattedData)
 
     this.options.onFormat && this.options.onFormat(formattedData)
   },
