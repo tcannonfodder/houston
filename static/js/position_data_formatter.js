@@ -232,12 +232,7 @@ var PositionDataFormatter = Class.create({
   findProjectedPositionOfReferenceBody: function(rootReferenceBody, body, universalTime){
     var distancePoints = this.findDistanceVectorBetweenBodiesAtTime(rootReferenceBody, body, universalTime)
     var distanceVector = math.add(distancePoints[1], math.multiply(-1, distancePoints[0]))
-
-    var currentTruePositionForReferenceBody = this.formatTruePositionVector(body.currentTruePosition)
-    var currentTruePositionForRootReferenceBody = this.formatTruePositionVector(rootReferenceBody.currentTruePosition)
-    var currentDistanceVector = math.add(currentTruePositionForReferenceBody, math.multiply(-1, currentTruePositionForRootReferenceBody))
-
-    return math.add(currentDistanceVector, math.add(currentTruePositionForRootReferenceBody, distanceVector))
+    return distanceVector
   },
 
   truePositionForRelativePosition: function(relativePositionVector, frameOfReferenceVector){
