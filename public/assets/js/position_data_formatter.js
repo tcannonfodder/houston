@@ -149,6 +149,7 @@ var PositionDataFormatter = Class.create({
   },
 
   formatTargetOrbitPatches: function(positionData, formattedData){
+    if(!positionData['tar.type']){ return }
     if(positionData["tar.o.orbitPatches"].length > 0){
       formattedData.orbitPatches = formattedData.orbitPatches.concat(this.formatOrbitPatches(
         formattedData, positionData, positionData["tar.o.orbitPatches"], {

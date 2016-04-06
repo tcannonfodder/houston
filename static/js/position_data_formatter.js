@@ -145,10 +145,22 @@ var PositionDataFormatter = Class.create({
         truePosition: targetCurrentTruePosition,
         referenceBodyName: positionData["tar.o.orbitingBody"]
       }))
+    } else{
+      var name = positionData["tar.name"]
+      var x = this.buildReferenceBody({
+        name: name,
+        type: "targetBodyCurrentPosition",
+        radius: positionData["targetBodyRadius"],
+        truePosition: this.formatTruePositionVector(positionData["targetBodyTruePosition"]),
+        atmosphericRadius: this.datalink.getOrbitalBodyInfo(name).atmosphericRadius
+      })
+      // debugger
+      formattedData.referenceBodies.push(x)
     }
   },
 
   formatTargetOrbitPatches: function(positionData, formattedData){
+    if(!positionData['tar.type']){ return }
     if(positionData["tar.o.orbitPatches"].length > 0){
       formattedData.orbitPatches = formattedData.orbitPatches.concat(this.formatOrbitPatches(
         formattedData, positionData, positionData["tar.o.orbitPatches"], {
