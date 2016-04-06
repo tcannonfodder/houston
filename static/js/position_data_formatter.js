@@ -139,6 +139,7 @@ var PositionDataFormatter = Class.create({
   },
 
   formatTargetVessel: function(positionData, formattedData){
+    if(!positionData['tar.type']){ return }
     if(positionData["tar.type"] == "Vessel"){
       var targetCurrentTruePosition = this.truePositionForRelativePosition(
         positionData["targetCurrentPosition"]["relativePosition"],
