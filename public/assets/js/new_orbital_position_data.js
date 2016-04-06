@@ -53,8 +53,9 @@ var NewOrbitalPositionData = Class.create({
       requestParams["targetCurrentPositionTrueAnomaly"] = "tar.o.trueAnomalyAtUTForOrbitPatch[" + 0 +","+ positionData["currentUniversalTime"] + "]"
     } else{
       var body = this.datalink.getOrbitalBodyInfo(positionData['tar.name'])
-      requestParams["targetBodyRadius"] = 'b.radius[' + body.id + ']'
-      requestParams["targetBodyTruePosition"] = 'b.o.truePositionAtUT[' + body.id + ',' + positionData["currentUniversalTime"] + ']'
+      requestParams[body.name + "[metadata]radius"] = 'b.radius[' + body.id + ']'
+      requestParams[body.name + "["+ positionData["currentUniversalTime"] +"]TruePosition"] = 'b.o.truePositionAtUT[' + body.id + ',' + positionData["currentUniversalTime"] + ']'
+      requestParams[body.name + "[metadata]currentTruePosition"] = 'b.o.truePositionAtUT[' + body.id + ',' + positionData["currentUniversalTime"] + ']'
     }
 
     this.datalink.sendMessage(requestParams, function(data){
@@ -70,9 +71,6 @@ var NewOrbitalPositionData = Class.create({
       if(positionData['tar.o.orbitPatches'].length > 0){
         this.buildTrueAnomalyPositionDataForOrbitPatches(data, positionData, "targetCurrentOrbit", "tar.o.orbitPatches")
         positionData["targetCurrentPosition"]["trueAnomaly"] = data["targetCurrentPositionTrueAnomaly"]
-      } else{
-        positionData["targetBodyRadius"] = data['targetBodyRadius']
-        positionData["targetBodyTruePosition"] = data['targetBodyTruePosition']
       }
 
       this.buildReferenceBodyPositionData(data, positionData)
