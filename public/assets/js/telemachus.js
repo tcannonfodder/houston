@@ -115,102 +115,119 @@ var Telemachus = Class.create({
     return {
       "Sun" : {
         id: 0,
+        referenceBodyName: null,
         mapBody: null,
         atmosphericRadius: 0,
-        surfaceGravity: 17.1 //m/s^2
+        surfaceGravity: 17.1 //m/s^2,
       },
       "Kerbin" : {
         id: 1,
+        referenceBodyName: "Sun",
         mapBody: L.KSP.CelestialBody.KERBIN,
         atmosphericRadius: 70000,
         surfaceGravity: 9.81 //m/s^2
       },
       "Mun" : {
         id: 2,
+        referenceBodyName: "Kerbin",
         mapBody: L.KSP.CelestialBody.MUN,
         atmosphericRadius: 0,
         surfaceGravity: 1.63 //m/s^2
       },
       "Minmus" : {
         id: 3,
+        referenceBodyName: "Kerbin",
         mapBody: L.KSP.CelestialBody.MINMUS,
         atmosphericRadius: 0,
         surfaceGravity: 0.491 //m/s^2
       },
       "Moho" : {
         id: 4,
+        referenceBodyName: "Sun",
         mapBody: L.KSP.CelestialBody.MOHO,
         atmosphericRadius: 0,
         surfaceGravity: 2.70 //m/s^2
       },
       "Eve" : {
         id: 5,
+        referenceBodyName: "Sun",
         mapBody: L.KSP.CelestialBody.EVE,
         atmosphericRadius: 90000,
         surfaceGravity: 16.7 //m/s^2
       },
       "Duna" : {
         id: 6,
+        referenceBodyName: "Sun",
         mapBody: L.KSP.CelestialBody.DUNA,
         atmosphericRadius: 50000,
         surfaceGravity: 2.94 //m/s^2
       },
       "Ike" : {
         id: 7,
+        referenceBodyName: "Duna",
         mapBody: L.KSP.CelestialBody.IKE,
         atmosphericRadius: 0,
         surfaceGravity: 1.10 //m/s^2
       },
       "Jool" : {
         id: 8,
+        referenceBodyName: "Sun",
         mapBody: L.KSP.CelestialBody.JOOL,
         atmosphericRadius: 200000,
         surfaceGravity: 7.85 //m/s^2
       },
       "Laythe" : {
         id: 9,
+        referenceBodyName: "Jool",
         mapBody: L.KSP.CelestialBody.LAYTHE,
         atmosphericRadius: 50000,
         surfaceGravity: 7.85 //m/s^2
       },
       "Vall" : {
         id: 10,
+        referenceBodyName: "Jool",
         mapBody: L.KSP.CelestialBody.VALL,
         atmosphericRadius: 0,
         surfaceGravity: 2.31 //m/s^2
       },
       "Bop" : {
         id: 11,
+        referenceBodyName: "Jool",
         mapBody: L.KSP.CelestialBody.BOP,
         atmosphericRadius: 0,
         surfaceGravity: 0.589 //m/s^2
       },
       "Tylo" : {
         id: 12,
+        referenceBodyName: "Jool",
         mapBody: L.KSP.CelestialBody.TYLO,
         atmosphericRadius: 0,
         surfaceGravity: 7.85 //m/s^2
       },
       "Gilly" : {
         id: 13,
+        referenceBodyName: "Eve",
         mapBody: L.KSP.CelestialBody.GILLY,
         atmosphericRadius: 0,
         surfaceGravity: 0.049 //m/s^2
       },
       "Pol" : {
         id: 14,
+        referenceBodyName: "Pol",
         mapBody: L.KSP.CelestialBody.POL,
         atmosphericRadius: 0,
         surfaceGravity: 0.373 //m/s^2
       },
       "Dres" : {
         id: 15,
+        referenceBodyName: "Sun",
         mapBody: L.KSP.CelestialBody.DRES,
         atmosphericRadius: 0,
         surfaceGravity: 1.13 //m/s^2
       },
       "Eeloo" : {
         id: 16,
+        referenceBodyName: "Sun",
         mapBody: L.KSP.CelestialBody.EELOO,
         atmosphericRadius: 0,
         surfaceGravity: 1.69 //m/s^2
