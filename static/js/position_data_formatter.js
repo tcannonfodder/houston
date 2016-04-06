@@ -152,17 +152,6 @@ var PositionDataFormatter = Class.create({
         truePosition: targetCurrentTruePosition,
         referenceBodyName: positionData["tar.o.orbitingBody"]
       }))
-    } else{
-      var name = positionData["tar.name"]
-      var x = this.buildReferenceBody({
-        name: name,
-        type: "targetBodyCurrentPosition",
-        radius: positionData["targetBodyRadius"],
-        truePosition: this.formatTruePositionVector(positionData["targetBodyTruePosition"]),
-        atmosphericRadius: this.datalink.getOrbitalBodyInfo(name).atmosphericRadius
-      })
-      // debugger
-      formattedData.referenceBodies.push(x)
     }
   },
 
