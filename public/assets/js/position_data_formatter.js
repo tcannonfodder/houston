@@ -40,9 +40,15 @@ var PositionDataFormatter = Class.create({
     for (var i = referenceBodyNames.length - 1; i >= 0; i--) {
       var name = referenceBodyNames[i]
       var info = positionData.referenceBodies[name]
+      var type = "currentPosition"
+
+      if(positionData["tar.type"] == "CelestialBody" && positionData["tar.name"] == name){
+        type = "targetBodyCurrentPosition"
+      }
+
       var x = this.buildReferenceBody({
         name: name,
-        type: "currentPosition",
+        type: type,
         radius: info.radius,
         truePosition: this.formatTruePositionVector(info.currentTruePosition),
         atmosphericRadius: this.datalink.getOrbitalBodyInfo(name).atmosphericRadius
