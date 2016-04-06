@@ -44,7 +44,7 @@ var NewOrbitalMap = Class.create({
     this.buildManeuverNodeGeometry(formattedData)
     // this.buildReferenceBodyOrbitPaths(formattedData)
     // this.buildDistancesFromRootReferenceBodyPaths(formattedData)
-    this.buildSunGeometryIfPresent(formattedData)
+    // this.buildSunGeometryIfPresent(formattedData)
   },
 
   buildReferenceBodyGeometry: function(formattedData){
@@ -53,7 +53,7 @@ var NewOrbitalMap = Class.create({
       var info = formattedData.referenceBodies[i]
 
       //render the sun last, and separately
-      if(info.name == "Sun"){ continue; }
+      // if(info.name == "Sun"){ continue; }
 
       var color = this.colors[i]
       var radius = info.radius * this.referenceBodyScaleFactor
