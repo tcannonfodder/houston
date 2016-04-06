@@ -56,20 +56,23 @@ var NewOrbitalMap = Class.create({
       if(info.name == "Sun"){ continue; }
 
       var color = this.colors[i]
+      var radius = info.radius * this.referenceBodyScaleFactor
 
       if(info.type == "currentPosition"){
-        var material = new THREE.MeshBasicMaterial( { color: color, 'wireframe': false } )
+        var material = new THREE.MeshBasicMaterial( { color: color, 'wireframe': true } )
+      } else if(info.type == "targetBodyCurrentPosition"){
+        var material = new THREE.MeshBasicMaterial( { color: this.targetColor, 'wireframe': false } )
+        radius = radius * 1.2
       } else{
         if(info.linkedPatchType == "maneuverNode"){
           color = this.orbitPathColors[info.linkedPatchID]
         } else{
           color = this.orbitPathColors[info.linkedPatchID]
         }
-
         var material = new THREE.MeshBasicMaterial( { color: color, 'wireframe': true } )
       }
 
-      var sphereGeometry = new THREE.SphereGeometry(info.radius * this.referenceBodyScaleFactor, 20, 20)
+      var sphereGeometry = new THREE.SphereGeometry(radius, 20, 20)
       var sphere = new THREE.Mesh( sphereGeometry, material )
       this.setPosition(sphere, info.truePosition)
       this.group.add(sphere)
