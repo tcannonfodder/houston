@@ -247,22 +247,27 @@ var NewOrbitalMap = Class.create({
 
     this.scene.add( axisHelper );
 
+    var cameraX = vector.x + ((this.vehicleLength * this.defaultZoomFactor) * scaleFactor)
+    var cameraY = vector.y + ((this.vehicleLength * this.defaultZoomFactor) * scaleFactor)
+    var cameraZ = vector.z + ((this.vehicleLength * this.defaultZoomFactor) * scaleFactor)
+
     if(!this.camera){
-      var cameraX = vector.x + ((this.vehicleLength * this.defaultZoomFactor) * scaleFactor)
-      var cameraY = vector.y + ((this.vehicleLength * this.defaultZoomFactor) * scaleFactor)
-      var cameraZ = vector.z + ((this.vehicleLength * this.defaultZoomFactor) * scaleFactor)
-
       this.camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, Number.MAX_SAFE_INTEGER)
-      this.camera.position.set(cameraX, cameraY, cameraZ)
-
-      this.camera.lookAt(vector)
     }
 
     if(!this.controls){
       this.controls = new THREE.OrbitControls( this.camera, this.renderer.domElement);
       this.controls.addEventListener( 'change', function(){this.renderer.render(this.scene, this.camera)}.bind(this) ); // add this only if there is no animation loop (requestAnimationFrame)
+    }
+
+    if(!this.cameraSet){
       this.controls.target = vector
+      this.camera.position.set(cameraX, cameraY, cameraZ)
       this.camera.lookAt(vector)
+      // this.controls.rotate.x = -Math.PI/2
+      this.cameraSet = true
+    } else{
+      this.controls.target0 = vector.clone()
     }
 
     this.controls.maxDistance = this.maxLengthInThreeJS
