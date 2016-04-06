@@ -270,8 +270,9 @@ var NewOrbitalMap = Class.create({
       this.controls.target0 = vector.clone()
     }
 
-    this.controls.maxDistance = this.maxLengthInThreeJS
-    this.controls.minDistance = this.vehicleLength * scaleFactor
+    // 
+    // // this.controls.maxDistance = this.maxLengthInThreeJS * 2
+    // this.controls.minDistance = this.vehicleLength * scaleFactor
   },
 
   getMiddle: function(min, max){
