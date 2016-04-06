@@ -335,7 +335,7 @@ var PositionDataFormatter = Class.create({
   },
 
   formatTruePositionVector: function(vector){
-    return math.multiply(1000, vector)
+    return vector
   },
 
   buildReferenceBody: function(options){
