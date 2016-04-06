@@ -241,7 +241,7 @@ var NewOrbitalMap = Class.create({
 
     var vector = this.currentVesselGeometry.position.clone()
     vector.multiplyScalar(scaleFactor)
-    var axisHelper = new THREE.AxisHelper(10);
+    var axisHelper = new THREE.AxisHelper(this.vehicleLength * 3 * scaleFactor);
     axisHelper.position.set(vector.x, vector.y, vector.z)
     axisHelper.rotation = this.currentVesselGeometry.rotation
 
