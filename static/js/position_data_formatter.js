@@ -273,7 +273,7 @@ var PositionDataFormatter = Class.create({
       for (var k = 0; k < sortedUniversalTimes.length; k++){
         var key = sortedUniversalTimes[k].toString()
 
-        if(orbitPatch.referenceBody == this.rootReferenceBodyName){
+        if(orbitPatch.referenceBody == this.rootReferenceBodyName || orbitPatch.referenceBody == "Sun"){
           var frameOfReferenceVector = this.formatTruePositionVector(referenceBody.currentTruePosition)
         } else{
           var frameOfReferenceVector = this.findProjectedPositionOfReferenceBody(
@@ -303,7 +303,7 @@ var PositionDataFormatter = Class.create({
             projectedTruePosition[2] + distanceFromLastPatchesPoint[2],
           ]
 
-          if(middleUniversalTime == sortedUniversalTimes[k] && orbitPatch.referenceBody != this.rootReferenceBodyName && orbitPatch.referenceBody != "Sun" ){
+          if(middleUniversalTime == sortedUniversalTimes[k] && orbitPatch.referenceBody != this.rootReferenceBodyName){
             var positionOfReferenceBody = [
               frameOfReferenceVector[0] + distanceFromLastPatchesPoint[0],
               frameOfReferenceVector[1] + distanceFromLastPatchesPoint[1],
