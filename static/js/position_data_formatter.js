@@ -227,8 +227,8 @@ var PositionDataFormatter = Class.create({
       relativePositionVector[2],
       relativePositionVector[1],
     ]
-    var z = math.add(transformedRelativePositionVector, frameOfReferenceVector)
-    return math.add(transformedRelativePositionVector, z)
+
+    return math.add(frameOfReferenceVector, transformedRelativePositionVector)
   },
 
   findTruePositionClosestToRelativeTime: function(universalTime, positionData){
