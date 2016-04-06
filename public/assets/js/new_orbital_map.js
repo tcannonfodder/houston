@@ -278,7 +278,7 @@ var NewOrbitalMap = Class.create({
   },
 
   buildVector: function(vector){
-    return new THREE.Vector3( vector[0] * this.distanceScaleFactor, vector[2] * this.distanceScaleFactor, vector[1] * this.distanceScaleFactor );
+    return new THREE.Vector3( vector[0] * this.distanceScaleFactor, vector[1] * this.distanceScaleFactor, vector[2] * this.distanceScaleFactor );
   },
 
   buildCurveGeometryFromPoints: function(points){
