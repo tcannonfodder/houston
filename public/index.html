@@ -214,8 +214,8 @@ window.location.href="ascension/index.html"
       $('settings_overlay').removeClassName('open')
     })
 
-    //window.datalink = new Telemachus(settings.getHost(), settings.getPort())
-   // window.titleBar = new TitleBar(datalink, 'title-bar')
+    window.datalink = new Telemachus(settings.getHost(), settings.getPort())
+    window.titleBar = new TitleBar(datalink, 'title-bar')
 
     $('nav_toggle').observe("click", function(e){
       var nav = $$('nav')[0]
