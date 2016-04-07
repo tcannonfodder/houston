@@ -126,7 +126,7 @@ var Telemachus = Class.create({
         referenceBodyName: "Sun",
         mapBody: L.KSP.CelestialBody.KERBIN,
         atmosphericRadius: 70000,
-        color: '#C5DCAB',
+        color: '#4a5472',
         surfaceGravity: 9.81 //m/s^2
       },
       "Mun" : {
@@ -182,7 +182,7 @@ var Telemachus = Class.create({
         referenceBodyName: "Sun",
         mapBody: L.KSP.CelestialBody.JOOL,
         atmosphericRadius: 200000,
-        color: '#51ff07',
+        color: '#C5DCAB',
         surfaceGravity: 7.85 //m/s^2
       },
       "Laythe" : {
