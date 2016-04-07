@@ -1,4 +1,15 @@
-canvas{
-  width: 10px;
-  height: 10px;
+html, body {margin:0;padding:0;height:100%}
+
+#map{
+  width: 1440px;
+  height: 650px;
+  max-height: 100%;
+  max-width: 100%;
+  position: relative;
+}
+
+.dg.main{
+  position: absolute;
+  top: 0px;
+  right: 0px;
 }

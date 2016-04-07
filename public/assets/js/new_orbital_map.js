@@ -3,6 +3,7 @@ var NewOrbitalMap = Class.create({
     this.container = $(containerID)
 
     this.buildSceneCameraAndRenderer()
+    this.buildGUI()
 
     this.distanceScaleFactor = 1
     this.referenceBodyScaleFactor = 1
@@ -23,10 +24,21 @@ var NewOrbitalMap = Class.create({
     this.positionDataFormatter.options.onFormat = this.render.bind(this)
   },
 
+  buildGUI: function(){
+    var parameters =  {
+      "reset": this.resetPosition.bind(this)
+    }
+
+    var gui = new dat.GUI({ autoPlace: false });
+    gui.add( parameters, 'reset' ).name('Reset');
+
+    this.container.appendChild(gui.domElement);
+  },
+
   buildSceneCameraAndRenderer: function(){
     this.renderer = new THREE.WebGLRenderer({antialias: true})
 
-    this.renderer.setSize( window.innerWidth, window.innerHeight )
+    this.renderer.setSize( this.container.clientWidth, this.container.clientHeight )
     this.container.appendChild( this.renderer.domElement )
   },
 
@@ -273,11 +285,19 @@ var NewOrbitalMap = Class.create({
       this.cameraSet = true
     } else{
       this.controls.target0 = vector.clone()
+      this.controls.position0 = new THREE.Vector3(cameraX, cameraY, cameraZ)
     }
 
-    // 
-    // // this.controls.maxDistance = this.maxLengthInThreeJS * 2
-    // this.controls.minDistance = this.vehicleLength * scaleFactor
+    this.controls.maxDistance = Math.max(
+      (Math.abs(boundingBox.min.x) + Math.abs(boundingBox.max.x)),
+      (Math.abs(boundingBox.min.y) + Math.abs(boundingBox.max.y)),
+      (Math.abs(boundingBox.min.z) + Math.abs(boundingBox.max.z))
+    ) * 2
+    this.controls.minDistance = this.vehicleLength * scaleFactor
+  },
+
+  resetPosition: function(){
+    this.controls.reset()
   },
 
   getMiddle: function(min, max){
