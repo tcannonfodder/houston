@@ -40,6 +40,12 @@ var NewOrbitalMap = Class.create({
 
     this.renderer.setSize( this.container.clientWidth, this.container.clientHeight )
     this.container.appendChild( this.renderer.domElement )
+
+    window.addEventListener('resize', function(){
+      this.camera.aspect = this.container.clientWidth/this.container.clientHeight
+      this.camera.updateProjectionMatrix()
+      this.renderer.setSize(this.container.clientWidth, this.container.clientHeight)
+    }.bind(this), false );
   },
 
   buildScene: function(){
