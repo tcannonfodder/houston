@@ -61,7 +61,6 @@ var PositionDataFormatter = Class.create({
 
   formatReferenceBodyPaths: function(positionData, formattedData){
     referenceBodyNames = Object.keys(positionData.referenceBodies)
-    // debugger
     for (var i = referenceBodyNames.length - 1; i >= 0; i--) {
       var name = referenceBodyNames[i]
 
@@ -101,7 +100,6 @@ var PositionDataFormatter = Class.create({
       var renderPoints = [sortedUniversalTimes.first(),sortedUniversalTimes.last(), sortedUniversalTimes[59]]
 
       for (var j = 0; j < renderPoints.length; j++) {
-        // debugger
         var firstUniversalTime = renderPoints[j]
 
         var projectedPositionOfReferenceBody = this.findProjectedPositionOfReferenceBody(rootReferenceBody, body, firstUniversalTime)
@@ -196,8 +194,6 @@ var PositionDataFormatter = Class.create({
           var frameOfReferenceVector = this.findProjectedPositionOfReferenceBody(
             this.rootReferenceBody(positionData), referenceBody, middleUniversalTime
           )
-
-          // debugger
         }
       }
 

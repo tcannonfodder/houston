@@ -132,7 +132,6 @@ var OrbitalMap = Class.create({
 
   buildSunGeometryIfPresent: function(formattedData){
     var sunInfo = formattedData.referenceBodies.find(function(x){ return x.name == "Sun" })
-    // debugger
     if(sunInfo){
       var boundingBox = new THREE.Box3().setFromObject(this.group)
       var color = 'yellow'
@@ -141,7 +140,6 @@ var OrbitalMap = Class.create({
       var sphereGeometry = new THREE.SphereGeometry(radius, 20, 20)
       var sphere = new THREE.Mesh( sphereGeometry, material )
 
-      // debugger
       var vector = this.buildVector(sunInfo.truePosition) // boundingBox.center()
       sphere.position.x = vector.x
       sphere.position.y = vector.y

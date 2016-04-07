@@ -102,7 +102,6 @@ var OrbitalMath = {
     // console.log("trueAnomaly: " + trueAnomaly)
     // console.log("r: " + r)
     // console.log(JSON.stringify(vector))
-    // debugger
     return vector
   },
 
@@ -173,8 +172,6 @@ var OrbitalMath = {
     vectorIJK.j = transformedPQW.q
     vectorIJK.k = transformedPQW.w
 
-    // debugger
-
     return vectorIJK
   },
 
@@ -198,7 +195,6 @@ var OrbitalMath = {
     var deltaT = endTime - startTime
     var quadrant = vector.j > 0 ? 1 : -1
     var theta = Math.atan(vector.j/vector.i)
-    // debugger
     return theta - GMSTInRadians - (angularVelocityOfPlanet * deltaT)
   },
 
