@@ -51,7 +51,8 @@ var PositionDataFormatter = Class.create({
         type: type,
         radius: info.radius,
         truePosition: this.formatTruePositionVector(info.currentTruePosition),
-        atmosphericRadius: this.datalink.getOrbitalBodyInfo(name).atmosphericRadius
+        atmosphericRadius: this.datalink.getOrbitalBodyInfo(name).atmosphericRadius,
+        color: info.color
       })
 
       formattedData["referenceBodies"].push(x)
@@ -346,7 +347,8 @@ var PositionDataFormatter = Class.create({
       truePosition: options.truePosition,
       linkedPatchID: options.linkedPatchID,
       linkedPatchType: options.linkedPatchType,
-      atmosphericRadius: options.atmosphericRadius
+      atmosphericRadius: options.atmosphericRadius,
+      color: options.color
     }
   },
 
