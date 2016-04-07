@@ -2,6 +2,12 @@ var OrbitalMap = Class.create({
   initialize: function(positionDataFormatter, datalink, containerID){
     this.container = $(containerID)
 
+    this.GUIParameters = {
+      "reset": this.resetPosition.bind(this),
+      "fullscreen": this.toggleFullscreen.bind(this),
+      "lastUpdate": '00:00:00'
+    }
+
     this.buildSceneCameraAndRenderer()
     this.buildGUI()
 
@@ -25,14 +31,10 @@ var OrbitalMap = Class.create({
   },
 
   buildGUI: function(){
-    var parameters =  {
-      "reset": this.resetPosition.bind(this),
-      "fullscreen": this.toggleFullscreen.bind(this),
-    }
-
     var gui = new dat.GUI({ autoPlace: false });
-    gui.add( parameters, 'reset' ).name('Reset');
-    gui.add( parameters, 'fullscreen' ).name('ToggleFullscreen');
+    gui.add( this.GUIParameters, 'reset' ).name('Reset');
+    gui.add( this.GUIParameters, 'fullscreen' ).name('ToggleFullscreen');
+    gui.add( this.GUIParameters, 'lastUpdate' ).name('LastUpdate').listen();
 
     this.container.appendChild(gui.domElement);
   },
@@ -336,6 +338,7 @@ var OrbitalMap = Class.create({
       this.buildGeometry(formattedData)
       this.positionCamera()
       this.renderer.render(this.scene, this.camera)
+      this.GUIParameters.lastUpdate = TimeFormatters.formatUT(formattedData.currentUniversalTime)
     }.bind(this))
   }
 })
