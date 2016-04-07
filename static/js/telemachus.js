@@ -118,6 +118,7 @@ var Telemachus = Class.create({
         referenceBodyName: null,
         mapBody: null,
         atmosphericRadius: 0,
+        color: '#FFFF00',
         surfaceGravity: 17.1 //m/s^2,
       },
       "Kerbin" : {
@@ -125,6 +126,7 @@ var Telemachus = Class.create({
         referenceBodyName: "Sun",
         mapBody: L.KSP.CelestialBody.KERBIN,
         atmosphericRadius: 70000,
+        color: '#C5DCAB',
         surfaceGravity: 9.81 //m/s^2
       },
       "Mun" : {
@@ -132,12 +134,14 @@ var Telemachus = Class.create({
         referenceBodyName: "Kerbin",
         mapBody: L.KSP.CelestialBody.MUN,
         atmosphericRadius: 0,
+        color: '#e2e0d7',
         surfaceGravity: 1.63 //m/s^2
       },
       "Minmus" : {
         id: 3,
         referenceBodyName: "Kerbin",
         mapBody: L.KSP.CelestialBody.MINMUS,
+        color: '#98f2c5',
         atmosphericRadius: 0,
         surfaceGravity: 0.491 //m/s^2
       },
@@ -146,6 +150,7 @@ var Telemachus = Class.create({
         referenceBodyName: "Sun",
         mapBody: L.KSP.CelestialBody.MOHO,
         atmosphericRadius: 0,
+        color: '#fdc39e',
         surfaceGravity: 2.70 //m/s^2
       },
       "Eve" : {
@@ -153,6 +158,7 @@ var Telemachus = Class.create({
         referenceBodyName: "Sun",
         mapBody: L.KSP.CelestialBody.EVE,
         atmosphericRadius: 90000,
+        color: '#c394fe',
         surfaceGravity: 16.7 //m/s^2
       },
       "Duna" : {
@@ -160,6 +166,7 @@ var Telemachus = Class.create({
         referenceBodyName: "Sun",
         mapBody: L.KSP.CelestialBody.DUNA,
         atmosphericRadius: 50000,
+        color: '#fc5e49',
         surfaceGravity: 2.94 //m/s^2
       },
       "Ike" : {
@@ -167,6 +174,7 @@ var Telemachus = Class.create({
         referenceBodyName: "Duna",
         mapBody: L.KSP.CelestialBody.IKE,
         atmosphericRadius: 0,
+        color: '#e2e0d7',
         surfaceGravity: 1.10 //m/s^2
       },
       "Jool" : {
@@ -174,6 +182,7 @@ var Telemachus = Class.create({
         referenceBodyName: "Sun",
         mapBody: L.KSP.CelestialBody.JOOL,
         atmosphericRadius: 200000,
+        color: '#51ff07',
         surfaceGravity: 7.85 //m/s^2
       },
       "Laythe" : {
@@ -181,6 +190,7 @@ var Telemachus = Class.create({
         referenceBodyName: "Jool",
         mapBody: L.KSP.CelestialBody.LAYTHE,
         atmosphericRadius: 50000,
+        color: '#a8b4fe',
         surfaceGravity: 7.85 //m/s^2
       },
       "Vall" : {
@@ -188,6 +198,7 @@ var Telemachus = Class.create({
         referenceBodyName: "Jool",
         mapBody: L.KSP.CelestialBody.VALL,
         atmosphericRadius: 0,
+        color: '#b0f4fe',
         surfaceGravity: 2.31 //m/s^2
       },
       "Bop" : {
@@ -195,6 +206,7 @@ var Telemachus = Class.create({
         referenceBodyName: "Jool",
         mapBody: L.KSP.CelestialBody.BOP,
         atmosphericRadius: 0,
+        color: '#c64605',
         surfaceGravity: 0.589 //m/s^2
       },
       "Tylo" : {
@@ -202,6 +214,7 @@ var Telemachus = Class.create({
         referenceBodyName: "Jool",
         mapBody: L.KSP.CelestialBody.TYLO,
         atmosphericRadius: 0,
+        color: '#fdf7ed',
         surfaceGravity: 7.85 //m/s^2
       },
       "Gilly" : {
@@ -209,6 +222,7 @@ var Telemachus = Class.create({
         referenceBodyName: "Eve",
         mapBody: L.KSP.CelestialBody.GILLY,
         atmosphericRadius: 0,
+        color: '#fdcbb1',
         surfaceGravity: 0.049 //m/s^2
       },
       "Pol" : {
@@ -216,6 +230,7 @@ var Telemachus = Class.create({
         referenceBodyName: "Pol",
         mapBody: L.KSP.CelestialBody.POL,
         atmosphericRadius: 0,
+        color: '#fec681',
         surfaceGravity: 0.373 //m/s^2
       },
       "Dres" : {
@@ -223,6 +238,7 @@ var Telemachus = Class.create({
         referenceBodyName: "Sun",
         mapBody: L.KSP.CelestialBody.DRES,
         atmosphericRadius: 0,
+        color: '#fef8f9',
         surfaceGravity: 1.13 //m/s^2
       },
       "Eeloo" : {
@@ -230,6 +246,7 @@ var Telemachus = Class.create({
         referenceBodyName: "Sun",
         mapBody: L.KSP.CelestialBody.EELOO,
         atmosphericRadius: 0,
+        color: '#e5fafe',
         surfaceGravity: 1.69 //m/s^2
       }
     }
