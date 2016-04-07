@@ -278,10 +278,10 @@ var OrbitalMap = Class.create({
     this.group.scale.set(scaleFactor, scaleFactor, scaleFactor)
     var boundingBox = new THREE.Box3().setFromObject(this.group)
 
-    var hex  = 0xff0000;
-    var bbox = new THREE.BoundingBoxHelper( this.group, hex );
-    bbox.update();
-    this.scene.add( bbox );
+    // var hex  = 0xff0000;
+    // var bbox = new THREE.BoundingBoxHelper( this.group, hex );
+    // bbox.update();
+    // this.scene.add( bbox );
 
     var vector = this.currentVesselGeometry.position.clone()
     vector.multiplyScalar(scaleFactor)
