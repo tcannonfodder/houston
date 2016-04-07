@@ -19,7 +19,8 @@ var PositionDataFormatter = Class.create({
       "orbitPatches": [],
       "maneuverNodes": [],
       "referenceBodyPaths": [],
-      "distancesFromRootReferenceBody": []
+      "distancesFromRootReferenceBody": [],
+      "currentUniversalTime": positionData.currentUniversalTime
     }
 
     this.formatReferenceBodies(positionData, formattedData)
