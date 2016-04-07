@@ -26,13 +26,26 @@ var OrbitalMap = Class.create({
 
   buildGUI: function(){
     var parameters =  {
-      "reset": this.resetPosition.bind(this)
+      "reset": this.resetPosition.bind(this),
+      "fullscreen": this.toggleFullscreen.bind(this),
     }
 
     var gui = new dat.GUI({ autoPlace: false });
     gui.add( parameters, 'reset' ).name('Reset');
+    gui.add( parameters, 'fullscreen' ).name('ToggleFullscreen');
 
     this.container.appendChild(gui.domElement);
+  },
+
+  toggleFullscreen: function(){
+    if(!THREEx.FullScreen.available()){return}
+
+    if(THREEx.FullScreen.activated()){
+      THREEx.FullScreen.cancel()
+    } else{
+      THREEx.FullScreen.request(this.container)
+      this.renderer.domElement.focus()
+    }
   },
 
   buildSceneCameraAndRenderer: function(){
