@@ -17,7 +17,7 @@ var NewOrbitalMap = Class.create({
 
     this.colors = ["#b4f489", "#f48e77", "#a4d1f2", "#99ffc6", "#fcc2e7", "#99ffc6", "#9d67e5", "#f49ab2", "#ffcc99", "#b7fca4", "#ff7cd1", "#ffc9de", "#a4f9ac", "#b6ff77", "#80e6f2", "#f9bdbb", "#e79bef", "#85f7d5", "#88c4ea", "#68a9d8"]
     this.orbitPathColors = ["orange", "#b4c6f7", "#987cf9", "#6baedb", "#d0f788", "#f774dd", "#9dc3f9", "#edef70", "#f97292", "#adffb6", "#efc9ff", "#bfc0ff", "#ffe3c4", "#8eb2f9", "#83f7b7", "#8cfc8a", "#97f4b5", "#96dff7", "#ffaabe", "#eda371"]
-    this.targetColor = '#ff7cd1'
+    this.targetColor = '#51ff07'
 
     this.datalink = datalink
     this.positionDataFormatter = positionDataFormatter
@@ -185,9 +185,15 @@ var NewOrbitalMap = Class.create({
     for (var i = formattedData.orbitPatches.length - 1; i >= 0; i--) {
       var points = formattedData.orbitPatches[i].truePositions.map(function(x){ return this.buildVector(x) }.bind(this))
 
+      if(formattedData.orbitPatches[i].parentType == "targetVessel"){
+        var color = this.targetColor
+      } else{
+        var color = this.orbitPathColors[i]
+      }
+
       var geometry = this.buildCurveGeometryFromPoints(points)
       var material = new THREE.LineBasicMaterial({
-        color: this.orbitPathColors[i],
+        color: color,
         linewidth: 3
       })
 
