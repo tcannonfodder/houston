@@ -67,7 +67,11 @@ var NewOrbitalMap = Class.create({
       //render the sun last, and separately
       // if(info.name == "Sun"){ continue; }
 
-      var color = this.colors[i]
+      if(info.color){
+        var color = info.color
+      } else {
+        var color = this.colors[i]
+      }
       var radius = info.radius * this.referenceBodyScaleFactor
 
       if(info.name == "Sun"){ color = 'yellow' }
