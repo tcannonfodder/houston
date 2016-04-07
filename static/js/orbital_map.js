@@ -75,7 +75,6 @@ var OrbitalMap = Class.create({
     this.buildManeuverNodeGeometry(formattedData)
     // this.buildReferenceBodyOrbitPaths(formattedData)
     // this.buildDistancesFromRootReferenceBodyPaths(formattedData)
-    // this.buildSunGeometryIfPresent(formattedData)
   },
 
   buildReferenceBodyGeometry: function(formattedData){
@@ -140,25 +139,6 @@ var OrbitalMap = Class.create({
         this.setPosition(atmo, info.truePosition)
         this.group.add( atmo );
       }
-    }
-  },
-
-  buildSunGeometryIfPresent: function(formattedData){
-    var sunInfo = formattedData.referenceBodies.find(function(x){ return x.name == "Sun" })
-    if(sunInfo){
-      var boundingBox = new THREE.Box3().setFromObject(this.group)
-      var color = 'yellow'
-      var material = new THREE.MeshBasicMaterial( { color: color, 'wireframe': true } )
-      var radius = sunInfo.radius * this.sunBodyScaleFactor
-      var sphereGeometry = new THREE.SphereGeometry(radius, 20, 20)
-      var sphere = new THREE.Mesh( sphereGeometry, material )
-
-      var vector = this.buildVector(sunInfo.truePosition) // boundingBox.center()
-      sphere.position.x = vector.x
-      sphere.position.y = vector.y
-      sphere.position.z = vector.z
-
-      this.group.add(sphere)
     }
   },
 
