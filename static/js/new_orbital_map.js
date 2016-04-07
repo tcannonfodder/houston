@@ -3,6 +3,7 @@ var NewOrbitalMap = Class.create({
     this.container = $(containerID)
 
     this.buildSceneCameraAndRenderer()
+    this.buildGUI()
 
     this.distanceScaleFactor = 1
     this.referenceBodyScaleFactor = 1
@@ -21,6 +22,17 @@ var NewOrbitalMap = Class.create({
     this.datalink = datalink
     this.positionDataFormatter = positionDataFormatter
     this.positionDataFormatter.options.onFormat = this.render.bind(this)
+  },
+
+  buildGUI: function(){
+    var parameters =  {
+      "reset": this.resetPosition.bind(this)
+    }
+
+    var gui = new dat.GUI({ autoPlace: false });
+    gui.add( parameters, 'reset' ).name('Reset');
+
+    this.container.appendChild(gui.domElement);
   },
 
   buildSceneCameraAndRenderer: function(){
@@ -273,11 +285,16 @@ var NewOrbitalMap = Class.create({
       this.cameraSet = true
     } else{
       this.controls.target0 = vector.clone()
+      this.controls.position0 = new THREE.Vector3(cameraX, cameraY, cameraZ)
     }
 
     // 
     // // this.controls.maxDistance = this.maxLengthInThreeJS * 2
     // this.controls.minDistance = this.vehicleLength * scaleFactor
+  },
+
+  resetPosition: function(){
+    this.controls.reset()
   },
 
   getMiddle: function(min, max){
