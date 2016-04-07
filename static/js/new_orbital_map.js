@@ -288,9 +288,12 @@ var NewOrbitalMap = Class.create({
       this.controls.position0 = new THREE.Vector3(cameraX, cameraY, cameraZ)
     }
 
-    // 
-    // // this.controls.maxDistance = this.maxLengthInThreeJS * 2
-    // this.controls.minDistance = this.vehicleLength * scaleFactor
+    this.controls.maxDistance = Math.max(
+      (Math.abs(boundingBox.min.x) + Math.abs(boundingBox.max.x)),
+      (Math.abs(boundingBox.min.y) + Math.abs(boundingBox.max.y)),
+      (Math.abs(boundingBox.min.z) + Math.abs(boundingBox.max.z))
+    ) * 2
+    this.controls.minDistance = this.vehicleLength * scaleFactor
   },
 
   resetPosition: function(){
