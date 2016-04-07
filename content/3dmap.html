@@ -40,9 +40,9 @@ void main()
 <% content_for :dom_loaded do %>
   window.mapDatalink = new Telemachus(settings.getHost(), settings.getPort())
   window.mapDatalink.rate = 2000
-  var orbitalPositionData = new NewOrbitalPositionData(window.mapDatalink)
+  var orbitalPositionData = new OrbitalPositionData(window.mapDatalink)
   window.positionDataFormatter = new PositionDataFormatter(orbitalPositionData, window.mapDatalink)
 
-  window.NewOrbitalMap = new NewOrbitalMap(positionDataFormatter, window.mapDatalink, "map")
+  window.OrbitalMap = new OrbitalMap(positionDataFormatter, window.mapDatalink, "map")
 
 <% end %>

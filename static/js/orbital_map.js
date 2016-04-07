@@ -1,4 +1,4 @@
-var NewOrbitalMap = Class.create({
+var OrbitalMap = Class.create({
   initialize: function(positionDataFormatter, datalink, containerID){
     this.container = $(containerID)
 

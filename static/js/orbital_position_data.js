@@ -1,4 +1,4 @@
-var NewOrbitalPositionData = Class.create({
+var OrbitalPositionData = Class.create({
   initialize: function(datalink, options){
     this.datalink = datalink
     this.initializeDatalink()

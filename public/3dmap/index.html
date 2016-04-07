@@ -44,9 +44,9 @@
   <script src="../assets/js/staging_info_table.js"></script>
   <script src="../assets/js/maneuver_node_editor.js"></script>
 
-  <script src="../assets/js/new_orbital_position_data.js"></script>
+  <script src="../assets/js/orbital_position_data.js"></script>
   <script src="../assets/js/position_data_formatter.js"></script>
-  <script src="../assets/js/new_orbital_map.js"></script>
+  <script src="../assets/js/orbital_map.js"></script>
 
   <link rel="stylesheet" type="text/css" href="../assets/stylesheets/chartist.min.css" />
   <link rel="stylesheet" type="text/css" href="../assets/stylesheets/leafletksp.css" />
@@ -265,10 +265,10 @@ void main()
     
   window.mapDatalink = new Telemachus(settings.getHost(), settings.getPort())
   window.mapDatalink.rate = 2000
-  var orbitalPositionData = new NewOrbitalPositionData(window.mapDatalink)
+  var orbitalPositionData = new OrbitalPositionData(window.mapDatalink)
   window.positionDataFormatter = new PositionDataFormatter(orbitalPositionData, window.mapDatalink)
 
-  window.NewOrbitalMap = new NewOrbitalMap(positionDataFormatter, window.mapDatalink, "map")
+  window.OrbitalMap = new OrbitalMap(positionDataFormatter, window.mapDatalink, "map")
 
 
   })
