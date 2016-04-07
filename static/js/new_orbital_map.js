@@ -58,17 +58,22 @@ var NewOrbitalMap = Class.create({
       var color = this.colors[i]
       var radius = info.radius * this.referenceBodyScaleFactor
 
+      if(info.name == "Sun"){ color = 'yellow' }
+
       if(info.type == "currentPosition"){
-        var material = new THREE.MeshBasicMaterial( { color: color, 'wireframe': true } )
+        var material = new THREE.MeshBasicMaterial( { color: color, 'wireframe': false } )
       } else if(info.type == "targetBodyCurrentPosition"){
         var material = new THREE.MeshBasicMaterial( { color: this.targetColor, 'wireframe': false } )
         radius = radius * 1.2
       } else{
-        if(info.linkedPatchType == "maneuverNode"){
-          color = this.orbitPathColors[info.linkedPatchID]
-        } else{
-          color = this.orbitPathColors[info.linkedPatchID]
+        if(info.name != "Sun"){
+          if(info.linkedPatchType == "maneuverNode"){
+            color = this.orbitPathColors[info.linkedPatchID]
+          } else{
+            color = this.orbitPathColors[info.linkedPatchID]
+          }
         }
+
         var material = new THREE.MeshBasicMaterial( { color: color, 'wireframe': true } )
       }
 
