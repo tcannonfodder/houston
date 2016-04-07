@@ -34,7 +34,7 @@ var OrbitalMap = Class.create({
     var gui = new dat.GUI({ autoPlace: false });
     gui.add( this.GUIParameters, 'reset' ).name('Reset');
     gui.add( this.GUIParameters, 'fullscreen' ).name('ToggleFullscreen');
-    gui.add( this.GUIParameters, 'lastUpdate' ).name('LastUpdate').listen();
+    gui.add( this.GUIParameters, 'lastUpdate' ).name('Updated').listen();
 
     this.container.appendChild(gui.domElement);
   },
@@ -54,6 +54,7 @@ var OrbitalMap = Class.create({
     this.renderer = new THREE.WebGLRenderer({antialias: true})
 
     this.renderer.setSize( this.container.clientWidth, this.container.clientHeight )
+    this.renderer.setClearColor('#3A1604')
     this.container.appendChild( this.renderer.domElement )
 
     window.addEventListener('resize', function(){
