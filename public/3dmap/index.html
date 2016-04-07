@@ -178,7 +178,7 @@
     
 
 
-<div id="map"></div>
+<div id="orbital-map"></div>
 
 <!-- ---------------- Custom Shader Code ------------------------ -->
 <script id="vertexShader" type="x-shader/x-vertex">
@@ -268,7 +268,7 @@ void main()
   var orbitalPositionData = new OrbitalPositionData(window.mapDatalink)
   window.positionDataFormatter = new PositionDataFormatter(orbitalPositionData, window.mapDatalink)
 
-  window.OrbitalMap = new OrbitalMap(positionDataFormatter, window.mapDatalink, "map")
+  window.OrbitalMap = new OrbitalMap(positionDataFormatter, window.mapDatalink, "orbital-map")
 
 
   })
