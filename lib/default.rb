@@ -9,7 +9,7 @@ include Nanoc3::Helpers::LinkTo
 AssetCompiler.load_config(
   File.expand_path(File.join(File.dirname(__FILE__), "../config/assets.yml")),
   "destination_path" => File.expand_path(File.join(File.dirname(__FILE__), "../public/assets")),
-  "environment" => "production"
+  # "environment" => "production"
 )
 
 def include_javascripts(name)
