@@ -1,0 +1,73 @@
+embed_static: on
+package_assets: off
+compress_assets: off
+# asset_root: ../
+
+
+javascripts:
+  app:
+    - static/js/math.js
+    - static/js/math_polyfill.js
+    - static/js/numeric.js
+    - static/js/numeral.min.js
+    - static/js/chartist.min.js
+    - static/js/time_formatters.js
+    - static/js/data_formatters.js
+    - static/js/prototype.js
+    - static/js/event.simulate.js
+    - static/js/data_table.js
+    - static/js/leaflet.ksp.js
+    - static/js/L.Graticule.js
+    - static/js/three.min.js
+    - static/js/THREEx.FullScreen.js
+    - static/js/tween.min.js
+    - static/js/orbit_controls.js
+    - static/js/dat.gui.min.js
+
+
+    - static/js/settings.js
+    - static/js/telemachus.js
+    - static/js/orbital_math.js
+    - static/js/orbital_prediction.js
+    - static/js/hohmann-intercept.js
+
+    - static/js/title_bar.js
+    - static/js/button_indicator.js
+    - static/js/readout_table.js
+    - static/js/orbiting_body_info_table.js
+    - static/js/resource_monitor.js
+    - static/js/ground_track.js
+    - static/js/position_map.js
+    - static/js/navball.js
+    - static/js/atmospheric_density_gauge.js
+    - static/js/throttle_gauge.js
+    - static/js/altitude_tracker.js
+
+    - static/js/current_stage_burn_info.js
+    - static/js/burn_planner.js
+    - static/js/staging_info_table.js
+    - static/js/maneuver_node_editor.js
+
+    - static/js/orbital_position_data.js
+    - static/js/position_data_formatter.js
+    - static/js/orbital_map.js
+
+stylesheets:
+  app:
+    - static/stylesheets/chartist.min.css
+    - static/stylesheets/leafletksp.css
+    - static/stylesheets/application.css
+  3dmap:
+    - static/stylesheets/3dmap.css
+  ascension:
+    - static/stylesheets/ascension.css
+  boost:
+    - static/stylesheets/boost.css
+  fido:
+    - static/stylesheets/fido.css
+  ground-track:
+    - static/stylesheets/ground-track.css
+  landing:
+    - static/stylesheets/landing.css
+  science:
+    - static/stylesheets/science.css
