@@ -41,7 +41,14 @@ title: Ground Track
 
 <% content_for :dom_loaded do %>
   window.datalink.rate = 1000
-  window.groundTrack = new GroundTrack(datalink, 'gt-map', 'altitude-estimate-chart')
+
+  window.mapDatalink = new Telemachus(settings.getHost(), settings.getPort())
+  window.mapDatalink.rate = 2000
+  var orbitalPositionData = new OrbitalPositionData(window.mapDatalink)
+  window.positionDataFormatter = new PositionDataFormatter(orbitalPositionData, window.mapDatalink)
+  window.groundTrackFormatter = new GroundTrackPositionDataFormatter(orbitalPositionData, window.mapDatalink)
+
+  window.groundTrack = new NewGroundTrack(datalink, groundTrackFormatter, 'gt-map', 'altitude-estimate-chart')
   window.rcsButtonIndicator = new ButtonIndicator(datalink, 'rcs', 'v.rcsValue')
   window.sasButtonIndicator = new ButtonIndicator(datalink, 'sas', 'v.sasValue')
 

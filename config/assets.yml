@@ -52,6 +52,9 @@ javascripts:
     - static/js/position_data_formatter.js
     - static/js/orbital_map.js
 
+    - static/js/ground_track_position_data_formatter.js
+    - static/js/new_ground_track.js
+
 stylesheets:
   app:
     - static/stylesheets/chartist.min.css
