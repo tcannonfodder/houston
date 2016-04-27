@@ -143,7 +143,6 @@ var GroundTrack = Class.create({
       var dataPoint = rawChartData[time]
 
       var intervalSection = Math.floor(i/intervalPeriod)
-      // debugger
       if(!intervalsCovered[intervalSection] && intervalSection != 0){
         var label = "-" + TimeFormatters.durationString(deltaT.toFixed(0))
         intervalsCovered[intervalSection] = true

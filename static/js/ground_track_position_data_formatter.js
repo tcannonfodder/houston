@@ -115,6 +115,7 @@ var GroundTrackPositionDataFormatter = Class.create({
         var position = orbitPatch.positionData[key].relativePosition
 
         var coordinates = this.coordinatesFromVector(position, info.radius)
+        if(coordinates.length == 0){ continue }
         var length = this.vectorLength(position)
 
         // don't render any points that are underneath the body's surface or back in time
@@ -166,8 +167,11 @@ var GroundTrackPositionDataFormatter = Class.create({
     var z = vector[2]
     var lat = 90 - (Math.acos(z / radius)) * 180 / Math.PI
     var lon = ((270 + (Math.atan2(x , y)) * 180 / Math.PI) % 360) -180
-
-    return [lat, lon]
+    if(!isNaN(lat) && !isNaN(lon)){
+      return [lat, lon]
+    } else{
+      return []
+    }
   },
 
   sortedUniversalTimes: function(positionData){
