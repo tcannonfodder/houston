@@ -5,6 +5,6 @@ var GroundTrackContainer = Class.create({
     this.orbitalPositionData = new OrbitalPositionData(this.mapDatalink)
     this.groundTrackFormatter = new GroundTrackPositionDataFormatter(this.orbitalPositionData, this.mapDatalink)
 
-    this.groundTrack = new NewGroundTrack(this.mapDatalink, this.groundTrackFormatter, map_id, altitudeEstimationId)
+    this.groundTrack = new GroundTrack(this.mapDatalink, this.groundTrackFormatter, map_id, altitudeEstimationId)
   }
 })

@@ -1,4 +1,4 @@
-var NewGroundTrack = Class.create({
+var GroundTrack = Class.create({
   initialize: function(datalink, positionDataFormatter, map_id, altitudeEstimationId){
     this.datalink = datalink
     this.positionDataFormatter = positionDataFormatter
