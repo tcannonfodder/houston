@@ -131,12 +131,14 @@ var GroundTrackPositionDataFormatter = Class.create({
             type: type,
             parentType: parentType,
             pathType: pathType,
-            points: []
+            points: [],
+            altitudes: []
           })
           pathSets.push(currentPathSet)
         }
 
         currentPathSet.points.push(coordinates)
+        currentPathSet.altitudes.push({time: sortedUniversalTimes[j], altitude: length - info.radius})
         currentPathType = type
       }
     }
@@ -149,7 +151,8 @@ var GroundTrackPositionDataFormatter = Class.create({
       type: options.type,
       pathType: options.pathType,
       parentType: options.parentType,
-      points: options.points
+      points: options.points,
+      altitudes: options.altitudes
     }
   },
 
