@@ -118,7 +118,7 @@ var GroundTrackPositionDataFormatter = Class.create({
         var length = this.vectorLength(position)
 
         // don't render any points that are underneath the body's surface or back in time
-        if(length <= info.radius || sortedUniversalTimes[j] < this.currentUniversalTime ){
+        if(length <= info.radius || (sortedUniversalTimes[j] < this.currentUniversalTime && pathType != "maneuverNode" ) ){
           continue
         } else if(length > orbitalClearanceDistance){
           var type = "orbital"
