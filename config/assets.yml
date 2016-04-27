@@ -28,7 +28,6 @@ javascripts:
     - static/js/settings.js
     - static/js/telemachus.js
     - static/js/orbital_math.js
-    - static/js/orbital_prediction.js
     - static/js/hohmann-intercept.js
 
     - static/js/title_bar.js
@@ -36,7 +35,6 @@ javascripts:
     - static/js/readout_table.js
     - static/js/orbiting_body_info_table.js
     - static/js/resource_monitor.js
-    - static/js/ground_track.js
     - static/js/position_map.js
     - static/js/navball.js
     - static/js/atmospheric_density_gauge.js
