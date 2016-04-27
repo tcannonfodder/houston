@@ -25,11 +25,13 @@ var NewGroundTrack = Class.create({
 
   renderVesselCurrentCoordinates: function(formattedData){
     var coordinates = formattedData.vesselCurrentCoordinates
+    if(!coordinates){return}
     this.positionMap.setCoordinatesForMapObject(this.markers.vesselCoordinates, coordinates[0], coordinates[1])
   },
 
   renderTargetCurrentCoordinates: function(formattedData){
     var coordinates = formattedData.targetCurrentCoordinates
+    if(!coordinates){return}
     this.positionMap.setCoordinatesForMapObject(this.markers.targetCoordinates, coordinates[0], coordinates[1])
   },
 
