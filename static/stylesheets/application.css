@@ -363,6 +363,26 @@ button#brake.on{
   fill: #FD7E23;
 }
 
+#altitude-estimate-chart .ct-point,
+#altitude-estimate-chart .ct-line{
+  stroke-width: 5px;
+}
+
+#altitude-estimate-chart .ct-series-b .ct-line{
+  stroke-width: 2px;
+  stroke-dasharray: 2,2;
+}
+
+#altitude-estimate-chart .ct-series-c .ct-point,
+#altitude-estimate-chart .ct-series-c .ct-line{
+  stroke: #b4f489;
+}
+
+#altitude-estimate-chart .ct-series-d .ct-point,
+#altitude-estimate-chart .ct-series-d .ct-line{
+  stroke: #987cf9;
+}
+
 .gauge{
   /*background: #D4D3D1;*/
   padding: 10px;
