@@ -65,11 +65,7 @@ var GroundTrackPositionDataFormatter = Class.create({
     formattedData.vesselOrbitalPaths = formattedData.vesselOrbitalPaths.concat(pathSet.filter(function(x){ return x.type == "orbital" }))
     formattedData.vesselSuborbitalPaths = formattedData.vesselSuborbitalPaths.concat(pathSet.filter(function(x){ return x.type == "suborbital" }))
 
-
-    var orbitPatches = positionData["o.maneuverNodes"]
-    var pathSet = this.formatPathSet(positionData, orbitPatches, parentType, "maneuverNode")
-    formattedData.vesselOrbitalPaths = formattedData.vesselOrbitalPaths.concat(pathSet.filter(function(x){ return x.type == "orbital" }))
-    formattedData.vesselSuborbitalPaths = formattedData.vesselSuborbitalPaths.concat(pathSet.filter(function(x){ return x.type == "suborbital" }))
+    this.formatManeuverNodes(positionData, formattedData, positionData["o.maneuverNodes"], parentType)
   },
 
   formatTargetOrbitalPaths: function(positionData, formattedData){
@@ -81,6 +77,23 @@ var GroundTrackPositionDataFormatter = Class.create({
 
     formattedData.targetOrbitalPaths = pathSet.filter(function(x){ return x.type == "orbital" })
     formattedData.targetSuborbitalPaths = pathSet.filter(function(x){ return x.type == "suborbital" })
+  },
+
+  formatManeuverNodes: function(positionData, formattedData, maneuverNodes, parentType){
+    for (var i = 0; i < maneuverNodes.length; i++) {
+      var node = maneuverNodes[i]
+      if(node.referenceBody != this.rootReferenceBodyName){ break }
+
+      //render each orbit patch as an array of 1 so we can break once the path set returns empty (it's left the SOI)
+      for (var j = 0; j < node.orbitPatches.length; j++) {
+        var orbitPatches = [node.orbitPatches[j]]
+        var pathSet = this.formatPathSet(positionData, orbitPatches, parentType, "maneuverNode")
+        if(pathSet.length == 0){ return }
+
+        formattedData.vesselOrbitalPaths = formattedData.vesselOrbitalPaths.concat(pathSet.filter(function(x){ return x.type == "orbital" }))
+        formattedData.vesselSuborbitalPaths = formattedData.vesselSuborbitalPaths.concat(pathSet.filter(function(x){ return x.type == "suborbital" }))
+      }
+    }
   },
 
   formatPathSet: function(positionData, orbitPatches, parentType, pathType){
