@@ -1,90 +1,215 @@
 var GroundTrack = Class.create({
-  initialize: function(datalink, map_id, altitudeEstimationId){
+  initialize: function(datalink, positionDataFormatter, map_id, altitudeEstimationId){
     this.datalink = datalink
+    this.positionDataFormatter = positionDataFormatter
     this.map_id = map_id
     this.altitudeEstimationId = altitudeEstimationId
+
+    this.vesselColor = '#F5A623'
+    this.vesselSuborbitalColor = 'red'
+    this.maneuverNodeColor = '#b4f489'
+    this.targetColor = '#987cf9'
+    this.targetSuborbitalColor = '#f97292'
+
     this.initializeAltitudeEstimate()
     this.initializeMap()
 
-    this.orbitalPrediction = new OrbitalPrediction(this.datalink, {
-      onRecalculate: this.drawOrbitalPrediction.bind(this)
-    })
+    this.positionDataFormatter.options.onFormat = this.render.bind(this)
   },
 
-  drawOrbitalPrediction: function(orbitalPrediction){
-    for (var i = this.markers.orbitalPaths.length - 1; i >= 0; i--) {
-      this.markers.orbitalPaths[i].setLatLngs([])
-    };
+  render: function(formattedData){
+    this.renderVesselCurrentCoordinates(formattedData)
+    this.renderTargetCurrentCoordinates(formattedData)
+    this.renderVesselOrbitPaths(formattedData)
+    this.renderTargetOrbitPaths(formattedData)
+    this.updateAltitudeEstimateChart(formattedData)
+  },
 
-    var orbitalPredictionSets = []
+  renderVesselCurrentCoordinates: function(formattedData){
+    var coordinates = formattedData.vesselCurrentCoordinates
+    if(!coordinates){return}
+    this.positionMap.setCoordinatesForMapObject(this.markers.vesselCoordinates, coordinates[0], coordinates[1])
+  },
 
-    var previousOrbitalPredictionValue = null
-    for (var i = 0 ; i < orbitalPrediction.orbitalPredictionValues.length; (10 * i++)) {
-      var orbitalPredictionValue = orbitalPrediction.orbitalPredictionValues[i]
-      var latitude = orbitalPredictionValue.latitude
-      var longitude = orbitalPredictionValue.longitude
+  renderTargetCurrentCoordinates: function(formattedData){
+    var coordinates = formattedData.targetCurrentCoordinates
+    if(!coordinates){return}
+    this.positionMap.setCoordinatesForMapObject(this.markers.targetCoordinates, coordinates[0], coordinates[1])
+  },
 
-      //If the current coordinate's longitude is greater than 180, then it will be wrapped.
-      //Therefore, make it the start of a new orbital path set
-      if(previousOrbitalPredictionValue && longitude > 180 && !(previousOrbitalPredictionValue.longitude > 180)){
-        currentOrbitalPathSet = null
-      }
+  renderVesselOrbitPaths: function(formattedData){
+    this.renderOrbitPaths(this.markers.vesselOrbitalPaths, formattedData.vesselOrbitalPaths, { color: this.vesselColor })
+    this.renderOrbitPaths(this.markers.vesselSuborbitalPaths, formattedData.vesselSuborbitalPaths, { color: this.vesselSuborbitalColor })
+  },
 
-      previousOrbitalPredictionValue = orbitalPredictionValue
+  renderTargetOrbitPaths: function(formattedData){
+    this.renderOrbitPaths(this.markers.targetOrbitalPaths, formattedData.targetOrbitalPaths, { color: this.targetColor })
+    this.renderOrbitPaths(this.markers.targetSuborbitalPaths, formattedData.targetSuborbitalPaths, { color: this.targetSuborbitalColor })
+  },
 
-      var convertedCoordinates = this.positionMap.convertCoordinatesToMap(latitude, longitude)
-
-      if(currentOrbitalPathSet == null){
-        var currentOrbitalPathSet = []
-        orbitalPredictionSets.push(currentOrbitalPathSet)
-      }
-
-      currentOrbitalPathSet.push(convertedCoordinates)
+  renderOrbitPaths: function(markers, orbitPaths, lineOptions){
+    //clear all the existing orbital path values
+    for (var i = markers.length - 1; i >= 0; i--) {
+      markers.setLatLngs([])
     }
 
-    for (var i = 0; i < orbitalPredictionSets.length; i++) {
-      var coordinateSet = orbitalPredictionSets[i]
-      if(!this.markers.orbitalPaths[i]){
-        this.markers.orbitalPaths[i] = L.polyline([], {color: '#F5A623'})
-        this.markers.orbitalPaths[i].addTo(this.positionMap.map)
+    for (var i = 0; i < orbitPaths.length; i++) {
+      var orbitPath = orbitPaths[i]
+      var coordinates = orbitPath.points
+
+      if(!markers[i]){
+        markers[i] = L.polyline([], lineOptions)
+        markers[i].addTo(this.positionMap.map)
       }
 
-      this.markers.orbitalPaths[i].setLatLngs(coordinateSet)
-    };
+      var options = {
+        dashArray: orbitPath.pathType == "maneuverNode" ? '5,10' : ''
+      }
 
-    var estimatedCoordinates = orbitalPrediction.orbitalPredictionValues[0]
-    this.positionMap.setCoordinatesForMapObject(this.markers.estimatedCoordinates, estimatedCoordinates.latitude, estimatedCoordinates.longitude)
+      if(orbitPath.pathType == "maneuverNode"){
+        options.color = this.maneuverNodeColor
+      }
 
-    this.updateAltitudeEstimateChart()
+      var marker = markers[i]
+      marker.setLatLngs(coordinates)
+      marker.setStyle(options)
+    }
   },
 
-  updateAltitudeEstimateChart: function(){
-    var chartData = {labels: [], series: [[]]}
+  updateAltitudeEstimateChart: function(formattedData){
+    var chartData = {
+      labels: [], series: [
+        {
+          name: 'vessel',
+          data: []
+        },
+        {
+          name: 'atmosphere',
+          data: []
+        },
+        {
+          name: 'vesselManeuver',
+          data: []
+        }
+      ]
+    }
+
+    if(formattedData.targetCurrentCoordinates){
+      chartData.push({
+        name: 'target',
+        data: []
+      })
+    }
+
+    var maxLabelSections = 10
     var interval = 60 * 5 //seconds based
     var intervalsCovered = {}
 
-    for (var i = 0 ; i < this.orbitalPrediction.orbitalPredictionValues.length; (interval * i++)) {
-      var orbitalPredictionValue = this.orbitalPrediction.orbitalPredictionValues[i]
-      var deltaT = orbitalPredictionValue.time - this.orbitalPrediction.startTime
+    var rawChartData = {}
 
-      var intervalPeriod = Math.floor(deltaT/interval)
+    this.buildAltitudePointsForChart(
+      formattedData.vesselOrbitalPaths.filter(function(x){ return x.pathType == "orbitPath" }),
+      formattedData.vesselSuborbitalPaths.filter(function(x){ return x.pathType == "orbitPath" }),
+      "vessel",
+      rawChartData
+    )
 
-      if(!intervalsCovered[intervalPeriod]){
-        if(intervalPeriod != 0){
-          var label = "-" + TimeFormatters.durationString(deltaT.toFixed(0))
-        } else{
-          var label = ""
-        }
+    this.buildAltitudePointsForChart(
+      formattedData.vesselOrbitalPaths.filter(function(x){ return x.pathType == "maneuverNode" }),
+      formattedData.vesselSuborbitalPaths.filter(function(x){ return x.pathType == "maneuverNode" }),
+      "vesselManeuver",
+      rawChartData
+    )
 
-        chartData.labels.push(label)
-        chartData.series[0].push(orbitalPredictionValue.altitude)
-        intervalsCovered[intervalPeriod] = true
+    this.buildAltitudePointsForChart(
+      formattedData.targetOrbitalPaths,
+      formattedData.targetSuborbitalPaths,
+      "target",
+      rawChartData
+    )
+
+    var sortedUniversalTimes = this.sortedUniversalTimes(rawChartData).sort()
+    if(sortedUniversalTimes.length > 0){
+      var startTime = parseFloat(sortedUniversalTimes.first())
+      var endTime = parseFloat(sortedUniversalTimes.last())
+
+      var totalDelta = sortedUniversalTimes.length
+      var intervalPeriod = Math.floor(totalDelta/maxLabelSections)
+    }
+
+    for (var i = 0; i < sortedUniversalTimes.length; i++) {
+      var time = sortedUniversalTimes[i]
+      var deltaT = time - startTime
+      var dataPoint = rawChartData[time]
+
+      var intervalSection = Math.floor(i/intervalPeriod)
+      // debugger
+      if(!intervalsCovered[intervalSection] && intervalSection != 0){
+        var label = "-" + TimeFormatters.durationString(deltaT.toFixed(0))
+        intervalsCovered[intervalSection] = true
+      } else{
+        var label = ""
+      }
+
+      chartData.labels.push(label)
+
+      chartData.series[0].data.push(dataPoint.vessel)
+      chartData.series[1].data.push(formattedData.atmosphericRadius)
+      chartData.series[2].data.push(dataPoint.vesselManeuver)
+
+      if(formattedData.targetCurrentCoordinates){
+        chartData.series[3].data.push(dataPoint.target)
+      }
+    }
+
+    var chartOptions = {
+      lineSmooth: Chartist.Interpolation.cardinal({ fillHoles: true }),
+      low: 0,
+      series: {
+        'atmosphere': {
+          showArea: true,
+          showPoint: false
+        },
+        'target': {
+          lineSmooth: Chartist.Interpolation.cardinal({ fillHoles: true })
+        },
+        'vessel': {
+          lineSmooth: Chartist.Interpolation.cardinal({ fillHoles: true })
+        },
+        'vesselManeuver': {
+          lineSmooth: Chartist.Interpolation.cardinal({ fillHoles: true })
+        },
       }
     }
 
     window.requestAnimationFrame(function(){
-      this.altitudeEstimateChart.update(chartData)
+      this.altitudeEstimateChart.update(chartData, chartOptions)
     }.bind(this))
+  },
+
+  buildAltitudePointsForChart: function(orbitPaths, subOrbitalPaths, type, rawChartData){
+    var altitudePoints = {}
+
+    orbitPaths.forEach(function(orbitPath){
+      orbitPath.altitudes.forEach(function(x){ altitudePoints[x.time] = x.altitude })
+    })
+
+    subOrbitalPaths.forEach(function(orbitPath){
+      orbitPath.altitudes.forEach(function(x){ altitudePoints[x.time] = x.altitude })
+    })
+
+    var sortedUniversalTimes = this.sortedUniversalTimes(altitudePoints)
+    if(sortedUniversalTimes.length > 0){
+      var startTime = parseFloat(sortedUniversalTimes[0])
+    }
+
+    for (var i = 0; i < sortedUniversalTimes.length; i++) {
+      var time = sortedUniversalTimes[i]
+      var altitude = altitudePoints[time]
+
+      rawChartData[time] = rawChartData[time] || {}
+      rawChartData[time][type] = altitude
+    }
   },
 
   initializeMap: function(){
@@ -100,12 +225,26 @@ var GroundTrack = Class.create({
       radius: 5
     }
 
-    this.markers = {
-      estimatedCoordinates : L.circleMarker([0,0], circleMarkerOptions),
-      orbitalPaths : []
+    var targetMarkerOptions = {
+      // fill: false,
+      color: this.targetColor,
+      opacity: 1.0,
+      fillOpacity: 1.0,
+      radius: 5
     }
 
-    this.markers.estimatedCoordinates.addTo(this.positionMap.map)
+    this.markers = {
+      vesselCoordinates : L.circleMarker([0,0], circleMarkerOptions),
+      vesselSuborbitalPaths: [],
+      vesselOrbitalPaths: [],
+
+      targetCoordinates: L.circleMarker([0,0], targetMarkerOptions),
+      targetSuborbitalPaths: [],
+      targetOrbitalPaths: [],
+    }
+
+    this.markers.vesselCoordinates.addTo(this.positionMap.map)
+    this.markers.targetCoordinates.addTo(this.positionMap.map)
   },
 
   initializeAltitudeEstimate: function(){
@@ -122,5 +261,10 @@ var GroundTrack = Class.create({
     // that is resolving to our chart container element. The Second parameter
     // is the actual data object.
     this.altitudeEstimateChart = new Chartist.Line("#" + this.altitudeEstimationId, data);
-  }
+  },
+
+  sortedUniversalTimes: function(data){
+    var keys = Object.keys(data)
+    return keys.map(function(x){return parseFloat(x)}).sortBy(function(x){ x }).reverse()
+  },
 })

@@ -22,14 +22,12 @@
 <script src="../assets/js/settings.js"></script>
 <script src="../assets/js/telemachus.js"></script>
 <script src="../assets/js/orbital_math.js"></script>
-<script src="../assets/js/orbital_prediction.js"></script>
 <script src="../assets/js/hohmann-intercept.js"></script>
 <script src="../assets/js/title_bar.js"></script>
 <script src="../assets/js/button_indicator.js"></script>
 <script src="../assets/js/readout_table.js"></script>
 <script src="../assets/js/orbiting_body_info_table.js"></script>
 <script src="../assets/js/resource_monitor.js"></script>
-<script src="../assets/js/ground_track.js"></script>
 <script src="../assets/js/position_map.js"></script>
 <script src="../assets/js/navball.js"></script>
 <script src="../assets/js/atmospheric_density_gauge.js"></script>
@@ -43,7 +41,8 @@
 <script src="../assets/js/position_data_formatter.js"></script>
 <script src="../assets/js/orbital_map.js"></script>
 <script src="../assets/js/ground_track_position_data_formatter.js"></script>
-<script src="../assets/js/new_ground_track.js"></script>
+<script src="../assets/js/ground_track.js"></script>
+<script src="../assets/js/ground_track_container.js"></script>
 
   <link rel="stylesheet" type="text/css" href="../assets/stylesheets/chartist.min.css" />
   <link rel="stylesheet" type="text/css" href="../assets/stylesheets/leafletksp.css" />
@@ -389,14 +388,8 @@
     
   window.datalink.rate = 1000
 
-  window.mapDatalink = new Telemachus(settings.getHost(), settings.getPort())
-  window.mapDatalink.rate = 2000
-  var orbitalPositionData = new OrbitalPositionData(window.mapDatalink)
-  window.positionDataFormatter = new PositionDataFormatter(orbitalPositionData, window.mapDatalink)
-  window.groundTrackFormatter = new GroundTrackPositionDataFormatter(orbitalPositionData, window.mapDatalink)
-
-  window.groundTrack = new NewGroundTrack(datalink, groundTrackFormatter, 'gt-map', 'altitude-estimate-chart')
-  window.rcsButtonIndicator = new ButtonIndicator(datalink, 'rcs', 'v.rcsValue')
+  window.groundTrackContainer = new GroundTrackContainer('gt-map', 'altitude-estimate-chart')
+  /*window.rcsButtonIndicator = new ButtonIndicator(datalink, 'rcs', 'v.rcsValue')
   window.sasButtonIndicator = new ButtonIndicator(datalink, 'sas', 'v.sasValue')
 
   window.liquidFuelMonitor = new ResourceMonitor(datalink, 'LiquidFuel', {
@@ -471,7 +464,7 @@
       value: 'v.orbitalVelocity',
       formatter: function(value){ return DataFormatters.velocityString(value) }
     },
-  ])
+  ])*/
 
   })
 
