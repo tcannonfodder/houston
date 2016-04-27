@@ -25,11 +25,11 @@ var GroundTrackPositionDataFormatter = Class.create({
       "targetOrbitalPaths": [],
 
       "currentUniversalTime": positionData.currentUniversalTime,
-      "referenceBodyName": positionData.vesselBody
+      "referenceBodyName": positionData.vesselBody,
+      "atmosphericRadius": this.datalink.getOrbitalBodyInfo(positionData.vesselBody).atmosphericRadius
     }
 
     this.currentUniversalTime = positionData.currentUniversalTime
-
     this.formatVesselCurrentCoordinates(positionData, formattedData)
     this.formatTargetCurrentCoordinates(positionData, formattedData)
     this.formatVesselOrbitalPaths(positionData, formattedData)
