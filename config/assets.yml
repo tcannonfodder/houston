@@ -54,6 +54,7 @@ javascripts:
 
     - static/js/ground_track_position_data_formatter.js
     - static/js/new_ground_track.js
+    - static/js/ground_track_container.js
 
 stylesheets:
   app:
