@@ -103,7 +103,7 @@ var GroundTrackPositionDataFormatter = Class.create({
     var info = this.rootReferenceBody(positionData)
     var orbitalClearanceDistance = this.orbitalClearanceDistance(positionData)
 
-    for (var i = orbitPatches.length - 1; i >= 0; i--) {
+    for (var i = 0; i < orbitPatches.length; i++) {
       var orbitPatch = orbitPatches[i]
       //If we extend beyond the root reference body then hard-stop the loop. We've escaped the SOI
       if(orbitPatch.referenceBody != this.rootReferenceBodyName){ break }
