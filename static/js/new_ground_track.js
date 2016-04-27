@@ -7,6 +7,7 @@ var NewGroundTrack = Class.create({
 
     this.vesselColor = '#F5A623'
     this.vesselSuborbitalColor = 'red'
+    this.maneuverNodeColor = '#b4f489'
     this.targetColor = '#987cf9'
     this.targetSuborbitalColor = '#f97292'
 
@@ -62,7 +63,11 @@ var NewGroundTrack = Class.create({
       }
 
       var options = {
-        dashArray: orbitPath.pathType == "maneuverNode" ? '3' : ''
+        dashArray: orbitPath.pathType == "maneuverNode" ? '5,10' : ''
+      }
+
+      if(orbitPath.pathType == "maneuverNode"){
+        options.color = this.maneuverNodeColor
       }
 
       var marker = markers[i]
