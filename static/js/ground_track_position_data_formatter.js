@@ -49,6 +49,7 @@ var GroundTrackPositionDataFormatter = Class.create({
 
   formatTargetCurrentCoordinates: function(positionData, formattedData){
     if(this.rootReferenceBodyName != positionData["tar.o.orbitingBody"]){ return }
+    if(positionData["tar.type"] != "Vessel"){ return }
     var currentPosition = positionData["targetCurrentPosition"]["relativePosition"]
     var info = this.rootReferenceBody(positionData)
 
