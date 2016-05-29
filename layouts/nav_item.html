@@ -1,6 +1,7 @@
+<% @image_name = @image_name.nil? ? "#{@nav_item}-preview.svg":  @image_name %>
 <li id="<%= @id %>" class="<%= current_page?(@item, @nav_item) ? "current" : "" %>">
   <a href="<%= @nav_url %>">
-    <img src="../assets/images/<%= @nav_item %>-preview.png"/>
+    <img src="../assets/images/<%= @image_name %>"/>
     <%= @nav_title %>
   </a>
 </li>
