@@ -964,3 +964,1207 @@ THREE.MorphBlendMesh.prototype.setAnimationDuration=function(a,b){var c=this.ani
 THREE.MorphBlendMesh.prototype.getAnimationDuration=function(a){var b=-1;if(a=this.animationsMap[a])b=a.duration;return b};THREE.MorphBlendMesh.prototype.playAnimation=function(a){var b=this.animationsMap[a];b?(b.time=0,b.active=!0):console.warn("THREE.MorphBlendMesh: animation["+a+"] undefined in .playAnimation()")};THREE.MorphBlendMesh.prototype.stopAnimation=function(a){if(a=this.animationsMap[a])a.active=!1};
 THREE.MorphBlendMesh.prototype.update=function(a){for(var b=0,c=this.animationsList.length;b<c;b++){var d=this.animationsList[b];if(d.active){var e=d.duration/d.length;d.time+=d.direction*a;if(d.mirroredLoop){if(d.time>d.duration||0>d.time)d.direction*=-1,d.time>d.duration&&(d.time=d.duration,d.directionBackwards=!0),0>d.time&&(d.time=0,d.directionBackwards=!1)}else d.time%=d.duration,0>d.time&&(d.time+=d.duration);var f=d.start+THREE.Math.clamp(Math.floor(d.time/e),0,d.length-1),g=d.weight;f!==d.currentFrame&&
 (this.morphTargetInfluences[d.lastFrame]=0,this.morphTargetInfluences[d.currentFrame]=1*g,this.morphTargetInfluences[f]=0,d.lastFrame=d.currentFrame,d.currentFrame=f);e=d.time%e/e;d.directionBackwards&&(e=1-e);d.currentFrame!==d.lastFrame?(this.morphTargetInfluences[d.currentFrame]=e*g,this.morphTargetInfluences[d.lastFrame]=(1-e)*g):this.morphTargetInfluences[d.currentFrame]=g}}};
+/** @namespace */
+var THREEx    = THREEx    || {};
+THREEx.FullScreen = THREEx.FullScreen || {};
+
+/**
+ * test if it is possible to have fullscreen
+ * 
+ * @returns {Boolean} true if fullscreen API is available, false otherwise
+*/
+THREEx.FullScreen.available = function()
+{
+  return this._hasWebkitFullScreen || this._hasMozFullScreen;
+}
+
+/**
+ * test if fullscreen is currently activated
+ * 
+ * @returns {Boolean} true if fullscreen is currently activated, false otherwise
+*/
+THREEx.FullScreen.activated = function()
+{
+  if( this._hasWebkitFullScreen ){
+    return document.webkitIsFullScreen;
+  }else if( this._hasMozFullScreen ){
+    return document.mozFullScreen;
+  }else{
+    console.assert(false);
+  }
+}
+
+/**
+ * Request fullscreen on a given element
+ * @param {DomElement} element to make fullscreen. optional. default to document.body
+*/
+THREEx.FullScreen.request = function(element)
+{
+  element = element || document.body;
+  if( this._hasWebkitFullScreen ){
+    element.webkitRequestFullScreen();
+  }else if( this._hasMozFullScreen ){
+    element.mozRequestFullScreen();
+  }else{
+    console.assert(false);
+  }
+}
+
+/**
+ * Cancel fullscreen
+*/
+THREEx.FullScreen.cancel  = function()
+{
+  if( this._hasWebkitFullScreen ){
+    document.webkitCancelFullScreen();
+  }else if( this._hasMozFullScreen ){
+    document.mozCancelFullScreen();
+  }else{
+    console.assert(false);
+  }
+}
+
+THREEx.FullScreen._hasWebkitFullScreen  = 'webkitCancelFullScreen' in document  ? true : false; 
+THREEx.FullScreen._hasMozFullScreen = 'mozCancelFullScreen' in document ? true : false;
+// tween.js - http://github.com/sole/tween.js - Licensed under the MIT License
+'use strict';void 0===Date.now&&(Date.now=function(){return(new Date).valueOf()});
+var TWEEN=TWEEN||function(){var a=[];return{REVISION:"14",getAll:function(){return a},removeAll:function(){a=[]},add:function(c){a.push(c)},remove:function(c){c=a.indexOf(c);-1!==c&&a.splice(c,1)},update:function(c){if(0===a.length)return!1;for(var b=0,c=void 0!==c?c:"undefined"!==typeof window&&void 0!==window.performance&&void 0!==window.performance.now?window.performance.now():Date.now();b<a.length;)a[b].update(c)?b++:a.splice(b,1);return!0}}}();
+TWEEN.Tween=function(a){var c={},b={},d={},e=1E3,g=0,h=!1,j=!1,q=0,m=null,w=TWEEN.Easing.Linear.None,x=TWEEN.Interpolation.Linear,n=[],r=null,s=!1,t=null,u=null,k=null,v;for(v in a)c[v]=parseFloat(a[v],10);this.to=function(a,c){void 0!==c&&(e=c);b=a;return this};this.start=function(e){TWEEN.add(this);j=!0;s=!1;m=void 0!==e?e:"undefined"!==typeof window&&void 0!==window.performance&&void 0!==window.performance.now?window.performance.now():Date.now();m+=q;for(var f in b){if(b[f]instanceof Array){if(0===
+b[f].length)continue;b[f]=[a[f]].concat(b[f])}c[f]=a[f];!1===c[f]instanceof Array&&(c[f]*=1);d[f]=c[f]||0}return this};this.stop=function(){if(!j)return this;TWEEN.remove(this);j=!1;null!==k&&k.call(a);this.stopChainedTweens();return this};this.stopChainedTweens=function(){for(var a=0,b=n.length;a<b;a++)n[a].stop()};this.delay=function(a){q=a;return this};this.repeat=function(a){g=a;return this};this.yoyo=function(a){h=a;return this};this.easing=function(a){w=a;return this};this.interpolation=function(a){x=
+a;return this};this.chain=function(){n=arguments;return this};this.onStart=function(a){r=a;return this};this.onUpdate=function(a){t=a;return this};this.onComplete=function(a){u=a;return this};this.onStop=function(a){k=a;return this};this.update=function(p){var f;if(p<m)return!0;!1===s&&(null!==r&&r.call(a),s=!0);var i=(p-m)/e,i=1<i?1:i,j=w(i);for(f in b){var k=c[f]||0,l=b[f];l instanceof Array?a[f]=x(l,j):("string"===typeof l&&(l=k+parseFloat(l,10)),"number"===typeof l&&(a[f]=k+(l-k)*j))}null!==t&&
+t.call(a,j);if(1==i)if(0<g){isFinite(g)&&g--;for(f in d)"string"===typeof b[f]&&(d[f]+=parseFloat(b[f],10)),h&&(i=d[f],d[f]=b[f],b[f]=i),c[f]=d[f];m=p+q}else{null!==u&&u.call(a);f=0;for(i=n.length;f<i;f++)n[f].start(p);return!1}return!0}};
+TWEEN.Easing={Linear:{None:function(a){return a}},Quadratic:{In:function(a){return a*a},Out:function(a){return a*(2-a)},InOut:function(a){return 1>(a*=2)?0.5*a*a:-0.5*(--a*(a-2)-1)}},Cubic:{In:function(a){return a*a*a},Out:function(a){return--a*a*a+1},InOut:function(a){return 1>(a*=2)?0.5*a*a*a:0.5*((a-=2)*a*a+2)}},Quartic:{In:function(a){return a*a*a*a},Out:function(a){return 1- --a*a*a*a},InOut:function(a){return 1>(a*=2)?0.5*a*a*a*a:-0.5*((a-=2)*a*a*a-2)}},Quintic:{In:function(a){return a*a*a*
+a*a},Out:function(a){return--a*a*a*a*a+1},InOut:function(a){return 1>(a*=2)?0.5*a*a*a*a*a:0.5*((a-=2)*a*a*a*a+2)}},Sinusoidal:{In:function(a){return 1-Math.cos(a*Math.PI/2)},Out:function(a){return Math.sin(a*Math.PI/2)},InOut:function(a){return 0.5*(1-Math.cos(Math.PI*a))}},Exponential:{In:function(a){return 0===a?0:Math.pow(1024,a-1)},Out:function(a){return 1===a?1:1-Math.pow(2,-10*a)},InOut:function(a){return 0===a?0:1===a?1:1>(a*=2)?0.5*Math.pow(1024,a-1):0.5*(-Math.pow(2,-10*(a-1))+2)}},Circular:{In:function(a){return 1-
+Math.sqrt(1-a*a)},Out:function(a){return Math.sqrt(1- --a*a)},InOut:function(a){return 1>(a*=2)?-0.5*(Math.sqrt(1-a*a)-1):0.5*(Math.sqrt(1-(a-=2)*a)+1)}},Elastic:{In:function(a){var c,b=0.1;if(0===a)return 0;if(1===a)return 1;!b||1>b?(b=1,c=0.1):c=0.4*Math.asin(1/b)/(2*Math.PI);return-(b*Math.pow(2,10*(a-=1))*Math.sin((a-c)*2*Math.PI/0.4))},Out:function(a){var c,b=0.1;if(0===a)return 0;if(1===a)return 1;!b||1>b?(b=1,c=0.1):c=0.4*Math.asin(1/b)/(2*Math.PI);return b*Math.pow(2,-10*a)*Math.sin((a-c)*
+2*Math.PI/0.4)+1},InOut:function(a){var c,b=0.1;if(0===a)return 0;if(1===a)return 1;!b||1>b?(b=1,c=0.1):c=0.4*Math.asin(1/b)/(2*Math.PI);return 1>(a*=2)?-0.5*b*Math.pow(2,10*(a-=1))*Math.sin((a-c)*2*Math.PI/0.4):0.5*b*Math.pow(2,-10*(a-=1))*Math.sin((a-c)*2*Math.PI/0.4)+1}},Back:{In:function(a){return a*a*(2.70158*a-1.70158)},Out:function(a){return--a*a*(2.70158*a+1.70158)+1},InOut:function(a){return 1>(a*=2)?0.5*a*a*(3.5949095*a-2.5949095):0.5*((a-=2)*a*(3.5949095*a+2.5949095)+2)}},Bounce:{In:function(a){return 1-
+TWEEN.Easing.Bounce.Out(1-a)},Out:function(a){return a<1/2.75?7.5625*a*a:a<2/2.75?7.5625*(a-=1.5/2.75)*a+0.75:a<2.5/2.75?7.5625*(a-=2.25/2.75)*a+0.9375:7.5625*(a-=2.625/2.75)*a+0.984375},InOut:function(a){return 0.5>a?0.5*TWEEN.Easing.Bounce.In(2*a):0.5*TWEEN.Easing.Bounce.Out(2*a-1)+0.5}}};
+TWEEN.Interpolation={Linear:function(a,c){var b=a.length-1,d=b*c,e=Math.floor(d),g=TWEEN.Interpolation.Utils.Linear;return 0>c?g(a[0],a[1],d):1<c?g(a[b],a[b-1],b-d):g(a[e],a[e+1>b?b:e+1],d-e)},Bezier:function(a,c){var b=0,d=a.length-1,e=Math.pow,g=TWEEN.Interpolation.Utils.Bernstein,h;for(h=0;h<=d;h++)b+=e(1-c,d-h)*e(c,h)*a[h]*g(d,h);return b},CatmullRom:function(a,c){var b=a.length-1,d=b*c,e=Math.floor(d),g=TWEEN.Interpolation.Utils.CatmullRom;return a[0]===a[b]?(0>c&&(e=Math.floor(d=b*(1+c))),g(a[(e-
+1+b)%b],a[e],a[(e+1)%b],a[(e+2)%b],d-e)):0>c?a[0]-(g(a[0],a[0],a[1],a[1],-d)-a[0]):1<c?a[b]-(g(a[b],a[b],a[b-1],a[b-1],d-b)-a[b]):g(a[e?e-1:0],a[e],a[b<e+1?b:e+1],a[b<e+2?b:e+2],d-e)},Utils:{Linear:function(a,c,b){return(c-a)*b+a},Bernstein:function(a,c){var b=TWEEN.Interpolation.Utils.Factorial;return b(a)/b(c)/b(a-c)},Factorial:function(){var a=[1];return function(c){var b=1,d;if(a[c])return a[c];for(d=c;1<d;d--)b*=d;return a[c]=b}}(),CatmullRom:function(a,c,b,d,e){var a=0.5*(b-a),d=0.5*(d-c),g=
+e*e;return(2*c-2*b+a+d)*e*g+(-3*c+3*b-2*a-d)*g+a*e+c}}};
+
+var OrbitalPositionData = Class.create({
+  initialize: function(datalink, options){
+    this.datalink = datalink
+    this.initializeDatalink()
+    this.timeoutRate = 1000 //times out every 5 seconds
+    this.mutexTimestamp = null
+    this.rootReferenceBody = null
+    this.options = Object.extend({
+      onRecalculate: null,
+      numberOfSegments: 120
+    }, options)
+  },
+
+  isLocked: function(){
+    this.mutexTimestamp && this.mutexTimestamp < ((Date.now() / 1000 | 0) + this.timeoutRate)
+  },
+
+  mutexLock: function(){
+    this.mutexTimestamp = Date.now()
+  },
+
+  mutexUnlock: function(){
+    this.mutexTimestamp = null
+  },
+
+  recalculate: function(data){
+    if(this.isLocked()){return}
+    this.mutexLock()
+    Object.extend(data, {
+      "currentUniversalTime": this.adjustUniversalTime(data['t.universalTime']),
+      "vesselBody": data['v.body'],
+      "vesselCurrentPosition": { "trueAnomaly" : null, "relativePosition": null },
+      "targetCurrentPosition": { "trueAnomaly" : null, "relativePosition": null },
+    })
+    this.getTrueAnomaliesAndReferenceBodies(data)
+  },
+
+  getTrueAnomaliesAndReferenceBodies: function(positionData){
+    var requestParams = {};
+    //ask for the true position for the current body right now and the radius
+    var referenceBody = this.datalink.getOrbitalBodyInfo(positionData["vesselBody"])
+    this.rootReferenceBody = referenceBody
+    requestParams["currentReferenceBodyRadius"] = 'b.radius[' + referenceBody.id + ']'
+    requestParams["currentReferenceBodyTruePosition"] = 'b.o.truePositionAtUT[' + referenceBody.id + ',' + positionData["currentUniversalTime"] + ']'
+    //ask for the true anomaly of the vessel in the current orbit patch at the current time
+    requestParams["vesselCurrentPositionTrueAnomaly"] = "o.trueAnomalyAtUTForOrbitPatch[" + 0 +","+ positionData["currentUniversalTime"] + "]"
+
+    this.buildTrueAnomalyRequestsForOrbitPatches(requestParams, "vesselCurrentOrbit", positionData['o.orbitPatches'], positionData["currentUniversalTime"])
+    this.buildTrueAnomalyRequestsForManeuverNodeOrbitPatches(requestParams, "vesselManeuverNodes", positionData['o.maneuverNodes'], positionData["currentUniversalTime"])
+
+    if(positionData['tar.type']){
+      if(positionData['tar.o.orbitPatches'] && positionData['tar.o.orbitPatches'].length > 0){
+        this.buildTrueAnomalyRequestsForOrbitPatches(requestParams, "targetCurrentOrbit", positionData['tar.o.orbitPatches'], positionData["currentUniversalTime"], 'tar.o')
+        requestParams["targetCurrentPositionTrueAnomaly"] = "tar.o.trueAnomalyAtUTForOrbitPatch[" + 0 +","+ positionData["currentUniversalTime"] + "]"
+      } else{
+        var body = this.datalink.getOrbitalBodyInfo(positionData['tar.name'])
+        requestParams[body.name + "[metadata]radius"] = 'b.radius[' + body.id + ']'
+        requestParams[body.name + "["+ positionData["currentUniversalTime"] +"]TruePosition"] = 'b.o.truePositionAtUT[' + body.id + ',' + positionData["currentUniversalTime"] + ']'
+        requestParams[body.name + "[metadata]currentTruePosition"] = 'b.o.truePositionAtUT[' + body.id + ',' + positionData["currentUniversalTime"] + ']'
+      }
+    }
+
+    this.datalink.sendMessage(requestParams, function(data){
+      positionData["currentReferenceBodyRadius"] = data["currentReferenceBodyRadius"]
+      positionData["currentReferenceBodyTruePosition"] = data["currentReferenceBodyTruePosition"]
+      positionData["vesselCurrentPosition"]["trueAnomaly"] = data["vesselCurrentPositionTrueAnomaly"]
+      this.buildTrueAnomalyPositionDataForOrbitPatches(data, positionData, "vesselCurrentOrbit", "o.orbitPatches")
+
+      if(positionData['o.maneuverNodes']){
+        this.buildTrueAnomalyPositionDataForManeuverNodeOrbitPatches(data, positionData, "vesselManeuverNodes", "o.maneuverNodes")
+      }
+
+      if(positionData['tar.o.orbitPatches'] && positionData['tar.o.orbitPatches'].length > 0){
+        this.buildTrueAnomalyPositionDataForOrbitPatches(data, positionData, "targetCurrentOrbit", "tar.o.orbitPatches")
+        positionData["targetCurrentPosition"]["trueAnomaly"] = data["targetCurrentPositionTrueAnomaly"]
+      }
+
+      this.buildReferenceBodyPositionData(data, positionData)
+      this.buildReferenceBodyMetadata(data, positionData)
+      this.getRelativePositionsAndRecalculate(positionData)
+    }.bind(this))
+  },
+
+  getRelativePositionsAndRecalculate: function(positionData){
+    var requestParams = {}
+
+    //ask for the current relative position of the vessel
+    requestParams["vesselCurrentPositionRelativePosition"] = "o.relativePositionAtTrueAnomalyForOrbitPatch[" + 0 +","+ positionData["vesselCurrentPosition"]["trueAnomaly"] + "]"
+
+    this.buildRelativePositionRequestsForOrbitPatches(requestParams, "vesselCurrentOrbit", positionData['o.orbitPatches'])
+
+    if(positionData['o.maneuverNodes']){
+      this.buildRelativePositionRequestsForManeuverNodeOrbitPatches(requestParams, "vesselManeuverNodes", positionData['o.maneuverNodes'])
+    }
+
+    if(positionData['tar.o.orbitPatches']){
+      this.buildRelativePositionRequestsForOrbitPatches(requestParams, "targetCurrentOrbit", positionData['tar.o.orbitPatches'], 'tar.o')
+      requestParams["targetCurrentPositionRelativePosition"] = "tar.o.relativePositionAtTrueAnomalyForOrbitPatch[" + 0 +","+ positionData["vesselCurrentPosition"]["trueAnomaly"] + "]"
+    }
+
+    this.datalink.sendMessage(requestParams, function(data){
+      positionData["vesselCurrentPosition"]["relativePosition"] = data["vesselCurrentPositionRelativePosition"]
+      this.buildRelativePositionPositionDataForOrbitPatches(data, positionData, "vesselCurrentOrbit", 'o.orbitPatches')
+
+      if(positionData['o.maneuverNodes']){
+        this.buildRelativePositionPositionDataForManeuverNodeOrbitPatches(data, positionData, "vesselManeuverNodes", 'o.maneuverNodes')
+      }
+
+      if(positionData['tar.o.orbitPatches']){
+        this.buildRelativePositionPositionDataForOrbitPatches(data, positionData, "targetCurrentOrbit", 'tar.o.orbitPatches', 'tar.o')
+        positionData["targetCurrentPosition"]["relativePosition"] = data["targetCurrentPositionRelativePosition"]
+      }
+      this.mutexUnlock()
+      this.options.onRecalculate && this.options.onRecalculate(positionData)
+    }.bind(this))
+  },
+
+  buildTrueAnomalyRequestsForOrbitPatches: function(requestParams, orbitPatchType, orbitPatches, currentUniversalTime, requestPrefix){
+    requestPrefix = requestPrefix || 'o'
+    for (var i = 0; i < orbitPatches.length; i++) {
+      var orbitPatch = orbitPatches[i]
+
+      // get the start and the end universal times for the patch
+      var startUT = this.adjustUniversalTime(orbitPatch["startUT"])
+      var endUT = this.adjustUniversalTime(orbitPatch["endUT"])
+
+      //ask for the true position for the current body right now and the radius
+      var referenceBody = this.datalink.getOrbitalBodyInfo(orbitPatch["referenceBody"])
+
+      var timeInterval = (endUT-startUT)/this.options.numberOfSegments
+      var UTForInterval = null
+      for(var j = 0; j < this.options.numberOfSegments; j++){
+        UTForInterval = this.adjustUniversalTime(startUT  + (timeInterval * j))
+        if(UTForInterval > endUT){
+          UTForInterval = endUT
+        }
+
+        //get the true position of the root reference body at this UT as well
+        requestParams[this.rootReferenceBody.name + "["+ UTForInterval +"]TruePosition"] = 'b.o.truePositionAtUT[' + this.rootReferenceBody.id + ',' + UTForInterval + ']'
+
+        requestParams[orbitPatchType + "[" + i + "][" + UTForInterval + "]TrueAnomaly"] = requestPrefix + ".trueAnomalyAtUTForOrbitPatch[" + i +","+ UTForInterval + "]"
+        requestParams[orbitPatch["referenceBody"] + "["+ UTForInterval +"]TruePosition"] = 'b.o.truePositionAtUT[' + referenceBody.id + ',' + UTForInterval + ']'
+      }
+
+      requestParams[orbitPatch["referenceBody"] + "[metadata]radius"] = 'b.radius[' + referenceBody.id + ']'
+      requestParams[orbitPatch["referenceBody"] + "[metadata]currentTruePosition"] = 'b.o.truePositionAtUT[' + referenceBody.id + ',' + currentUniversalTime + ']'
+    }
+  },
+
+  buildTrueAnomalyRequestsForManeuverNodeOrbitPatches: function(requestParams, maneuverNodeType, maneuverNodes, currentUniversalTime){
+    var requestPrefix = "o.maneuverNodes.trueAnomalyAtUTForManeuverNodesOrbitPatch"
+    for (var i = 0; i < maneuverNodes.length; i++) {
+      var maneuverNode = maneuverNodes[i]
+
+      /*
+      "apistring": "o.maneuverNodes.trueAnomalyAtUTForManeuverNodesOrbitPatch",
+      "name": "For a maneuver node, The orbit patch's True Anomaly at Universal Time [int id, orbit patch index, universal time]",
+      "units": "DEG",
+      "plotable": true
+      */
+
+      var labelPrefix = maneuverNodeType + "[" + i + "]"
+
+      for (var j = 0; j < maneuverNode['orbitPatches'].length; j++) {
+        var orbitPatch = maneuverNode['orbitPatches'][j]
+
+        // get the start and the end universal times for the patch
+        var startUT = this.adjustUniversalTime(orbitPatch["startUT"])
+        var endUT = this.adjustUniversalTime(orbitPatch["endUT"])
+
+        //ask for the true position for the current body right now and the radius
+        var referenceBody = this.datalink.getOrbitalBodyInfo(orbitPatch["referenceBody"])
+
+        var timeInterval = (endUT-startUT)/this.options.numberOfSegments
+        var UTForInterval = null
+        for(var k = 0; k < this.options.numberOfSegments; k++){
+          UTForInterval = this.adjustUniversalTime(startUT  + (timeInterval * k))
+          if(UTForInterval > endUT){
+            UTForInterval = endUT
+          }
+
+          var arguments = [i,j,UTForInterval]
+
+          //get the true position of the root reference body at this UT as well
+          requestParams[this.rootReferenceBody.name + "["+ UTForInterval +"]TruePosition"] = 'b.o.truePositionAtUT[' + this.rootReferenceBody.id + ',' + UTForInterval + ']'
+
+          requestParams[labelPrefix + "[" + j + "][" + UTForInterval + "]TrueAnomaly"] = requestPrefix + "[" + arguments.join(',') + "]"
+          requestParams[orbitPatch["referenceBody"] + "["+ UTForInterval +"]TruePosition"] = 'b.o.truePositionAtUT[' + referenceBody.id + ',' + UTForInterval + ']'
+        }
+
+        requestParams[orbitPatch["referenceBody"] + "[metadata]radius"] = 'b.radius[' + referenceBody.id + ']'
+        requestParams[orbitPatch["referenceBody"] + "[metadata]currentTruePosition"] = 'b.o.truePositionAtUT[' + referenceBody.id + ',' + currentUniversalTime + ']'
+      }
+    };
+  },
+
+  buildRelativePositionRequestsForOrbitPatches: function(requestParams, orbitPatchType, orbitPatches, requestPrefix){
+    requestPrefix = requestPrefix || 'o'
+    for (var i = 0; i < orbitPatches.length; i++) {
+      var orbitPatch = orbitPatches[i]
+
+      var universalTimes = Object.keys(orbitPatch["positionData"])
+
+      for (var j = universalTimes.length - 1; j >= 0; j--) {
+        var universalTime = universalTimes[j]
+        var trueAnomaly = orbitPatch["positionData"][universalTime]["trueAnomaly"]
+        requestParams[orbitPatchType + "[" + i + "][" + universalTime + "]RelativePosition"] = requestPrefix + ".relativePositionAtTrueAnomalyForOrbitPatch[" + i +","+ trueAnomaly + "]"
+      }
+    }
+  },
+
+  buildRelativePositionRequestsForManeuverNodeOrbitPatches: function(requestParams, maneuverNodeType, maneuverNodes){
+    var requestPrefix = "o.maneuverNodes.relativePositionAtTrueAnomalyForManeuverNodesOrbitPatch"
+    for (var i = 0; i < maneuverNodes.length; i++) {
+      var maneuverNode = maneuverNodes[i]
+
+      /*
+        "apistring": "o.maneuverNodes.relativePositionAtTrueAnomalyForManeuverNodesOrbitPatch",
+        "name": "For a maneuver node, The orbit patch's predicted displacement from the center of the main body at the given true anomaly [int id, orbit patch index, true anomaly]",
+        "units": "UNITLESS",
+        "plotable": true
+      */
+
+      var labelPrefix = maneuverNodeType + "[" + i + "]"
+
+      for (var j = 0; j < maneuverNode['orbitPatches'].length; j++) {
+        var orbitPatch = maneuverNode['orbitPatches'][j]
+
+        var universalTimes = Object.keys(orbitPatch["positionData"])
+
+        for (var k = universalTimes.length - 1; k >= 0; k--) {
+          var universalTime = universalTimes[k]
+          var trueAnomaly = orbitPatch["positionData"][universalTime]["trueAnomaly"]
+
+          var arguments = [i,j,trueAnomaly]
+          requestParams[labelPrefix + "[" + j + "][" + universalTime + "]RelativePosition"] = requestPrefix + "[" + arguments.join(',') + "]"
+        }
+      }
+    }
+  },
+
+  buildTrueAnomalyPositionDataForOrbitPatches: function(rawData, positionData, orbitPatchType, orbitPatchesKey){
+    var trueAnomalyFieldRegex = new RegExp(orbitPatchType + "\\[(\\d+)\\]\\[([\\d\\.]+)\\]TrueAnomaly")
+    var orbitPatches = positionData[orbitPatchesKey] = positionData[orbitPatchesKey] || {}
+
+    var rawDataKeys = Object.keys(rawData)
+    for (var i = rawDataKeys.length - 1; i >= 0; i--) {
+      var key = rawDataKeys[i]
+      if(trueAnomalyFieldRegex.test(key)){
+        var matchParts = trueAnomalyFieldRegex.exec(key)
+        var orbitPatchIndex = parseInt(matchParts[1])
+        var universalTime = matchParts[2]
+        var trueAnomaly = rawData[key]
+        var orbitPatch = orbitPatches[orbitPatchIndex] = orbitPatches[orbitPatchIndex] || {}
+        var orbitPatchPositionData = orbitPatch["positionData"] = orbitPatch["positionData"] || {}
+        orbitPatchPositionData[universalTime] = orbitPatch[universalTime] || {}
+        orbitPatchPositionData[universalTime]["trueAnomaly"] = trueAnomaly
+      }
+    };
+  },
+
+  buildTrueAnomalyPositionDataForManeuverNodeOrbitPatches: function(rawData, positionData, maneuverNodeType, maneuverNodesKey){
+    var trueAnomalyFieldRegex = new RegExp(maneuverNodeType + "\\[(\\d+)\\]\\[(\\d+)\\]\\[([\\d\\.]+)\\]TrueAnomaly")
+    var maneuverNodes = positionData[maneuverNodesKey] = positionData[maneuverNodesKey] || {}
+
+    var rawDataKeys = Object.keys(rawData)
+    for (var i = rawDataKeys.length - 1; i >= 0; i--) {
+      var key = rawDataKeys[i]
+      if(trueAnomalyFieldRegex.test(key)){
+        var matchParts = trueAnomalyFieldRegex.exec(key)
+        var maneuverNodeIndex = parseInt(matchParts[1])
+        var orbitPatchIndex = parseInt(matchParts[2])
+        var universalTime = matchParts[3]
+        var trueAnomaly = rawData[key]
+
+        var orbitPatch = maneuverNodes[maneuverNodeIndex]['orbitPatches'][orbitPatchIndex] = maneuverNodes[maneuverNodeIndex]['orbitPatches'][orbitPatchIndex] || {}
+        var orbitPatchPositionData = orbitPatch["positionData"] = orbitPatch["positionData"] || {}
+        orbitPatchPositionData[universalTime] = orbitPatch[universalTime] || {}
+        orbitPatchPositionData[universalTime]["trueAnomaly"] = trueAnomaly
+      }
+    };
+  },
+
+  buildRelativePositionPositionDataForOrbitPatches: function(rawData, positionData, orbitPatchType, orbitPatchesKey){
+    var relativePositionFieldRegex = new RegExp(orbitPatchType + "\\[(\\d+)\\]\\[([\\d\\.]+)\\]RelativePosition")
+    var orbitPatches = positionData[orbitPatchesKey] = positionData[orbitPatchesKey] || {}
+
+    var rawDataKeys = Object.keys(rawData)
+    for (var i = rawDataKeys.length - 1; i >= 0; i--) {
+      var key = rawDataKeys[i]
+      if(relativePositionFieldRegex.test(key)){
+        var matchParts = relativePositionFieldRegex.exec(key)
+        var orbitPatchIndex = parseInt(matchParts[1])
+        var universalTime = matchParts[2]
+        var relativePosition = rawData[key]
+
+        var orbitPatch = orbitPatches[orbitPatchIndex] = orbitPatches[orbitPatchIndex] || {}
+        var orbitPatchPositionData = orbitPatch["positionData"] = orbitPatch["positionData"] || {}
+        orbitPatchPositionData[universalTime] = orbitPatchPositionData[universalTime] || {}
+        orbitPatchPositionData[universalTime]["relativePosition"] = relativePosition
+      }
+    };
+  },
+
+  buildRelativePositionPositionDataForManeuverNodeOrbitPatches: function(rawData, positionData, maneuverNodeType, maneuverNodesKey){
+    var relativePositionFieldRegex = new RegExp(maneuverNodeType + "\\[(\\d+)\\]\\[(\\d+)\\]\\[([\\d\\.]+)\\]RelativePosition")
+    var maneuverNodes = positionData[maneuverNodesKey] = positionData[maneuverNodesKey] || {}
+
+    var rawDataKeys = Object.keys(rawData)
+    for (var i = rawDataKeys.length - 1; i >= 0; i--) {
+      var key = rawDataKeys[i]
+      if(relativePositionFieldRegex.test(key)){
+        var matchParts = relativePositionFieldRegex.exec(key)
+        var maneuverNodeIndex = parseInt(matchParts[1])
+        var orbitPatchIndex = parseInt(matchParts[2])
+        var universalTime = matchParts[3]
+        var relativePosition = rawData[key]
+
+        var orbitPatch = maneuverNodes[maneuverNodeIndex]['orbitPatches'][orbitPatchIndex] = maneuverNodes[maneuverNodeIndex]['orbitPatches'][orbitPatchIndex] || {}
+        var orbitPatchPositionData = orbitPatch["positionData"] = orbitPatch["positionData"] || {}
+        orbitPatchPositionData[universalTime] = orbitPatchPositionData[universalTime] || {}
+        orbitPatchPositionData[universalTime]["relativePosition"] = relativePosition
+      }
+    };
+  },
+
+  buildReferenceBodyPositionData: function(rawData, positionData){
+    var referenceBodyTruePositionRegex = new RegExp(/(\w+)\[([\d\.]+)\]TruePosition$/)
+
+    var rawDataKeys = Object.keys(rawData)
+    for (var i = rawDataKeys.length - 1; i >= 0; i--) {
+      var key = rawDataKeys[i]
+      if(referenceBodyTruePositionRegex.test(key)){
+        var matchParts = referenceBodyTruePositionRegex.exec(key)
+        var referenceBodyName = matchParts[1]
+        var universalTime = matchParts[2]
+        var truePosition = rawData[key]
+
+        var referenceBodies = positionData["referenceBodies"] = positionData["referenceBodies"] || {}
+        var referenceBodyObject = referenceBodies[referenceBodyName] = referenceBodies[referenceBodyName] || {}
+        referenceBodyObject["positionData"] = referenceBodyObject["positionData"] || {}
+        referenceBodyObject["positionData"][universalTime] = referenceBodyObject["positionData"][universalTime] || {}
+        referenceBodyObject["positionData"][universalTime]["truePosition"] = truePosition
+      }
+    }
+  },
+
+  buildReferenceBodyMetadata: function(rawData, positionData){
+    var referenceBodyTruePositionRegex = new RegExp(/(\w+)\[metadata\](\w+)$/)
+
+    var rawDataKeys = Object.keys(rawData)
+    for (var i = rawDataKeys.length - 1; i >= 0; i--) {
+      var key = rawDataKeys[i]
+      if(referenceBodyTruePositionRegex.test(key)){
+        var matchParts = referenceBodyTruePositionRegex.exec(key)
+        var referenceBodyName = matchParts[1]
+        var field = matchParts[2]
+        var data = rawData[key]
+
+        var referenceBodies = positionData["referenceBodies"] = positionData["referenceBodies"] || {}
+        var referenceBodyObject = referenceBodies[referenceBodyName] = referenceBodies[referenceBodyName] || {}
+        referenceBodyObject[field] = data
+      }
+    }
+  },
+
+  adjustUniversalTime: function(ut){
+    return ut//.toFixed(3)
+  },
+
+  initializeDatalink: function(){
+    this.datalink.subscribeToData([
+      'o.orbitPatches', 't.universalTime', 'v.body',
+      'tar.name', 'tar.type', 'tar.o.orbitingBody',
+      'tar.o.orbitPatches', 'o.maneuverNodes'
+    ])
+
+    this.datalink.addReceiverFunction(this.recalculate.bind(this))
+  },
+})
+var PositionDataFormatter = Class.create({
+  initialize: function(orbitalPositionData, datalink, options){
+    this.datalink = datalink
+    this.orbitalPositionData = orbitalPositionData;
+    this.orbitalPositionData.options.onRecalculate = this.format.bind(this)
+
+    this.rootReferenceBodyName = null
+
+    this.options = Object.extend({
+      onFormat: null,
+      numberOfSegments: 120
+    }, options)
+  },
+
+  format: function(positionData){
+    var formattedData = {
+      "referenceBodies": [],
+      "vessels": [],
+      "orbitPatches": [],
+      "maneuverNodes": [],
+      "referenceBodyPaths": [],
+      "distancesFromRootReferenceBody": [],
+      "currentUniversalTime": positionData.currentUniversalTime
+    }
+
+    this.formatReferenceBodies(positionData, formattedData)
+    this.formatCurrentVessel(positionData, formattedData)
+    this.formatTargetVessel(positionData, formattedData)
+    this.formatOrbitalPatches(positionData, formattedData)
+    this.formatManeuverNodes(positionData, formattedData)
+    this.formatTargetOrbitPatches(positionData, formattedData)
+    this.formatReferenceBodyPaths(positionData, formattedData)
+    // this.formatDistancesFromRootReferenceBody(positionData, formattedData)
+
+    this.options.onFormat && this.options.onFormat(formattedData)
+  },
+
+  formatReferenceBodies: function(positionData, formattedData){
+    referenceBodyNames = Object.keys(positionData.referenceBodies)
+
+    for (var i = referenceBodyNames.length - 1; i >= 0; i--) {
+      var name = referenceBodyNames[i]
+      var info = positionData.referenceBodies[name]
+      var type = "currentPosition"
+
+      if(positionData["tar.type"] == "CelestialBody" && positionData["tar.name"] == name){
+        type = "targetBodyCurrentPosition"
+      }
+
+      var x = this.buildReferenceBody({
+        name: name,
+        type: type,
+        radius: info.radius,
+        truePosition: this.formatTruePositionVector(info.currentTruePosition),
+        atmosphericRadius: this.datalink.getOrbitalBodyInfo(name).atmosphericRadius,
+        color: this.datalink.getOrbitalBodyInfo(name).color
+      })
+
+      formattedData["referenceBodies"].push(x)
+    }
+  },
+
+  formatReferenceBodyPaths: function(positionData, formattedData){
+    referenceBodyNames = Object.keys(positionData.referenceBodies)
+    for (var i = referenceBodyNames.length - 1; i >= 0; i--) {
+      var name = referenceBodyNames[i]
+
+      // if(name == this.rootReferenceBodyName){ continue; }
+      var info = positionData.referenceBodies[name]
+      var positionDataKeys = Object.keys(info.positionData)
+      var sortedUniversalTimes = positionDataKeys.map(function(x){return parseFloat(x)}).reverse()
+
+      var positions = []
+
+      for (var j = 0; j < sortedUniversalTimes.length; j++) {
+        var key = sortedUniversalTimes[j].toString()
+
+        positions.push(this.formatTruePositionVector(info.positionData[key].truePosition))
+      }
+
+      var x = this.buildReferenceBodyPath({
+        referenceBodyName: name,
+        truePositions: positions
+      })
+
+      formattedData.referenceBodyPaths.push(x)
+    }
+  },
+
+  formatDistancesFromRootReferenceBody: function(positionData, formattedData){
+    referenceBodyNames = Object.keys(positionData.referenceBodies)
+    var rootReferenceBody = positionData.referenceBodies[this.rootReferenceBodyName]
+
+    for (var i = referenceBodyNames.length - 1; i >= 0; i--) {
+      var name = referenceBodyNames[i]
+      if(name == this.rootReferenceBodyName){ continue; }
+
+      var body = positionData.referenceBodies[name]
+      var sortedUniversalTimes = this.sortedUniversalTimes(body.positionData)
+
+      var renderPoints = [sortedUniversalTimes.first(),sortedUniversalTimes.last(), sortedUniversalTimes[59]]
+
+      for (var j = 0; j < renderPoints.length; j++) {
+        var firstUniversalTime = renderPoints[j]
+
+        var projectedPositionOfReferenceBody = this.findProjectedPositionOfReferenceBody(rootReferenceBody, body, firstUniversalTime)
+
+        var positions = [
+          rootReferenceBody.currentTruePosition,
+          projectedPositionOfReferenceBody
+        ]
+
+        var x = this.buildDistanceFromRootReferenceBody({
+          referenceBodyName: name,
+          truePositions: positions
+        })
+
+        formattedData.distancesFromRootReferenceBody.push(x)
+      }
+    }
+  },
+
+  formatCurrentVessel: function(positionData, formattedData){
+    var currentVesselTruePosition = this.truePositionForRelativePosition(
+      positionData["vesselCurrentPosition"]["relativePosition"],
+      this.formatTruePositionVector(positionData.referenceBodies[positionData["vesselBody"]].currentTruePosition)
+    )
+
+    this.rootReferenceBodyName = positionData["vesselBody"]
+
+    formattedData.vessels.push(
+      this.buildVessel({
+        name: "current vessel",
+        type: "currentVessel",
+        truePosition: currentVesselTruePosition,
+        referenceBodyName: positionData["vesselBody"]
+      })
+    )
+  },
+
+  formatTargetVessel: function(positionData, formattedData){
+    if(!positionData['tar.type']){ return }
+    if(positionData["tar.type"] == "Vessel"){
+      var targetCurrentTruePosition = this.truePositionForRelativePosition(
+        positionData["targetCurrentPosition"]["relativePosition"],
+        this.formatTruePositionVector(positionData.referenceBodies[positionData["tar.o.orbitingBody"]].currentTruePosition)
+      )
+
+      formattedData.vessels.push(this.buildVessel({
+        name: positionData["tar.name"],
+        type: "targetVessel",
+        truePosition: targetCurrentTruePosition,
+        referenceBodyName: positionData["tar.o.orbitingBody"]
+      }))
+    }
+  },
+
+  formatTargetOrbitPatches: function(positionData, formattedData){
+    if(!positionData['tar.type']){ return }
+    if(positionData["tar.o.orbitPatches"].length > 0){
+      formattedData.orbitPatches = formattedData.orbitPatches.concat(this.formatOrbitPatches(
+        formattedData, positionData, positionData["tar.o.orbitPatches"], {
+          type: "orbitPatch",
+          parentType: "targetVessel",
+          parentName: positionData["tar.name"]
+        },{ linkedPatchType: "orbitPatch" }
+      ))
+    }
+  },
+
+  formatOrbitalPatches: function(positionData, formattedData){
+    formattedData.orbitPatches = this.formatOrbitPatches(formattedData,
+      positionData, positionData["o.orbitPatches"],{
+        type: "orbitPatch",
+        parentType: "vessel",
+        parentName: "current vessel"
+      }, { linkedPatchType: "orbitPatch" }
+    )
+  },
+
+  formatManeuverNodes: function(positionData, formattedData){
+    for (var i = 0; i < positionData["o.maneuverNodes"].length; i++){
+      var maneuverNode = positionData["o.maneuverNodes"][i]
+      var orbitPatches = this.formatOrbitPatches(formattedData, positionData, maneuverNode.orbitPatches, {
+        type: "maneuverNode", parentType: "vessel", parentName: "current vessel"
+      }, { linkedPatchType: "maneuverNode" })
+
+      for (var i = 0; i < maneuverNode.orbitPatches.length; i++) {
+        var orbitPatch = maneuverNode.orbitPatches[i]
+        if(orbitPatch.rootReferenceBody != this.rootReferenceBodyName){
+          var referenceBody = positionData.referenceBodies[orbitPatch.referenceBody]
+          var sortedUniversalTimes = this.sortedUniversalTimes(orbitPatch.positionData)
+          var middleUniversalTime = sortedUniversalTimes[Math.floor((sortedUniversalTimes.length-1)/2.0)]
+
+          var frameOfReferenceVector = this.findProjectedPositionOfReferenceBody(
+            this.rootReferenceBody(positionData), referenceBody, middleUniversalTime
+          )
+        }
+      }
+
+      formattedData.maneuverNodes.push(this.buildManeuverNode({
+        type: "maneuverNode",
+        parentType: "vessel",
+        parentName: "current vessel",
+        orbitPatches: orbitPatches
+      }))
+    }
+  },
+
+  findDistanceVectorBetweenBodiesAtTime: function(rootBody, targetBody, universalTime){
+    var closestUniversalTime = this.findTruePositionClosestToRelativeTime(universalTime, rootBody.positionData)
+
+    return [
+      rootBody.positionData[closestUniversalTime].truePosition,
+      targetBody.positionData[universalTime].truePosition
+    ]
+  },
+
+  findProjectedPositionOfReferenceBody: function(rootReferenceBody, body, universalTime){
+    var distancePoints = this.findDistanceVectorBetweenBodiesAtTime(rootReferenceBody, body, universalTime)
+    var distanceVector = math.add(distancePoints[1], math.multiply(-1, distancePoints[0]))
+    return distanceVector
+  },
+
+  truePositionForRelativePosition: function(relativePositionVector, frameOfReferenceVector){
+    var transformedRelativePositionVector = [
+      relativePositionVector[0],
+      relativePositionVector[2],
+      relativePositionVector[1],
+    ]
+
+    return math.add(frameOfReferenceVector, transformedRelativePositionVector)
+  },
+
+  findTruePositionClosestToRelativeTime: function(universalTime, positionData){
+    var positionDataKeys = Object.keys(positionData)
+    var sortedUniversalTimes = positionDataKeys.map(function(x){return parseFloat(x)}).sortBy(function(s) {
+      return s;
+    })
+
+    var closestTime = null
+    var closestDistance = null
+
+    for (var i = 0; i < sortedUniversalTimes.length; i++) {
+      var time = sortedUniversalTimes[i]
+      var distance = Math.abs(universalTime - time)
+
+      if((closestTime == null && closestDistance == null) || distance < closestDistance ){
+        closestTime = time
+        closestDistance = distance
+      }
+    }
+
+    return closestTime
+  },
+
+  formatOrbitPatches: function(formattedData, positionData, rawOrbitPatches, orbitPatchOptions, referenceBodyOptions){
+    var formattedOrbitPatches = []
+    var lastPatchesPoint = null
+    var firstPointInPatch = null
+    referenceBodyOptions = referenceBodyOptions || {}
+
+    for (var j = 0; j < rawOrbitPatches.length; j++){
+      var orbitPatch = rawOrbitPatches[j]
+      var referenceBody = positionData.referenceBodies[orbitPatch.referenceBody]
+      var sortedUniversalTimes = this.sortedUniversalTimes(orbitPatch.positionData)
+      var positions = []
+      var distanceFromLastPatchesPoint = null
+      var middleUniversalTime = sortedUniversalTimes[Math.floor((sortedUniversalTimes.length-1)/2)]
+
+      for (var k = 0; k < sortedUniversalTimes.length; k++){
+        var key = sortedUniversalTimes[k].toString()
+
+        if(orbitPatch.referenceBody == this.rootReferenceBodyName || orbitPatch.referenceBody == "Sun"){
+          var frameOfReferenceVector = this.formatTruePositionVector(referenceBody.currentTruePosition)
+        } else{
+          var frameOfReferenceVector = this.findProjectedPositionOfReferenceBody(
+            this.rootReferenceBody(positionData), referenceBody, sortedUniversalTimes[k]
+          )
+        }
+
+        var relativePositionVector = orbitPatch.positionData[key].relativePosition
+
+        var projectedTruePosition = this.truePositionForRelativePosition(
+          relativePositionVector, frameOfReferenceVector
+        )
+
+        if(lastPatchesPoint != null){
+          if(k == 0){
+            firstPointInPatch = projectedTruePosition
+            distanceFromLastPatchesPoint = [
+              lastPatchesPoint[0] - firstPointInPatch[0],
+              lastPatchesPoint[1] - firstPointInPatch[1],
+              lastPatchesPoint[2] - firstPointInPatch[2],
+            ]
+          }
+
+          var projectedTruePosition = [
+            projectedTruePosition[0] + distanceFromLastPatchesPoint[0],
+            projectedTruePosition[1] + distanceFromLastPatchesPoint[1],
+            projectedTruePosition[2] + distanceFromLastPatchesPoint[2],
+          ]
+
+          if(middleUniversalTime == sortedUniversalTimes[k] && orbitPatch.referenceBody != this.rootReferenceBodyName){
+            var positionOfReferenceBody = [
+              frameOfReferenceVector[0] + distanceFromLastPatchesPoint[0],
+              frameOfReferenceVector[1] + distanceFromLastPatchesPoint[1],
+              frameOfReferenceVector[2] + distanceFromLastPatchesPoint[2],
+            ]
+
+            formattedData["referenceBodies"].push(this.buildReferenceBody(Object.extend({
+              name: orbitPatch.referenceBody,
+              type: "projected",
+              radius: referenceBody.radius,
+              truePosition: positionOfReferenceBody,
+              linkedPatchID: j,
+              atmosphericRadius: this.datalink.getOrbitalBodyInfo(orbitPatch.referenceBody).atmosphericRadius
+            }, referenceBodyOptions)))
+          }
+        }
+
+        positions.push(projectedTruePosition)
+      }
+
+      lastPatchesPoint = positions.last()
+
+      formattedOrbitPatches.push(this.buildOrbitPatch(Object.extend({
+        truePositions: positions
+      }, orbitPatchOptions)))
+    }
+
+    return formattedOrbitPatches
+  },
+
+  formatTruePositionVector: function(vector){
+    return vector
+  },
+
+  buildReferenceBody: function(options){
+    return {
+      name: options.name,
+      type: options.type,
+      radius: options.radius,
+      truePosition: options.truePosition,
+      linkedPatchID: options.linkedPatchID,
+      linkedPatchType: options.linkedPatchType,
+      atmosphericRadius: options.atmosphericRadius,
+      color: options.color
+    }
+  },
+
+  buildReferenceBodyPath: function(options){
+    return {
+      referenceBodyName: options.referenceBodyName,
+      truePositions: options.truePositions
+    }
+  },
+
+  buildVessel: function(options){
+    return {
+      name: options.name,
+      type: options.type,
+      truePosition: options.truePosition,
+      referenceBodyName: options.referenceBodyName
+    }
+  },
+
+  buildOrbitPatch: function(options){
+    return {
+      type: options.type,
+      parentType: options.parentType,
+      parentName: options.parentName,
+      truePositions: options.truePositions
+    }
+  },
+
+  buildManeuverNode: function(options){
+    return {
+      type: options.type,
+      parentType: options.parentType,
+      parentName: options.parentName,
+      orbitPatches: options.orbitPatches
+    }
+  },
+
+  buildDistanceFromRootReferenceBody: function(options){
+    return {
+      referenceBodyName: options.referenceBodyName,
+      truePositions: options.truePositions
+    }
+  },
+
+  sortedUniversalTimes: function(positionData){
+    var positionDataKeys = Object.keys(positionData)
+    return positionDataKeys.map(function(x){return parseFloat(x)}).sortBy(function(x){ x }).reverse()
+  },
+
+  rootReferenceBody: function(positionData){
+    return positionData.referenceBodies[this.rootReferenceBodyName]
+  }
+})
+var OrbitalMap = Class.create({
+  initialize: function(positionDataFormatter, datalink, containerID){
+    this.container = $(containerID)
+
+    this.GUIParameters = {
+      "reset": this.resetPosition.bind(this),
+      "fullscreen": this.toggleFullscreen.bind(this),
+      "lastUpdate": '00:00:00'
+    }
+
+    this.buildSceneCameraAndRenderer()
+    this.buildGUI()
+
+    this.distanceScaleFactor = 1
+    this.referenceBodyScaleFactor = 1
+    this.sunBodyScaleFactor = 1
+    this.dashedLineLength = 100000
+    this.maxLengthInThreeJS = 2000
+    this.vehicleLength = 25000
+    this.defaultZoomFactor = 40
+
+    this.referenceBodyGeometry = {}
+
+    this.colors = ["#b4f489", "#f48e77", "#a4d1f2", "#99ffc6", "#fcc2e7", "#99ffc6", "#9d67e5", "#f49ab2", "#ffcc99", "#b7fca4", "#ff7cd1", "#ffc9de", "#a4f9ac", "#b6ff77", "#80e6f2", "#f9bdbb", "#e79bef", "#85f7d5", "#88c4ea", "#68a9d8"]
+    this.orbitPathColors = ["orange", "#b4c6f7", "#987cf9", "#6baedb", "#d0f788", "#f774dd", "#9dc3f9", "#edef70", "#f97292", "#adffb6", "#efc9ff", "#bfc0ff", "#ffe3c4", "#8eb2f9", "#83f7b7", "#8cfc8a", "#97f4b5", "#96dff7", "#ffaabe", "#eda371"]
+    this.targetColor = '#51ff07'
+
+    this.datalink = datalink
+    this.positionDataFormatter = positionDataFormatter
+    this.positionDataFormatter.options.onFormat = this.render.bind(this)
+  },
+
+  buildGUI: function(){
+    var gui = new dat.GUI({ autoPlace: false });
+    gui.add( this.GUIParameters, 'reset' ).name('Reset');
+    gui.add( this.GUIParameters, 'fullscreen' ).name('ToggleFullscreen');
+    gui.add( this.GUIParameters, 'lastUpdate' ).name('Updated').listen();
+
+    this.container.appendChild(gui.domElement);
+  },
+
+  toggleFullscreen: function(){
+    if(!THREEx.FullScreen.available()){return}
+
+    if(THREEx.FullScreen.activated()){
+      THREEx.FullScreen.cancel()
+    } else{
+      THREEx.FullScreen.request(this.container)
+      this.renderer.domElement.focus()
+    }
+  },
+
+  buildSceneCameraAndRenderer: function(){
+    this.renderer = new THREE.WebGLRenderer({antialias: true})
+
+    this.renderer.setSize( this.container.clientWidth, this.container.clientHeight )
+    this.renderer.setClearColor('#3A1604')
+    this.container.appendChild( this.renderer.domElement )
+
+    window.addEventListener('resize', function(){
+      this.camera.aspect = this.container.clientWidth/this.container.clientHeight
+      this.camera.updateProjectionMatrix()
+      this.renderer.setSize(this.container.clientWidth, this.container.clientHeight)
+    }.bind(this), false );
+  },
+
+  buildScene: function(){
+    this.scene = new THREE.Scene()
+  },
+
+  buildGeometry: function(formattedData){
+    this.group = new THREE.Group()
+    this.scene.add(this.group)
+
+    this.buildReferenceBodyGeometry(formattedData)
+    this.buildVesselGeometry(formattedData)
+    this.buildOrbitPathGeometry(formattedData)
+    this.buildManeuverNodeGeometry(formattedData)
+    // this.buildReferenceBodyOrbitPaths(formattedData)
+    // this.buildDistancesFromRootReferenceBodyPaths(formattedData)
+  },
+
+  buildReferenceBodyGeometry: function(formattedData){
+    var i = 0
+    for (var i = formattedData.referenceBodies.length - 1; i >= 0; i--) {
+      var info = formattedData.referenceBodies[i]
+
+      //render the sun last, and separately
+      // if(info.name == "Sun"){ continue; }
+
+      if(info.color){
+        var color = info.color
+      } else {
+        var color = this.colors[i]
+      }
+      var radius = info.radius * this.referenceBodyScaleFactor
+
+      if(info.name == "Sun"){ color = 'yellow' }
+
+      if(info.type == "currentPosition"){
+        var material = new THREE.MeshBasicMaterial( { color: color, 'wireframe': false } )
+      } else if(info.type == "targetBodyCurrentPosition"){
+        var material = new THREE.MeshBasicMaterial( { color: this.targetColor, 'wireframe': false } )
+        radius = radius * 1.2
+      } else{
+        if(info.name != "Sun"){
+          if(info.linkedPatchType == "maneuverNode"){
+            color = this.orbitPathColors[info.linkedPatchID]
+          } else{
+            color = this.orbitPathColors[info.linkedPatchID]
+          }
+        }
+
+        var material = new THREE.MeshBasicMaterial( { color: color, 'wireframe': true } )
+      }
+
+      var sphereGeometry = new THREE.SphereGeometry(radius, 20, 20)
+      var sphere = new THREE.Mesh( sphereGeometry, material )
+      this.setPosition(sphere, info.truePosition)
+      this.group.add(sphere)
+
+      if(info.atmosphericRadius > 0){
+        // Now to add the atmospheric glow
+        var customMaterial = new THREE.ShaderMaterial( 
+        {
+            uniforms: 
+          { 
+            "c":   { type: "f", value: 1 },
+            "p":   { type: "f", value: 1.5 },
+            glowColor: { type: "c", value: new THREE.Color('white') },
+            viewVector: { type: "v3", value: (this.camera && this.camera.position) || sphere.position }
+          },
+          vertexShader:   document.getElementById( 'vertexShader'   ).textContent,
+          fragmentShader: document.getElementById( 'fragmentShader' ).textContent,
+          side: THREE.FrontSide,
+          blending: THREE.AdditiveBlending,
+          transparent: true
+        }   );
+
+        var atmoGeometry = new THREE.SphereGeometry((info.radius + info.atmosphericRadius) * this.referenceBodyScaleFactor, 20, 20)
+        atmo = new THREE.Mesh( atmoGeometry, customMaterial );
+        this.setPosition(atmo, info.truePosition)
+        this.group.add( atmo );
+      }
+    }
+  },
+
+  buildVesselGeometry: function(formattedData){
+    for (var i = formattedData.vessels.length - 1; i >= 0; i--) {
+      var info = formattedData.vessels[i]
+
+      if(info.type == "currentVessel"){
+        var materials = [
+          new THREE.MeshBasicMaterial( { color: 'white', 'wireframe': false } ),
+          new THREE.MeshBasicMaterial( { color: 'grey', 'wireframe': true } )
+        ];
+      } else{
+        var materials = [
+          new THREE.MeshBasicMaterial( { color: this.targetColor, 'wireframe': false } ),
+          new THREE.MeshBasicMaterial( { color: 'grey', 'wireframe': true } )
+        ];
+      }
+
+      var length = this.vehicleLength
+
+      var geometry = new THREE.BoxGeometry( length, length, length)
+      var cube = THREE.SceneUtils.createMultiMaterialObject( geometry, materials );
+
+      if(info.type == "currentVessel"){
+        this.currentVesselGeometry = cube
+      }
+
+      this.setPosition(cube, info.truePosition)
+      this.group.add(cube)
+    }
+  },
+
+  buildOrbitPathGeometry: function(formattedData){
+    for (var i = formattedData.orbitPatches.length - 1; i >= 0; i--) {
+      var points = formattedData.orbitPatches[i].truePositions.map(function(x){ return this.buildVector(x) }.bind(this))
+
+      if(formattedData.orbitPatches[i].parentType == "targetVessel"){
+        var color = this.targetColor
+      } else{
+        var color = this.orbitPathColors[i]
+      }
+
+      var geometry = this.buildCurveGeometryFromPoints(points)
+      var material = new THREE.LineBasicMaterial({
+        color: color,
+        linewidth: 3
+      })
+
+      var spline = new THREE.Line( geometry, material )
+
+      this.group.add(spline)
+    }
+  },
+
+  buildManeuverNodeGeometry: function(formattedData){
+    for (var i = formattedData.maneuverNodes.length - 1; i >= 0; i--) {
+      var maneuverNode = formattedData.maneuverNodes[i]
+
+      for (var j = maneuverNode.orbitPatches.length - 1; j >= 0; j--) {
+        var orbitPatch = maneuverNode.orbitPatches[j]
+        var points = orbitPatch.truePositions.map(function(x){ return this.buildVector(x) }.bind(this))
+
+        var geometry = this.buildCurveGeometryFromPoints(points)
+
+        geometry.computeBoundingBox()
+        var dashSize = geometry.boundingBox.size().x/Math.ceil(geometry.boundingBox.size().x/this.dashedLineLength)
+
+        var material = new THREE.LineDashedMaterial({
+          color: this.orbitPathColors[j],
+          dashSize: dashSize,
+          gapSize: dashSize,
+          linewidth: 3
+        })
+
+        var spline = new THREE.Line( geometry, material )
+
+        this.group.add(spline)
+      }
+    }
+  },
+
+  buildReferenceBodyOrbitPaths: function(formattedData){
+    for (var i = formattedData.referenceBodyPaths.length - 1; i >= 0; i--) {
+      var points = formattedData.referenceBodyPaths[i].truePositions.map(function(x){ return this.buildVector(x) }.bind(this))
+      var material = new THREE.LineBasicMaterial( { color : 'white', linewidth: formattedData.referenceBodies[0].radius * .1 } );
+
+      var geometry = this.buildCurveGeometryFromPoints(points)
+
+      var spline = new THREE.Line( geometry, material )
+
+      this.group.add(spline)
+    }
+  },
+
+  buildDistancesFromRootReferenceBodyPaths: function(formattedData){
+    var colors = ['teal', 'magenta','purple', 'green', 'blue', 'red']
+
+    for (var i = formattedData.distancesFromRootReferenceBody.length - 1; i >= 0; i--) {
+      var points = formattedData.distancesFromRootReferenceBody[i].truePositions.map(function(x){ return this.buildVector(x) }.bind(this))
+      var material = new THREE.LineBasicMaterial( { color : colors[i], linewidth: formattedData.referenceBodies[0].radius * .1 } );
+
+      var spline = this.buildSplineWithMaterial(points, material)
+
+      this.group.add(spline)
+    }
+  },
+
+  positionCamera: function(){
+    var boundingBox = new THREE.Box3().setFromObject(this.group)
+    var scaleFactor = Math.max(
+      (this.maxLengthInThreeJS/boundingBox.max.x),
+      (this.maxLengthInThreeJS/boundingBox.max.y),
+      (this.maxLengthInThreeJS/boundingBox.max.z)
+    )
+
+    this.group.scale.set(scaleFactor, scaleFactor, scaleFactor)
+    var boundingBox = new THREE.Box3().setFromObject(this.group)
+
+    // var hex  = 0xff0000;
+    // var bbox = new THREE.BoundingBoxHelper( this.group, hex );
+    // bbox.update();
+    // this.scene.add( bbox );
+
+    var vector = this.currentVesselGeometry.position.clone()
+    vector.multiplyScalar(scaleFactor)
+    var axisHelper = new THREE.AxisHelper(this.vehicleLength * 3 * scaleFactor);
+    axisHelper.position.set(vector.x, vector.y, vector.z)
+    axisHelper.rotation = this.currentVesselGeometry.rotation
+
+    this.scene.add( axisHelper );
+
+    var cameraX = vector.x + ((this.vehicleLength * this.defaultZoomFactor) * scaleFactor)
+    var cameraY = vector.y + ((this.vehicleLength * this.defaultZoomFactor) * scaleFactor)
+    var cameraZ = vector.z + ((this.vehicleLength * this.defaultZoomFactor) * scaleFactor)
+
+    if(!this.camera){
+      this.camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, Number.MAX_SAFE_INTEGER)
+    }
+
+    if(!this.controls){
+      this.controls = new THREE.OrbitControls( this.camera, this.renderer.domElement);
+      this.controls.addEventListener( 'change', function(){this.renderer.render(this.scene, this.camera)}.bind(this) ); // add this only if there is no animation loop (requestAnimationFrame)
+    }
+
+    if(!this.cameraSet){
+      this.controls.target = vector
+      this.camera.position.set(cameraX, cameraY, cameraZ)
+      this.camera.lookAt(vector)
+      // this.controls.rotate.x = -Math.PI/2
+      this.cameraSet = true
+    } else{
+      this.controls.target0 = vector.clone()
+      this.controls.position0 = new THREE.Vector3(cameraX, cameraY, cameraZ)
+    }
+
+    this.controls.maxDistance = Math.max(
+      (Math.abs(boundingBox.min.x) + Math.abs(boundingBox.max.x)),
+      (Math.abs(boundingBox.min.y) + Math.abs(boundingBox.max.y)),
+      (Math.abs(boundingBox.min.z) + Math.abs(boundingBox.max.z))
+    ) * 2
+    this.controls.minDistance = this.vehicleLength * scaleFactor
+  },
+
+  resetPosition: function(){
+    this.controls.reset()
+  },
+
+  getMiddle: function(min, max){
+    return min + ((Math.abs(min) + Math.abs(max))/2.0)
+  },
+
+  setPosition: function(mesh, vector){
+    var vector = this.buildVector(vector)
+    mesh.position.x = vector.x
+    mesh.position.y = vector.y
+    mesh.position.z = vector.z
+  },
+
+  buildVector: function(vector){
+    return new THREE.Vector3( vector[0] * this.distanceScaleFactor, vector[1] * this.distanceScaleFactor, vector[2] * this.distanceScaleFactor );
+  },
+
+  buildCurveGeometryFromPoints: function(points){
+    var curve = new THREE.CatmullRomCurve3(points);
+    var geometry = new THREE.Geometry()
+    geometry.vertices = curve.getPoints( 360 );
+    geometry.computeLineDistances()
+    return geometry
+  },
+
+  render: function (formattedData) {
+    requestAnimationFrame( function(){
+      this.buildScene()
+      this.buildGeometry(formattedData)
+      this.positionCamera()
+      this.renderer.render(this.scene, this.camera)
+      this.GUIParameters.lastUpdate = TimeFormatters.formatUT(formattedData.currentUniversalTime)
+    }.bind(this))
+  }
+})
