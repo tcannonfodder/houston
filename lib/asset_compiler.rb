@@ -1,5 +1,6 @@
 require 'yaml'
 require 'erb'
+require 'byebug'
 
 module AssetCompiler
   def self.load_config(config_file, options = {})
