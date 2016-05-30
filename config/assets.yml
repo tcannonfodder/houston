@@ -18,23 +18,25 @@ javascripts:
     - static/js/data_table.js
     - static/js/leaflet.ksp.js
     - static/js/L.Graticule.js
-    - static/js/three.min.js
-    - static/js/THREEx.FullScreen.js
-    - static/js/tween.min.js
     - static/js/orbit_controls.js
     - static/js/dat.gui.min.js
 
-
     - static/js/settings.js
     - static/js/telemachus.js
-    - static/js/orbital_math.js
-    - static/js/hohmann-intercept.js
 
     - static/js/title_bar.js
     - static/js/button_indicator.js
     - static/js/readout_table.js
-    - static/js/orbiting_body_info_table.js
     - static/js/resource_monitor.js
+
+
+    # EVERYTHING UNDER HERE IS FOR SPECIFIC STATIONS
+    - static/js/orbital_math.js
+    - static/js/hohmann-intercept.js
+
+
+    - static/js/orbiting_body_info_table.js
+
     - static/js/position_map.js
     - static/js/navball.js
     - static/js/atmospheric_density_gauge.js
@@ -46,13 +48,16 @@ javascripts:
     - static/js/staging_info_table.js
     - static/js/maneuver_node_editor.js
 
-    - static/js/orbital_position_data.js
-    - static/js/position_data_formatter.js
-    - static/js/orbital_map.js
-
     - static/js/ground_track_position_data_formatter.js
     - static/js/ground_track.js
     - static/js/ground_track_container.js
+  3dmap:
+    - static/js/three.min.js
+    - static/js/THREEx.FullScreen.js
+    - static/js/tween.min.js
+    - static/js/orbital_position_data.js
+    - static/js/position_data_formatter.js
+    - static/js/orbital_map.js
 
 stylesheets:
   app:
