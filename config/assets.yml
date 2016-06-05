@@ -8,7 +8,6 @@ javascripts:
   app:
     - static/js/math.js
     - static/js/math_polyfill.js
-    - static/js/numeric.js
     - static/js/numeral.min.js
     - static/js/chartist.min.js
     - static/js/time_formatters.js
