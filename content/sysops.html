@@ -1,5 +1,5 @@
 ---
-title: SCIENCE
+title: SYSOPS
 ---
 
 <% content_for :head do %>
@@ -18,9 +18,29 @@ title: SCIENCE
     </div>
   </div>
 
-  <div class="readout-display">
-    <h2>Target Info</h2>
-    <table id="target-info" class="readout-table"></table>
+  <div id="actions-and-target-info">
+    <table id="custom-actions" class="gauge">
+      <tr><th colspan="5">Custom Actions</th></tr>
+      <tr>
+        <td><%= render 'action_button', :button_id => "action_button_1", :button_label => "1" %></td>
+        <td><%= render 'action_button', :button_id => "action_button_2", :button_label => "2" %></td>
+        <td><%= render 'action_button', :button_id => "action_button_3", :button_label => "3" %></td>
+        <td><%= render 'action_button', :button_id => "action_button_4", :button_label => "4" %></td>
+        <td><%= render 'action_button', :button_id => "action_button_5", :button_label => "5" %></td>
+      </tr>
+      <tr>
+        <td><%= render 'action_button', :button_id => "action_button_6", :button_label => "6" %></td>
+        <td><%= render 'action_button', :button_id => "action_button_7", :button_label => "7" %></td>
+        <td><%= render 'action_button', :button_id => "action_button_8", :button_label => "8" %></td>
+        <td><%= render 'action_button', :button_id => "action_button_9", :button_label => "9" %></td>
+        <td><%= render 'action_button', :button_id => "action_button_10", :button_label => "10" %></td>
+      </tr>
+    </table>
+
+    <div class="readout-display">
+      <h2>Target Info</h2>
+      <table id="target-info" class="readout-table"></table>
+    </div>
   </div>
 
   <div class="readout-display">
@@ -134,4 +154,15 @@ title: SCIENCE
   ])
 
   window.orbitingBodyInfoTable = new OrbitingBodyInfoTable(datalink, 'orbiting-body-info')
+
+  window.actionButton1 = new ActionButton(datalink, 'action_button_1', 'f.ag1')
+  window.actionButton2 = new ActionButton(datalink, 'action_button_2', 'f.ag2')
+  window.actionButton3 = new ActionButton(datalink, 'action_button_3', 'f.ag3')
+  window.actionButton4 = new ActionButton(datalink, 'action_button_4', 'f.ag4')
+  window.actionButton5 = new ActionButton(datalink, 'action_button_5', 'f.ag5')
+  window.actionButton6 = new ActionButton(datalink, 'action_button_6', 'f.ag6')
+  window.actionButton7 = new ActionButton(datalink, 'action_button_7', 'f.ag7')
+  window.actionButton8 = new ActionButton(datalink, 'action_button_8', 'f.ag8')
+  window.actionButton9 = new ActionButton(datalink, 'action_button_9', 'f.ag9')
+  window.actionButton10 = new ActionButton(datalink, 'action_button_10', 'f.ag10')
 <% end %>

@@ -15,3 +15,47 @@
   width: 500px;
   margin-bottom: 10px;
 }
+
+#custom-actions{
+  margin: auto;
+  margin-bottom: 5px;
+}
+
+#custom-actions th{
+  font-family: 'AeroMatics Display Bold';
+  font-size: 20px;
+  background-color: rgba(51,51,51, 1);
+  background-image: url('../images/title-noise.png');
+  color: rgba(51,51,51, 1);
+  margin: 0px;
+  margin: auto;
+  /*-webkit-text-stroke: 1px black;*/
+  text-shadow: 0px 1px 1px rgba(255,255,255,.3);
+  -webkit-background-clip: text;
+}
+
+.action-button{
+  border: 2px solid #4A4A4A;
+  box-shadow: 0px 2px 3px 0px rgba(0,0,0,0.50);
+  border-radius: 100px;
+  width: 40px;
+  height: 40px;
+
+  /* text */
+  font-family: AeroMaticsDisplayBold;
+  font-size: 24px;
+  color: #75010F;
+  letter-spacing: 0px;
+
+  background-color: #FFFFFF;
+  background-image: radial-gradient(rgba(56,56,56,.1) 50%, rgba(0,0,0,0.50) 100%);
+  color: rgba(56,56,56,.9);
+}
+
+.action-button:hover{
+  cursor: pointer;
+}
+
+.action-button:active, .action-button.on{
+  background-image: radial-gradient(rgba(102, 249, 1, .73) 50%, rgba(0,0,0,0.30) 100%);
+}
