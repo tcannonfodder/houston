@@ -44,7 +44,7 @@ module AssetCompiler
   end
 
   def self.compressor_options
-    {:copyright => false}
+    {:comments => :none}
   end
 
   def self.compile_javascript_set(name)
