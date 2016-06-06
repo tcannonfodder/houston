@@ -10,4 +10,5 @@ group :development do
   gem 'guard-livereload'
   gem 'guard-nanoc'
   gem 'html-proofer'
+  gem 'byebug'
 end

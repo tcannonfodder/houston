@@ -1,5 +1,6 @@
 require 'yaml'
 require 'erb'
+require 'byebug'
 
 module AssetCompiler
   def self.load_config(config_file, options = {})
@@ -17,9 +18,13 @@ module AssetCompiler
     @@config["environment"] == "production"
   end
 
+  def self.has_javascript_sourcetree?(name)
+    javascript_sourcetrees.has_key?(name)
+  end
+
   def self.include_javascripts(name)
     name = name.to_s
-    raise ArgumentError, "no sourcetree for #{name}" unless javascript_sourcetrees.has_key?(name)
+    raise ArgumentError, "no sourcetree for #{name}" unless has_javascript_sourcetree?(name)
 
     if production?
       javascript_include(path_for_name("#{name}.js"))
@@ -38,17 +43,31 @@ module AssetCompiler
     "<script src=\"#{path}\"></script>"
   end
 
+  def self.compressor_options
+    {:copyright => false}
+  end
+
   def self.compile_javascript_set(name)
     raise ArgumentError, "no sourcetree for #{name}" unless javascript_sourcetrees.has_key?(name)
 
     if production?
       FileUtils.mkdir_p(@@config["destination_path"])
-      # file = File.new()
 
-      puts "concating..."
+      puts "concating #{name}"
       uncompressed_filename = File.join(@@config["destination_path"], "#{name}.js")
+
+      js = concatenate(javascript_sourcetrees[name])
+
+      puts "compressing #{name}"
+      if compress_assets?
+        js = ::Uglifier.compile(js, compressor_options)
+      end
+
+      filename = File.join(@@config["destination_path"], "#{name}.js")
+      File.write(filename, js)
+
       # Concatenate new file based on old assets
-      `cat #{javascript_sourcetrees[name].join(' ')} > #{File.join(@@config["destination_path"], "#{name}.js")}`
+      #`cat #{javascript_sourcetrees[name].join(' ')} > #{File.join(@@config["destination_path"], "#{name}.js")}`
 
       # puts "compressing"
       # compressed_filename = File.join(@@config["destination_path"], "#{name}.js")
@@ -77,6 +96,16 @@ module AssetCompiler
     end
   end
 
+  # Concatenate together a list of asset files.
+  def self.concatenate(paths)
+    [paths].flatten.map {|p| read_binary_file(p) }.join("\n")
+  end
+
+  # `File.read`, but in "binary" mode.
+  def self.read_binary_file(path)
+    File.open(path, 'rb:UTF-8') {|f| f.read }
+  end
+
   def self.compile_javascript
     javascript_sourcetrees.keys.each{|name| compile_javascript_set(name) }
   end
@@ -87,5 +116,9 @@ module AssetCompiler
 
   def self.stylesheets_sourcetrees
     @@config["javascripts"]
+  end
+
+  def self.compress_assets?
+    @@config["compress_assets"]
   end
 end
