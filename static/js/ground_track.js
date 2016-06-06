@@ -77,7 +77,6 @@ var GroundTrack = Class.create({
   },
 
   updateAltitudeEstimateChart: function(formattedData){
-    debugger
     if(!this.altitudeEstimateChart){ return }
 
     var chartData = {
