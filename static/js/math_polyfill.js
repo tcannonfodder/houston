@@ -28,4 +28,4 @@ Math.cosh = Math.cosh || function(x) {
 
 Math.sinh = Math.sinh || function(x) {
   return (Math.exp(x) - Math.exp(-x)) / 2;
-}
+};
