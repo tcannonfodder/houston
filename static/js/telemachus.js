@@ -53,6 +53,14 @@ var Telemachus = Class.create({
     }
   },
 
+  notifyIfLOS: function(request){
+    if(request.transport.status == 0){
+      document.fire('telemachus:loss-of-signal')
+      return true
+    }
+    return false
+  },
+
   prepareParams: function(params){
     var normalizedParams = []
     Object.keys(params).forEach(function(field){
@@ -87,7 +95,7 @@ var Telemachus = Class.create({
 
         this.dispatchMessages(data)
       }.bind(this),
-
+      onException: this.notifyIfLOS.bind(this),
       onComplete: function(response){
         setTimeout(this.poll.bind(this),this.rate);
       }.bind(this)
@@ -103,7 +111,8 @@ var Telemachus = Class.create({
         var rawData = JSON.parse(response.responseText)
         var data = this.convertData(rawData)
         callback(data)
-      }.bind(this)
+      }.bind(this),
+      onException: this.notifyIfLOS.bind(this)
     })
   },
 
