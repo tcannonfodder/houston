@@ -34,6 +34,7 @@ var Telemachus = Class.create({
       try{
         this.receiverFunctions[i](data)
       } catch(e){
+        debugger
         console.error(e)
       }
     };

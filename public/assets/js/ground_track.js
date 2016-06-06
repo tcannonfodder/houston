@@ -77,6 +77,8 @@ var GroundTrack = Class.create({
   },
 
   updateAltitudeEstimateChart: function(formattedData){
+    if(!this.altitudeEstimateChart){ return }
+
     var chartData = {
       labels: [], series: [
         {
@@ -256,10 +258,14 @@ var GroundTrack = Class.create({
       ]
     };
 
-    // Create a new line chart object where as first parameter we pass in a selector
-    // that is resolving to our chart container element. The Second parameter
-    // is the actual data object.
-    this.altitudeEstimateChart = new Chartist.Line("#" + this.altitudeEstimationId, data);
+    if($(this.altitudeEstimationId) == null){
+      this.altitudeEstimateChart = null
+    } else{
+      // Create a new line chart object where as first parameter we pass in a selector
+      // that is resolving to our chart container element. The Second parameter
+      // is the actual data object.
+      this.altitudeEstimateChart = new Chartist.Line("#" + this.altitudeEstimationId, data);
+    }
   },
 
   sortedUniversalTimes: function(data){

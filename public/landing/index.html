@@ -158,7 +158,7 @@
 
 
 <div id="top-panel">
-  <div id="position-map" class="map readout-display"></div>
+  <div id="gt-map" class="map readout-display"></div>
 
   <div id="navigation-and-atmospheric-density" class="gauge">
     <div class="navigation-wrapper">
@@ -329,7 +329,7 @@
 
   window.altitudeTracker = new AltitudeTracker(datalink, 'altitude-tracker', {maxDataPoints : 50})
 
-  window.positionMap = new PositionMap(datalink, 'position-map')
+  window.groundTrackContainer = new GroundTrackContainer('gt-map', 'altitude-estimate-chart')
 
   window.liquidFuelMonitor = new ResourceMonitor(datalink, 'LiquidFuel', {
     currentStageProgressBar: $('liquid-fuel-current'),
