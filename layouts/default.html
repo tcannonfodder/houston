@@ -4,7 +4,6 @@
   <title><%= @item[:title] %></title>
   <%= include_javascripts :app %>
 
-  # Include any page-specific JS assets
   <% asset_name = "@item.identifier.chop[1..-1]" %>
   <% if has_javascript_sourcetree? asset_name %>
     <%= include_javascripts asset_name %>
