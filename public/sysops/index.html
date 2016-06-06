@@ -1,73 +1,79 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>SCIENCE</title>
+  <title>SYSOPS</title>
+  <script src="../assets/js/math_polyfill.js"></script>
   <script src="../assets/js/math.js"></script>
-<script src="../assets/js/math_polyfill.js"></script>
-<script src="../assets/js/numeric.js"></script>
-<script src="../assets/js/numeral.min.js"></script>
-<script src="../assets/js/chartist.min.js"></script>
-<script src="../assets/js/time_formatters.js"></script>
-<script src="../assets/js/data_formatters.js"></script>
-<script src="../assets/js/prototype.js"></script>
-<script src="../assets/js/event.simulate.js"></script>
-<script src="../assets/js/data_table.js"></script>
-<script src="../assets/js/leaflet.ksp.js"></script>
-<script src="../assets/js/L.Graticule.js"></script>
-<script src="../assets/js/three.min.js"></script>
-<script src="../assets/js/THREEx.FullScreen.js"></script>
-<script src="../assets/js/tween.min.js"></script>
-<script src="../assets/js/orbit_controls.js"></script>
-<script src="../assets/js/dat.gui.min.js"></script>
-<script src="../assets/js/settings.js"></script>
-<script src="../assets/js/telemachus.js"></script>
-<script src="../assets/js/orbital_math.js"></script>
-<script src="../assets/js/hohmann-intercept.js"></script>
-<script src="../assets/js/title_bar.js"></script>
-<script src="../assets/js/button_indicator.js"></script>
-<script src="../assets/js/readout_table.js"></script>
-<script src="../assets/js/orbiting_body_info_table.js"></script>
-<script src="../assets/js/resource_monitor.js"></script>
-<script src="../assets/js/position_map.js"></script>
-<script src="../assets/js/navball.js"></script>
-<script src="../assets/js/atmospheric_density_gauge.js"></script>
-<script src="../assets/js/throttle_gauge.js"></script>
-<script src="../assets/js/altitude_tracker.js"></script>
-<script src="../assets/js/current_stage_burn_info.js"></script>
-<script src="../assets/js/burn_planner.js"></script>
-<script src="../assets/js/staging_info_table.js"></script>
-<script src="../assets/js/maneuver_node_editor.js"></script>
-<script src="../assets/js/orbital_position_data.js"></script>
-<script src="../assets/js/position_data_formatter.js"></script>
-<script src="../assets/js/orbital_map.js"></script>
-<script src="../assets/js/ground_track_position_data_formatter.js"></script>
-<script src="../assets/js/ground_track.js"></script>
-<script src="../assets/js/ground_track_container.js"></script>
+  <script src="../assets/js/numeric.js"></script>
+  <script src="../assets/js/numeral.min.js"></script>
+  <script src="../assets/js/chartist.min.js"></script>
+  <script src="../assets/js/time_formatters.js"></script>
+  <script src="../assets/js/data_formatters.js"></script>
+  <script src="../assets/js/prototype.js"></script>
+  <script src="../assets/js/event.simulate.js"></script>
+  <script src="../assets/js/data_table.js"></script>
+  <script src="../assets/js/leaflet.ksp.js"></script>
+  <script src="../assets/js/L.Graticule.js"></script>
+  <script src="../assets/js/three.min.js"></script>
+  <script src="../assets/js/THREEx.FullScreen.js"></script>
+  <script src="../assets/js/tween.min.js"></script>
+  <script src="../assets/js/orbit_controls.js"></script>
+  <script src="../assets/js/dat.gui.min.js"></script>
+
+
+  <script src="../assets/js/settings.js"></script>
+  <script src="../assets/js/telemachus.js"></script>
+  <script src="../assets/js/orbital_math.js"></script>
+  <script src="../assets/js/orbital_prediction.js"></script>
+  <script src="../assets/js/hohmann-intercept.js"></script>
+
+  <script src="../assets/js/title_bar.js"></script>
+  <script src="../assets/js/button_indicator.js"></script>
+  <script src="../assets/js/readout_table.js"></script>
+  <script src="../assets/js/orbiting_body_info_table.js"></script>
+  <script src="../assets/js/resource_monitor.js"></script>
+  <script src="../assets/js/ground_track.js"></script>
+  <script src="../assets/js/position_map.js"></script>
+  <script src="../assets/js/navball.js"></script>
+  <script src="../assets/js/atmospheric_density_gauge.js"></script>
+  <script src="../assets/js/throttle_gauge.js"></script>
+  <script src="../assets/js/altitude_tracker.js"></script>
+
+  <script src="../assets/js/current_stage_burn_info.js"></script>
+  <script src="../assets/js/burn_planner.js"></script>
+  <script src="../assets/js/staging_info_table.js"></script>
+  <script src="../assets/js/maneuver_node_editor.js"></script>
+
+  <script src="../assets/js/orbital_position_data.js"></script>
+  <script src="../assets/js/position_data_formatter.js"></script>
+  <script src="../assets/js/orbital_map.js"></script>
+
+  <script src="../assets/js/action_button.js"></script>
 
   <link rel="stylesheet" type="text/css" href="../assets/stylesheets/chartist.min.css" />
   <link rel="stylesheet" type="text/css" href="../assets/stylesheets/leafletksp.css" />
   <link rel="stylesheet" type="text/css" href="../assets/stylesheets/application.css" />
 
-  <link rel="apple-touch-icon-precomposed" sizes="57x57" href="../assets/icons//science//apple-touch-icon-57x57.png" />
-  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../assets/icons//science//apple-touch-icon-114x114.png" />
-  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../assets/icons//science//apple-touch-icon-72x72.png" />
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../assets/icons//science//apple-touch-icon-144x144.png" />
-  <link rel="apple-touch-icon-precomposed" sizes="60x60" href="../assets/icons//science//apple-touch-icon-60x60.png" />
-  <link rel="apple-touch-icon-precomposed" sizes="120x120" href="../assets/icons//science//apple-touch-icon-120x120.png" />
-  <link rel="apple-touch-icon-precomposed" sizes="76x76" href="../assets/icons//science//apple-touch-icon-76x76.png" />
-  <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../assets/icons//science//apple-touch-icon-152x152.png" />
-  <link rel="icon" type="image/png" href="../assets/icons//science//favicon-196x196.png" sizes="196x196" />
-  <link rel="icon" type="image/png" href="../assets/icons//science//favicon-96x96.png" sizes="96x96" />
-  <link rel="icon" type="image/png" href="../assets/icons//science//favicon-32x32.png" sizes="32x32" />
-  <link rel="icon" type="image/png" href="../assets/icons//science//favicon-16x16.png" sizes="16x16" />
-  <link rel="icon" type="image/png" href="../assets/icons//science//favicon-128.png" sizes="128x128" />
-  <meta name="application-name" content="../assets/icons/SCIENCE"/>
+  <link rel="apple-touch-icon-precomposed" sizes="57x57" href="../assets/icons//sysops//apple-touch-icon-57x57.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../assets/icons//sysops//apple-touch-icon-114x114.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../assets/icons//sysops//apple-touch-icon-72x72.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../assets/icons//sysops//apple-touch-icon-144x144.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="60x60" href="../assets/icons//sysops//apple-touch-icon-60x60.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="120x120" href="../assets/icons//sysops//apple-touch-icon-120x120.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="76x76" href="../assets/icons//sysops//apple-touch-icon-76x76.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../assets/icons//sysops//apple-touch-icon-152x152.png" />
+  <link rel="icon" type="image/png" href="../assets/icons//sysops//favicon-196x196.png" sizes="196x196" />
+  <link rel="icon" type="image/png" href="../assets/icons//sysops//favicon-96x96.png" sizes="96x96" />
+  <link rel="icon" type="image/png" href="../assets/icons//sysops//favicon-32x32.png" sizes="32x32" />
+  <link rel="icon" type="image/png" href="../assets/icons//sysops//favicon-16x16.png" sizes="16x16" />
+  <link rel="icon" type="image/png" href="../assets/icons//sysops//favicon-128.png" sizes="128x128" />
+  <meta name="application-name" content="../assets/icons/SYSOPS"/>
   <meta name="msapplication-TileColor" content="#FFFFFF" />
-  <meta name="msapplication-TileImage" content="../assets/icons//science//mstile-144x144.png" />
-  <meta name="msapplication-square70x70logo" content="../assets/icons//science//mstile-70x70.png" />
-  <meta name="msapplication-square150x150logo" content="../assets/icons//science//mstile-150x150.png" />
-  <meta name="msapplication-wide310x150logo" content="../assets/icons//science//mstile-310x150.png" />
-  <meta name="msapplication-square310x310logo" content="../assets/icons//science//mstile-310x310.png" />
+  <meta name="msapplication-TileImage" content="../assets/icons//sysops//mstile-144x144.png" />
+  <meta name="msapplication-square70x70logo" content="../assets/icons//sysops//mstile-70x70.png" />
+  <meta name="msapplication-square150x150logo" content="../assets/icons//sysops//mstile-150x150.png" />
+  <meta name="msapplication-wide310x150logo" content="../assets/icons//sysops//mstile-310x150.png" />
+  <meta name="msapplication-square310x310logo" content="../assets/icons//sysops//mstile-310x310.png" />
 
 
   
@@ -127,9 +133,9 @@
 
       
 <li id="" class="current">
-  <a href="../science/index.html">
-    <img src="../assets/images/science-preview.svg"/>
-    SCIENCE
+  <a href="../sysops/index.html">
+    <img src="../assets/images/sysops-preview.svg"/>
+    SYSOPS
   </a>
 </li>
 
@@ -180,7 +186,7 @@
       <span id="mission-time">T+12:34:14 MET</span>
     </div>
 
-    <h1>SCIENCE</h1>
+    <h1>SYSOPS</h1>
 
     <div id="world-clock" class="readout-display">
       Year 1, Day 1 00:23:13 UT
@@ -217,9 +223,29 @@
     </div>
   </div>
 
-  <div class="readout-display">
-    <h2>Target Info</h2>
-    <table id="target-info" class="readout-table"></table>
+  <div id="actions-and-target-info">
+    <table id="custom-actions" class="gauge">
+      <tr><th colspan="5">Custom Actions</th></tr>
+      <tr>
+        <td><button id="action_button_1" class="action-button">1</button></td>
+        <td><button id="action_button_2" class="action-button">2</button></td>
+        <td><button id="action_button_3" class="action-button">3</button></td>
+        <td><button id="action_button_4" class="action-button">4</button></td>
+        <td><button id="action_button_5" class="action-button">5</button></td>
+      </tr>
+      <tr>
+        <td><button id="action_button_6" class="action-button">6</button></td>
+        <td><button id="action_button_7" class="action-button">7</button></td>
+        <td><button id="action_button_8" class="action-button">8</button></td>
+        <td><button id="action_button_9" class="action-button">9</button></td>
+        <td><button id="action_button_10" class="action-button">10</button></td>
+      </tr>
+    </table>
+
+    <div class="readout-display">
+      <h2>Target Info</h2>
+      <table id="target-info" class="readout-table"></table>
+    </div>
   </div>
 
   <div class="readout-display">
@@ -386,6 +412,17 @@
   ])
 
   window.orbitingBodyInfoTable = new OrbitingBodyInfoTable(datalink, 'orbiting-body-info')
+
+  window.actionButton1 = new ActionButton(datalink, 'action_button_1', 'f.ag1')
+  window.actionButton2 = new ActionButton(datalink, 'action_button_2', 'f.ag2')
+  window.actionButton3 = new ActionButton(datalink, 'action_button_3', 'f.ag3')
+  window.actionButton4 = new ActionButton(datalink, 'action_button_4', 'f.ag4')
+  window.actionButton5 = new ActionButton(datalink, 'action_button_5', 'f.ag5')
+  window.actionButton6 = new ActionButton(datalink, 'action_button_6', 'f.ag6')
+  window.actionButton7 = new ActionButton(datalink, 'action_button_7', 'f.ag7')
+  window.actionButton8 = new ActionButton(datalink, 'action_button_8', 'f.ag8')
+  window.actionButton9 = new ActionButton(datalink, 'action_button_9', 'f.ag9')
+  window.actionButton10 = new ActionButton(datalink, 'action_button_10', 'f.ag10')
 
   })
 
