@@ -2,47 +2,53 @@
 <html>
 <head>
   <title>3D Orbital Map</title>
+  <script src="../assets/js/math_polyfill.js"></script>
   <script src="../assets/js/math.js"></script>
-<script src="../assets/js/math_polyfill.js"></script>
-<script src="../assets/js/numeric.js"></script>
-<script src="../assets/js/numeral.min.js"></script>
-<script src="../assets/js/chartist.min.js"></script>
-<script src="../assets/js/time_formatters.js"></script>
-<script src="../assets/js/data_formatters.js"></script>
-<script src="../assets/js/prototype.js"></script>
-<script src="../assets/js/event.simulate.js"></script>
-<script src="../assets/js/data_table.js"></script>
-<script src="../assets/js/leaflet.ksp.js"></script>
-<script src="../assets/js/L.Graticule.js"></script>
-<script src="../assets/js/three.min.js"></script>
-<script src="../assets/js/THREEx.FullScreen.js"></script>
-<script src="../assets/js/tween.min.js"></script>
-<script src="../assets/js/orbit_controls.js"></script>
-<script src="../assets/js/dat.gui.min.js"></script>
-<script src="../assets/js/settings.js"></script>
-<script src="../assets/js/telemachus.js"></script>
-<script src="../assets/js/orbital_math.js"></script>
-<script src="../assets/js/hohmann-intercept.js"></script>
-<script src="../assets/js/title_bar.js"></script>
-<script src="../assets/js/button_indicator.js"></script>
-<script src="../assets/js/readout_table.js"></script>
-<script src="../assets/js/orbiting_body_info_table.js"></script>
-<script src="../assets/js/resource_monitor.js"></script>
-<script src="../assets/js/position_map.js"></script>
-<script src="../assets/js/navball.js"></script>
-<script src="../assets/js/atmospheric_density_gauge.js"></script>
-<script src="../assets/js/throttle_gauge.js"></script>
-<script src="../assets/js/altitude_tracker.js"></script>
-<script src="../assets/js/current_stage_burn_info.js"></script>
-<script src="../assets/js/burn_planner.js"></script>
-<script src="../assets/js/staging_info_table.js"></script>
-<script src="../assets/js/maneuver_node_editor.js"></script>
-<script src="../assets/js/orbital_position_data.js"></script>
-<script src="../assets/js/position_data_formatter.js"></script>
-<script src="../assets/js/orbital_map.js"></script>
-<script src="../assets/js/ground_track_position_data_formatter.js"></script>
-<script src="../assets/js/ground_track.js"></script>
-<script src="../assets/js/ground_track_container.js"></script>
+  <script src="../assets/js/numeric.js"></script>
+  <script src="../assets/js/numeral.min.js"></script>
+  <script src="../assets/js/chartist.min.js"></script>
+  <script src="../assets/js/time_formatters.js"></script>
+  <script src="../assets/js/data_formatters.js"></script>
+  <script src="../assets/js/prototype.js"></script>
+  <script src="../assets/js/event.simulate.js"></script>
+  <script src="../assets/js/data_table.js"></script>
+  <script src="../assets/js/leaflet.ksp.js"></script>
+  <script src="../assets/js/L.Graticule.js"></script>
+  <script src="../assets/js/three.min.js"></script>
+  <script src="../assets/js/THREEx.FullScreen.js"></script>
+  <script src="../assets/js/tween.min.js"></script>
+  <script src="../assets/js/orbit_controls.js"></script>
+  <script src="../assets/js/dat.gui.min.js"></script>
+
+
+  <script src="../assets/js/settings.js"></script>
+  <script src="../assets/js/telemachus.js"></script>
+  <script src="../assets/js/orbital_math.js"></script>
+  <script src="../assets/js/orbital_prediction.js"></script>
+  <script src="../assets/js/hohmann-intercept.js"></script>
+
+  <script src="../assets/js/title_bar.js"></script>
+  <script src="../assets/js/button_indicator.js"></script>
+  <script src="../assets/js/readout_table.js"></script>
+  <script src="../assets/js/orbiting_body_info_table.js"></script>
+  <script src="../assets/js/resource_monitor.js"></script>
+  <script src="../assets/js/ground_track.js"></script>
+  <script src="../assets/js/position_map.js"></script>
+  <script src="../assets/js/navball.js"></script>
+  <script src="../assets/js/atmospheric_density_gauge.js"></script>
+  <script src="../assets/js/throttle_gauge.js"></script>
+  <script src="../assets/js/altitude_tracker.js"></script>
+
+  <script src="../assets/js/current_stage_burn_info.js"></script>
+  <script src="../assets/js/burn_planner.js"></script>
+  <script src="../assets/js/staging_info_table.js"></script>
+  <script src="../assets/js/maneuver_node_editor.js"></script>
+
+  <script src="../assets/js/orbital_position_data.js"></script>
+  <script src="../assets/js/position_data_formatter.js"></script>
+  <script src="../assets/js/orbital_map.js"></script>
+
+  <script src="../assets/js/action_button.js"></script>
 
   <link rel="stylesheet" type="text/css" href="../assets/stylesheets/chartist.min.css" />
   <link rel="stylesheet" type="text/css" href="../assets/stylesheets/leafletksp.css" />
@@ -127,9 +133,9 @@
 
       
 <li id="" class="">
-  <a href="../science/index.html">
-    <img src="../assets/images/science-preview.svg"/>
-    SCIENCE
+  <a href="../sysops/index.html">
+    <img src="../assets/images/sysops-preview.svg"/>
+    SYSOPS
   </a>
 </li>
 

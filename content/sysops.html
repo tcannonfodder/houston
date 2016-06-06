@@ -1,0 +1,168 @@
+---
+title: SYSOPS
+---
+
+<% content_for :head do %>
+  <link rel="stylesheet" type="text/css" href="../assets/stylesheets/science.css" />
+<% end %>
+
+<div id="top-panel">
+  <div id="map-and-sensors">
+    <div id="position-map" class="map readout-display"></div>
+
+    <div class="readout-display">
+      <h2>Sensor Info</h2>
+      <table id="sensor-info" class="readout-table"></table>
+
+      <%= render 'resource_bar', :resource_name => "ore", :resource_label => "Ore", :show_totals => true %>
+    </div>
+  </div>
+
+  <div id="actions-and-target-info">
+    <table id="custom-actions" class="gauge">
+      <tr><th colspan="5">Custom Actions</th></tr>
+      <tr>
+        <td><%= render 'action_button', :button_id => "action_button_1", :button_label => "1" %></td>
+        <td><%= render 'action_button', :button_id => "action_button_2", :button_label => "2" %></td>
+        <td><%= render 'action_button', :button_id => "action_button_3", :button_label => "3" %></td>
+        <td><%= render 'action_button', :button_id => "action_button_4", :button_label => "4" %></td>
+        <td><%= render 'action_button', :button_id => "action_button_5", :button_label => "5" %></td>
+      </tr>
+      <tr>
+        <td><%= render 'action_button', :button_id => "action_button_6", :button_label => "6" %></td>
+        <td><%= render 'action_button', :button_id => "action_button_7", :button_label => "7" %></td>
+        <td><%= render 'action_button', :button_id => "action_button_8", :button_label => "8" %></td>
+        <td><%= render 'action_button', :button_id => "action_button_9", :button_label => "9" %></td>
+        <td><%= render 'action_button', :button_id => "action_button_10", :button_label => "10" %></td>
+      </tr>
+    </table>
+
+    <div class="readout-display">
+      <h2>Target Info</h2>
+      <table id="target-info" class="readout-table"></table>
+    </div>
+  </div>
+
+  <div class="readout-display">
+    <h2>Orbiting Body Info</h2>
+    <table id="orbiting-body-info" class="readout-table"></table>
+  </div>
+</div>
+
+<% content_for :dom_loaded do %>
+  window.positionMap = new PositionMap(datalink, 'position-map')
+
+  window.oreMonitor = new ResourceMonitor(datalink, 'Ore', {
+    totalProgressBar: $('ore-total')
+  })
+
+
+  window.sensorInfoTable = new ReadoutTable(datalink, 'sensor-info', [
+    {
+      label: "Gravity Sensor",
+      value: 's.sensor.grav',
+      formatter: function(value){ return DataFormatters.accelerationSensorString(value) }
+    },
+    {
+      label: "Acceleration Sensor",
+      value: 's.sensor.acc',
+      formatter: function(value){ return DataFormatters.accelerationSensorString(value) }
+    },
+    {
+      label: "Pressure Sensor",
+      value: 's.sensor.pres',
+      formatter: function(value){ return DataFormatters.pressureSensorString(value) }
+    },
+    {
+      label: "Temperature Sensor",
+      value: 's.sensor.temp',
+      formatter: function(value){ return DataFormatters.temperatureString(value[1][0]) }
+    },
+    {
+      label: "G-Force",
+      value: 'v.geeForce',
+      formatter: function(value){ return value.toFixed(3) }
+    },
+  ])
+
+  window.sensorInfoTable = new ReadoutTable(datalink, 'target-info', [
+    {
+      label: "Target Name",
+      value: 'tar.name',
+      formatter: function(value){ return value }
+    },
+    {
+      label: "Target Type",
+      value: 'tar.type',
+      formatter: function(value){ return value }
+    },
+    {
+      label: "Target Distance",
+      value: 'tar.distance',
+      formatter: function(value){ return DataFormatters.distanceString(value) }
+    },
+    {
+      label: "Target's Orbiting Body",
+      value: 'tar.o.orbitingBody',
+      formatter: function(value){ return value }
+    },
+    {
+      label: "Target Apoapsis",
+      value: 'tar.o.ApA',
+      formatter: function(value){ return DataFormatters.distanceString(value) }
+    },
+    {
+      label: "Target Periapsis",
+      value: 'tar.o.PeA',
+      formatter: function(value){ return DataFormatters.distanceString(value) }
+    },
+    {
+      label: "Target Time to Apoapsis",
+      value: 'tar.o.timeToAp',
+      formatter: function(value){ return "-" + TimeFormatters.durationString(value) }
+    },
+    {
+      label: "Target Time to Periapsis",
+      value: 'tar.o.timeToPe',
+      formatter: function(value){ return "-" + TimeFormatters.durationString(value) }
+    },
+    {
+      label: "Target Inclination",
+      value: 'tar.o.inclination',
+      formatter: function(value){ return DataFormatters.degreeString(value) }
+    },
+    {
+      label: "Target Eccentricity",
+      value: 'tar.o.eccentricity',
+      formatter: function(value){ return value.toFixed(3) }
+    },
+    {
+      label: "Target Orbital Period",
+      value: 'tar.o.period',
+      formatter: function(value){ return TimeFormatters.durationString(value) }
+    },
+    {
+      label: "Target Velocity",
+      value: 'tar.o.velocity',
+      formatter: function(value){ return DataFormatters.velocityString(value) }
+    },
+    {
+      label: "Target Relative Velocity",
+      value: 'tar.o.relativeVelocity',
+      formatter: function(value){ return DataFormatters.velocityString(value) }
+    }
+  ])
+
+  window.orbitingBodyInfoTable = new OrbitingBodyInfoTable(datalink, 'orbiting-body-info')
+
+  window.actionButton1 = new ActionButton(datalink, 'action_button_1', 'f.ag1')
+  window.actionButton2 = new ActionButton(datalink, 'action_button_2', 'f.ag2')
+  window.actionButton3 = new ActionButton(datalink, 'action_button_3', 'f.ag3')
+  window.actionButton4 = new ActionButton(datalink, 'action_button_4', 'f.ag4')
+  window.actionButton5 = new ActionButton(datalink, 'action_button_5', 'f.ag5')
+  window.actionButton6 = new ActionButton(datalink, 'action_button_6', 'f.ag6')
+  window.actionButton7 = new ActionButton(datalink, 'action_button_7', 'f.ag7')
+  window.actionButton8 = new ActionButton(datalink, 'action_button_8', 'f.ag8')
+  window.actionButton9 = new ActionButton(datalink, 'action_button_9', 'f.ag9')
+  window.actionButton10 = new ActionButton(datalink, 'action_button_10', 'f.ag10')
+<% end %>

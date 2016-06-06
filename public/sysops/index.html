@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>SYSOPS</title>
+  <script src="../assets/js/math_polyfill.js"></script>
+  <script src="../assets/js/math.js"></script>
+  <script src="../assets/js/numeric.js"></script>
+  <script src="../assets/js/numeral.min.js"></script>
+  <script src="../assets/js/chartist.min.js"></script>
+  <script src="../assets/js/time_formatters.js"></script>
+  <script src="../assets/js/data_formatters.js"></script>
+  <script src="../assets/js/prototype.js"></script>
+  <script src="../assets/js/event.simulate.js"></script>
+  <script src="../assets/js/data_table.js"></script>
+  <script src="../assets/js/leaflet.ksp.js"></script>
+  <script src="../assets/js/L.Graticule.js"></script>
+  <script src="../assets/js/three.min.js"></script>
+  <script src="../assets/js/THREEx.FullScreen.js"></script>
+  <script src="../assets/js/tween.min.js"></script>
+  <script src="../assets/js/orbit_controls.js"></script>
+  <script src="../assets/js/dat.gui.min.js"></script>
+
+
+  <script src="../assets/js/settings.js"></script>
+  <script src="../assets/js/telemachus.js"></script>
+  <script src="../assets/js/orbital_math.js"></script>
+  <script src="../assets/js/orbital_prediction.js"></script>
+  <script src="../assets/js/hohmann-intercept.js"></script>
+
+  <script src="../assets/js/title_bar.js"></script>
+  <script src="../assets/js/button_indicator.js"></script>
+  <script src="../assets/js/readout_table.js"></script>
+  <script src="../assets/js/orbiting_body_info_table.js"></script>
+  <script src="../assets/js/resource_monitor.js"></script>
+  <script src="../assets/js/ground_track.js"></script>
+  <script src="../assets/js/position_map.js"></script>
+  <script src="../assets/js/navball.js"></script>
+  <script src="../assets/js/atmospheric_density_gauge.js"></script>
+  <script src="../assets/js/throttle_gauge.js"></script>
+  <script src="../assets/js/altitude_tracker.js"></script>
+
+  <script src="../assets/js/current_stage_burn_info.js"></script>
+  <script src="../assets/js/burn_planner.js"></script>
+  <script src="../assets/js/staging_info_table.js"></script>
+  <script src="../assets/js/maneuver_node_editor.js"></script>
+
+  <script src="../assets/js/orbital_position_data.js"></script>
+  <script src="../assets/js/position_data_formatter.js"></script>
+  <script src="../assets/js/orbital_map.js"></script>
+
+  <script src="../assets/js/action_button.js"></script>
+
+  <link rel="stylesheet" type="text/css" href="../assets/stylesheets/chartist.min.css" />
+  <link rel="stylesheet" type="text/css" href="../assets/stylesheets/leafletksp.css" />
+  <link rel="stylesheet" type="text/css" href="../assets/stylesheets/application.css" />
+
+  <link rel="apple-touch-icon-precomposed" sizes="57x57" href="../assets/icons//sysops//apple-touch-icon-57x57.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../assets/icons//sysops//apple-touch-icon-114x114.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../assets/icons//sysops//apple-touch-icon-72x72.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../assets/icons//sysops//apple-touch-icon-144x144.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="60x60" href="../assets/icons//sysops//apple-touch-icon-60x60.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="120x120" href="../assets/icons//sysops//apple-touch-icon-120x120.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="76x76" href="../assets/icons//sysops//apple-touch-icon-76x76.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../assets/icons//sysops//apple-touch-icon-152x152.png" />
+  <link rel="icon" type="image/png" href="../assets/icons//sysops//favicon-196x196.png" sizes="196x196" />
+  <link rel="icon" type="image/png" href="../assets/icons//sysops//favicon-96x96.png" sizes="96x96" />
+  <link rel="icon" type="image/png" href="../assets/icons//sysops//favicon-32x32.png" sizes="32x32" />
+  <link rel="icon" type="image/png" href="../assets/icons//sysops//favicon-16x16.png" sizes="16x16" />
+  <link rel="icon" type="image/png" href="../assets/icons//sysops//favicon-128.png" sizes="128x128" />
+  <meta name="application-name" content="../assets/icons/SYSOPS"/>
+  <meta name="msapplication-TileColor" content="#FFFFFF" />
+  <meta name="msapplication-TileImage" content="../assets/icons//sysops//mstile-144x144.png" />
+  <meta name="msapplication-square70x70logo" content="../assets/icons//sysops//mstile-70x70.png" />
+  <meta name="msapplication-square150x150logo" content="../assets/icons//sysops//mstile-150x150.png" />
+  <meta name="msapplication-wide310x150logo" content="../assets/icons//sysops//mstile-310x150.png" />
+  <meta name="msapplication-square310x310logo" content="../assets/icons//sysops//mstile-310x310.png" />
+
+
+  
+  <link rel="stylesheet" type="text/css" href="../assets/stylesheets/science.css" />
+
+</head>
+<body>
+  <nav>
+    <ul>
+      
+<li id="" class="">
+  <a href="../ground-track/index.html">
+    <img src="../assets/images/ground-track-preview.svg"/>
+    Ground Track
+  </a>
+</li>
+
+      
+<li id="" class="">
+  <a href="../ascension/index.html">
+    <img src="../assets/images/ascension-preview.svg"/>
+    Ascension
+  </a>
+</li>
+
+      
+<li id="" class="">
+  <a href="../landing/index.html">
+    <img src="../assets/images/landing-preview.svg"/>
+    Landing
+  </a>
+</li>
+
+      
+<li id="" class="">
+  <a href="../boost/index.html">
+    <img src="../assets/images/boost-preview.svg"/>
+    BOOST/EECOM
+  </a>
+</li>
+
+      
+<li id="" class="">
+  <a href="../fido/index.html">
+    <img src="../assets/images/fido-preview.svg"/>
+    FIDO
+  </a>
+</li>
+
+      
+<li id="" class="">
+  <a href="../3dmap/index.html">
+    <img src="../assets/images/map-preview.svg"/>
+    Orbital Map
+  </a>
+</li>
+
+      
+<li id="" class="current">
+  <a href="../sysops/index.html">
+    <img src="../assets/images/sysops-preview.svg"/>
+    SYSOPS
+  </a>
+</li>
+
+      
+<li id="telemachus-console" class="">
+  <a href="/telemachus/console.html">
+    <img src="../assets/images/telemachus-preview.png"/>
+    Telemachus Console
+  </a>
+</li>
+
+      
+<li id="mkon" class="">
+  <a href="/telemachus/MKON/index.html">
+    <img src="../assets/images/mkon-preview.png"/>
+    MKON
+  </a>
+</li>
+
+      
+<li id="settings-link" class="">
+  <a href="#settings">
+    <img src="../assets/images/settings-preview.svg"/>
+    Settings
+  </a>
+</li>
+    </ul>
+    <div id="nav_toggle"><a href="#">&darr; Open</a></div>
+  </nav>
+
+  <section id="settings_overlay" >
+    <form id="settings">
+      <h2>Settings</h2>
+      <fieldset>
+        <label for="host">Host</label>
+        <input name="host" id="host" type="text" placeholder="localhost"/><br>
+
+        <label for="port">Port</label>
+        <input name="port" id="port" type="text" placeholder="8085"/>
+      </fieldset>
+
+      <button type="submit">Save &amp; Close</button>
+    </form>
+  </section>
+
+  <header id="title-bar">
+    <div id="mission-time-warp-indicator" class="readout-display">
+      <span id="mission-time">T+12:34:14 MET</span>
+    </div>
+
+    <h1>SYSOPS</h1>
+
+    <div id="world-clock" class="readout-display">
+      Year 1, Day 1 00:23:13 UT
+    </div>
+  </header>
+
+  <div id="content">
+    
+
+
+<div id="top-panel">
+  <div id="map-and-sensors">
+    <div id="position-map" class="map readout-display"></div>
+
+    <div class="readout-display">
+      <h2>Sensor Info</h2>
+      <table id="sensor-info" class="readout-table"></table>
+
+      <div id="ore" class="resource-readout">
+  <p>Ore</p>
+
+  
+
+  <div>
+    
+    
+      <div class="totals">
+        <span id="ore-total-value">0</span>/<span id="ore-total-max">100</span>
+      </div>
+    
+    <progress id="ore-total" value="0" max="0">0%</progress>
+  </div>
+</div>
+    </div>
+  </div>
+
+  <div id="actions-and-target-info">
+    <table id="custom-actions" class="gauge">
+      <tr><th colspan="5">Custom Actions</th></tr>
+      <tr>
+        <td><button id="action_button_1" class="action-button">1</button></td>
+        <td><button id="action_button_2" class="action-button">2</button></td>
+        <td><button id="action_button_3" class="action-button">3</button></td>
+        <td><button id="action_button_4" class="action-button">4</button></td>
+        <td><button id="action_button_5" class="action-button">5</button></td>
+      </tr>
+      <tr>
+        <td><button id="action_button_6" class="action-button">6</button></td>
+        <td><button id="action_button_7" class="action-button">7</button></td>
+        <td><button id="action_button_8" class="action-button">8</button></td>
+        <td><button id="action_button_9" class="action-button">9</button></td>
+        <td><button id="action_button_10" class="action-button">10</button></td>
+      </tr>
+    </table>
+
+    <div class="readout-display">
+      <h2>Target Info</h2>
+      <table id="target-info" class="readout-table"></table>
+    </div>
+  </div>
+
+  <div class="readout-display">
+    <h2>Orbiting Body Info</h2>
+    <table id="orbiting-body-info" class="readout-table"></table>
+  </div>
+</div>
+
+
+  </div>
+
+
+  <script>
+
+  $(document).observe("dom:loaded", function() {
+    window.settings = new Settings(window.location.hostname, window.location.port)
+    $('settings')['host'].value = settings.getHost()
+    $('settings')['port'].value = settings.getPort()
+
+    function updateTelemachusAndMKONLinks(){
+      var baseURL = "http://" + settings.getHost() + ":" + settings.getPort()
+      $('telemachus-console').down('a').href = baseURL + "/telemachus/console.html"
+      $('mkon').down('a').href = baseURL + "/telemachus/MKON/index.html"
+    }
+
+    updateTelemachusAndMKONLinks()
+
+    $('settings-link').observe('click', function(e){
+      e.preventDefault()
+      $('settings_overlay').addClassName('open')
+    })
+
+    $('settings').observe('submit', function(e){
+      e.preventDefault();
+      var form = e.target
+      window.settings.setHost(form['host'].value)
+      window.settings.setPort(form['port'].value)
+
+      window.datalink.updateConnection(
+        window.settings.getHost(),
+        window.settings.getPort()
+      )
+
+      updateTelemachusAndMKONLinks()
+
+      $('settings_overlay').removeClassName('open')
+    })
+
+    window.datalink = new Telemachus(settings.getHost(), settings.getPort())
+    window.titleBar = new TitleBar(datalink, 'title-bar')
+
+    $('nav_toggle').observe("click", function(e){
+      var nav = $$('nav')[0]
+      nav.toggleClassName('open')
+      if(nav.hasClassName('open')){
+        $('nav_toggle').down('a').update('&uarr; Close')
+      } else{
+        $('nav_toggle').down('a').update('&darr; Open')
+      }
+    })
+
+    
+  window.positionMap = new PositionMap(datalink, 'position-map')
+
+  window.oreMonitor = new ResourceMonitor(datalink, 'Ore', {
+    totalProgressBar: $('ore-total')
+  })
+
+
+  window.sensorInfoTable = new ReadoutTable(datalink, 'sensor-info', [
+    {
+      label: "Gravity Sensor",
+      value: 's.sensor.grav',
+      formatter: function(value){ return DataFormatters.accelerationSensorString(value) }
+    },
+    {
+      label: "Acceleration Sensor",
+      value: 's.sensor.acc',
+      formatter: function(value){ return DataFormatters.accelerationSensorString(value) }
+    },
+    {
+      label: "Pressure Sensor",
+      value: 's.sensor.pres',
+      formatter: function(value){ return DataFormatters.pressureSensorString(value) }
+    },
+    {
+      label: "Temperature Sensor",
+      value: 's.sensor.temp',
+      formatter: function(value){ return DataFormatters.temperatureString(value[1][0]) }
+    },
+    {
+      label: "G-Force",
+      value: 'v.geeForce',
+      formatter: function(value){ return value.toFixed(3) }
+    },
+  ])
+
+  window.sensorInfoTable = new ReadoutTable(datalink, 'target-info', [
+    {
+      label: "Target Name",
+      value: 'tar.name',
+      formatter: function(value){ return value }
+    },
+    {
+      label: "Target Type",
+      value: 'tar.type',
+      formatter: function(value){ return value }
+    },
+    {
+      label: "Target Distance",
+      value: 'tar.distance',
+      formatter: function(value){ return DataFormatters.distanceString(value) }
+    },
+    {
+      label: "Target's Orbiting Body",
+      value: 'tar.o.orbitingBody',
+      formatter: function(value){ return value }
+    },
+    {
+      label: "Target Apoapsis",
+      value: 'tar.o.ApA',
+      formatter: function(value){ return DataFormatters.distanceString(value) }
+    },
+    {
+      label: "Target Periapsis",
+      value: 'tar.o.PeA',
+      formatter: function(value){ return DataFormatters.distanceString(value) }
+    },
+    {
+      label: "Target Time to Apoapsis",
+      value: 'tar.o.timeToAp',
+      formatter: function(value){ return "-" + TimeFormatters.durationString(value) }
+    },
+    {
+      label: "Target Time to Periapsis",
+      value: 'tar.o.timeToPe',
+      formatter: function(value){ return "-" + TimeFormatters.durationString(value) }
+    },
+    {
+      label: "Target Inclination",
+      value: 'tar.o.inclination',
+      formatter: function(value){ return DataFormatters.degreeString(value) }
+    },
+    {
+      label: "Target Eccentricity",
+      value: 'tar.o.eccentricity',
+      formatter: function(value){ return value.toFixed(3) }
+    },
+    {
+      label: "Target Orbital Period",
+      value: 'tar.o.period',
+      formatter: function(value){ return TimeFormatters.durationString(value) }
+    },
+    {
+      label: "Target Velocity",
+      value: 'tar.o.velocity',
+      formatter: function(value){ return DataFormatters.velocityString(value) }
+    },
+    {
+      label: "Target Relative Velocity",
+      value: 'tar.o.relativeVelocity',
+      formatter: function(value){ return DataFormatters.velocityString(value) }
+    }
+  ])
+
+  window.orbitingBodyInfoTable = new OrbitingBodyInfoTable(datalink, 'orbiting-body-info')
+
+  window.actionButton1 = new ActionButton(datalink, 'action_button_1', 'f.ag1')
+  window.actionButton2 = new ActionButton(datalink, 'action_button_2', 'f.ag2')
+  window.actionButton3 = new ActionButton(datalink, 'action_button_3', 'f.ag3')
+  window.actionButton4 = new ActionButton(datalink, 'action_button_4', 'f.ag4')
+  window.actionButton5 = new ActionButton(datalink, 'action_button_5', 'f.ag5')
+  window.actionButton6 = new ActionButton(datalink, 'action_button_6', 'f.ag6')
+  window.actionButton7 = new ActionButton(datalink, 'action_button_7', 'f.ag7')
+  window.actionButton8 = new ActionButton(datalink, 'action_button_8', 'f.ag8')
+  window.actionButton9 = new ActionButton(datalink, 'action_button_9', 'f.ag9')
+  window.actionButton10 = new ActionButton(datalink, 'action_button_10', 'f.ag10')
+
+  })
+
+  </script>
+</body>
+</html>
