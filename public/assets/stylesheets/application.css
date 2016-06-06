@@ -21,6 +21,17 @@
 
 }
 
+@keyframes blink {
+  50% {
+    opacity: 0.0;
+  }
+}
+@-webkit-keyframes blink {
+  50% {
+    opacity: 0.0;
+  }
+}
+
 body{
   background: #9B9B9B;
   background-image: url('../images/background-noise.png');
@@ -325,6 +336,11 @@ button#light.on{
 
 button#brake.on{
   background-color: #D0021B;
+}
+
+#title-bar .loss-of-signal {
+  animation: blink 1s step-start 0s infinite;
+  -webkit-animation: blink 1s step-start 0s infinite;
 }
 
 

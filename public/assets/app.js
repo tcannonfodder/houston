@@ -8115,7 +8115,6 @@ var Telemachus = Class.create({
       try{
         this.receiverFunctions[i](data)
       } catch(e){
-        debugger
         console.error(e)
       }
     };
@@ -8133,6 +8132,14 @@ var Telemachus = Class.create({
     } else{
       return null
     }
+  },
+
+  notifyIfLOS: function(request){
+    if(request.transport.status == 0){
+      document.fire('telemachus:loss-of-signal')
+      return true
+    }
+    return false
   },
 
   prepareParams: function(params){
@@ -8171,7 +8178,9 @@ var Telemachus = Class.create({
       }.bind(this),
 
       onComplete: function(response){
-        setTimeout(this.poll.bind(this),this.rate);
+        if(!this.notifyIfLOS(response)){
+          setTimeout(this.poll.bind(this),this.rate);
+        }
       }.bind(this)
     })
   },
@@ -8185,7 +8194,8 @@ var Telemachus = Class.create({
         var rawData = JSON.parse(response.responseText)
         var data = this.convertData(rawData)
         callback(data)
-      }.bind(this)
+      }.bind(this),
+      onException: this.notifyIfLOS.bind(this)
     })
   },
 
@@ -8335,6 +8345,7 @@ var TitleBar = Class.create({
     this.datalink = datalink
     this.title_bar_id = title_bar_id
     this.title_bar = $(this.title_bar_id)
+    this.initializeLOSNotifier()
     this.initializeDatalink()
   },
 
@@ -8342,6 +8353,17 @@ var TitleBar = Class.create({
     window.requestAnimationFrame(function(){
       this.title_bar.down("#world-clock").update(TimeFormatters.formatUT(data["t.universalTime"]))
       this.title_bar.down("#mission-time").update(TimeFormatters.formatMET(data["v.missionTime"]))
+
+      this.title_bar.down("#mission-time").removeClassName("loss-of-signal")
+    }.bind(this))
+  },
+
+  initializeLOSNotifier:function(){
+    document.observe('telemachus:loss-of-signal', function(){
+      window.requestAnimationFrame(function(){
+        this.title_bar.down("#mission-time").update("&#9888; LOS &#9888;")
+        this.title_bar.down("#mission-time").addClassName("loss-of-signal")
+      }.bind(this))
     }.bind(this))
   },
 
