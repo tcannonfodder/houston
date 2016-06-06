@@ -95,11 +95,9 @@ var Telemachus = Class.create({
 
         this.dispatchMessages(data)
       }.bind(this),
-
+      onException: this.notifyIfLOS.bind(this),
       onComplete: function(response){
-        if(!this.notifyIfLOS(response)){
-          setTimeout(this.poll.bind(this),this.rate);
-        }
+        setTimeout(this.poll.bind(this),this.rate);
       }.bind(this)
     })
   },

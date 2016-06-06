@@ -21,15 +21,9 @@
 
 }
 
-@keyframes blink {
-  50% {
-    opacity: 0.0;
-  }
-}
 @-webkit-keyframes blink {
-  50% {
-    opacity: 0.0;
-  }
+  0%     { opacity: 0 } 50% { opacity: 0 }
+  50.01% { opacity: 1 } 100% { opacity: 1 }
 }
 
 body{
@@ -339,8 +333,9 @@ button#brake.on{
 }
 
 #title-bar .loss-of-signal {
-  animation: blink 1s step-start 0s infinite;
-  -webkit-animation: blink 1s step-start 0s infinite;
+  animation: blink 0.7s infinite linear alternate;
+  -webkit-animation: blink 0.7s infinite linear alternate;
+  -webkit-font-smoothing: antialiased;
 }
 
 
