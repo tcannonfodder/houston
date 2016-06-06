@@ -11,12 +11,12 @@
 }
 
 
-#position-map{
+#gt-map{
   margin-right: auto;
   width: 350px;
 }
 
-#navigation-and-atmospheric-density, #position-map{
+#navigation-and-atmospheric-density, #gt-map{
   max-height: 280px;
 }
 

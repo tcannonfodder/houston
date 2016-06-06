@@ -17,7 +17,6 @@ javascripts:
     - static/js/data_table.js
     - static/js/leaflet.ksp.js
     - static/js/L.Graticule.js
-    - static/js/orbit_controls.js
     - static/js/dat.gui.min.js
 
     - static/js/settings.js
@@ -50,9 +49,10 @@ javascripts:
     - static/js/ground_track_position_data_formatter.js
     - static/js/ground_track.js
     - static/js/ground_track_container.js
-  3dmap:
+  # 3dmap:
     - static/js/three.min.js
     - static/js/THREEx.FullScreen.js
+    - static/js/orbit_controls.js
     - static/js/tween.min.js
     - static/js/orbital_position_data.js
     - static/js/position_data_formatter.js
