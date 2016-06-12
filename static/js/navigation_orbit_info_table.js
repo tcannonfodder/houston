@@ -52,7 +52,7 @@ var NavigationOrbitInfoTable = Class.create({
       this.fields.vesselRelativeVelocity.update(DataFormatters.velocityString(data['o.relativeVelocity']))
       this.fields.targetRelativeVelocity.update(DataFormatters.velocityString(data['tar.o.relativeVelocity']))
 
-      this.fields.vesselGForce.update(data['o.relativeVelocity'].toFixed(2))
+      this.fields.vesselGForce.update(data['v.geeForce'].toFixed(2))
     }.bind(this))
   },
 
