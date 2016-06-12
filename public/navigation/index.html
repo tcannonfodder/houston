@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Navigation</title>
+  <script src="../assets/app.js"></script>
+
+  
+  
+
+  <script src="../assets/js/action_button.js"></script>
+
+  <link rel="stylesheet" type="text/css" href="../assets/stylesheets/chartist.min.css" />
+  <link rel="stylesheet" type="text/css" href="../assets/stylesheets/leafletksp.css" />
+  <link rel="stylesheet" type="text/css" href="../assets/stylesheets/application.css" />
+
+  <link rel="apple-touch-icon-precomposed" sizes="57x57" href="../assets/icons//navigation//apple-touch-icon-57x57.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../assets/icons//navigation//apple-touch-icon-114x114.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../assets/icons//navigation//apple-touch-icon-72x72.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../assets/icons//navigation//apple-touch-icon-144x144.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="60x60" href="../assets/icons//navigation//apple-touch-icon-60x60.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="120x120" href="../assets/icons//navigation//apple-touch-icon-120x120.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="76x76" href="../assets/icons//navigation//apple-touch-icon-76x76.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../assets/icons//navigation//apple-touch-icon-152x152.png" />
+  <link rel="icon" type="image/png" href="../assets/icons//navigation//favicon-196x196.png" sizes="196x196" />
+  <link rel="icon" type="image/png" href="../assets/icons//navigation//favicon-96x96.png" sizes="96x96" />
+  <link rel="icon" type="image/png" href="../assets/icons//navigation//favicon-32x32.png" sizes="32x32" />
+  <link rel="icon" type="image/png" href="../assets/icons//navigation//favicon-16x16.png" sizes="16x16" />
+  <link rel="icon" type="image/png" href="../assets/icons//navigation//favicon-128.png" sizes="128x128" />
+  <meta name="application-name" content="../assets/icons/Navigation"/>
+  <meta name="msapplication-TileColor" content="#FFFFFF" />
+  <meta name="msapplication-TileImage" content="../assets/icons//navigation//mstile-144x144.png" />
+  <meta name="msapplication-square70x70logo" content="../assets/icons//navigation//mstile-70x70.png" />
+  <meta name="msapplication-square150x150logo" content="../assets/icons//navigation//mstile-150x150.png" />
+  <meta name="msapplication-wide310x150logo" content="../assets/icons//navigation//mstile-310x150.png" />
+  <meta name="msapplication-square310x310logo" content="../assets/icons//navigation//mstile-310x310.png" />
+
+
+  
+  <link rel="stylesheet" type="text/css" href="../assets/stylesheets/navigation.css" />
+
+</head>
+<body>
+  <nav>
+    <ul>
+      
+<li id="" class="">
+  <a href="../ground-track/index.html">
+    <img src="../assets/images/ground-track-preview.svg"/>
+    Ground Track
+  </a>
+</li>
+
+      
+<li id="" class="">
+  <a href="../ascension/index.html">
+    <img src="../assets/images/ascension-preview.svg"/>
+    Ascension
+  </a>
+</li>
+
+      
+<li id="" class="">
+  <a href="../landing/index.html">
+    <img src="../assets/images/landing-preview.svg"/>
+    Landing
+  </a>
+</li>
+
+      
+<li id="" class="">
+  <a href="../boost/index.html">
+    <img src="../assets/images/boost-preview.svg"/>
+    BOOST/EECOM
+  </a>
+</li>
+
+      
+<li id="" class="">
+  <a href="../fido/index.html">
+    <img src="../assets/images/fido-preview.svg"/>
+    FIDO
+  </a>
+</li>
+
+      
+<li id="" class="">
+  <a href="../3dmap/index.html">
+    <img src="../assets/images/map-preview.svg"/>
+    Orbital Map
+  </a>
+</li>
+
+      
+<li id="" class="">
+  <a href="../sysops/index.html">
+    <img src="../assets/images/sysops-preview.svg"/>
+    SYSOPS
+  </a>
+</li>
+
+      
+<li id="telemachus-console" class="">
+  <a href="/telemachus/console.html">
+    <img src="../assets/images/telemachus-preview.png"/>
+    Telemachus Console
+  </a>
+</li>
+
+      
+<li id="mkon" class="">
+  <a href="/telemachus/MKON/index.html">
+    <img src="../assets/images/mkon-preview.png"/>
+    MKON
+  </a>
+</li>
+
+      
+<li id="settings-link" class="">
+  <a href="#settings">
+    <img src="../assets/images/settings-preview.svg"/>
+    Settings
+  </a>
+</li>
+    </ul>
+    <div id="nav_toggle"><a href="#">&darr; Open</a></div>
+  </nav>
+
+  <section id="settings_overlay" >
+    <form id="settings">
+      <h2>Settings</h2>
+      <fieldset>
+        <label for="host">Host</label>
+        <input name="host" id="host" type="text" placeholder="localhost"/><br>
+
+        <label for="port">Port</label>
+        <input name="port" id="port" type="text" placeholder="8085"/>
+      </fieldset>
+
+      <button type="submit">Save &amp; Close</button>
+    </form>
+  </section>
+
+  <header id="title-bar">
+    <div id="mission-time-warp-indicator" class="readout-display">
+      <span id="mission-time">T+12:34:14 MET</span>
+    </div>
+
+    <h1>Navigation</h1>
+
+    <div id="world-clock" class="readout-display">
+      Year 1, Day 1 00:23:13 UT
+    </div>
+  </header>
+
+  <div id="content">
+    
+
+
+<!-- ---------------- Custom Shader Code ------------------------ -->
+<script id="vertexShader" type="x-shader/x-vertex">
+uniform vec3 viewVector;
+uniform float c;
+uniform float p;
+varying float intensity;
+void main() 
+{
+    vec3 vNormal = normalize( normalMatrix * normal );
+  vec3 vNormel = normalize( normalMatrix * viewVector );
+  intensity = pow( c - dot(vNormal, vNormel), p );
+  
+    gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+}
+</script>
+
+<!-- fragment shader a.k.a. pixel shader -->
+<script id="fragmentShader" type="x-shader/x-vertex"> 
+uniform vec3 glowColor;
+varying float intensity;
+void main() 
+{
+  vec3 glow = glowColor * intensity;
+    gl_FragColor = vec4( glow, 1.0 );
+}
+</script>
+<!-- ----------------------------------------------------------- -->
+
+<div id="top-panel">
+  <div id="orbital-map-container" class="readout-display">
+    <div id="orbital-map"></div>
+  </div>
+
+  <div class="readout-display">
+    <h2>Orbit Info</h2>
+    <table id="navigation-orbit-info" class="readout-table">
+      <thead>
+        <tr>
+          <th></th>
+          <th>Vessel</th>
+          <th>Target</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr>
+  <th>Reference Body</th>
+  <td id="vessel-reference-body"></td>
+  <td id="target-reference-body"></td>
+</tr>
+
+        <tr>
+  <th>Altitude</th>
+  <td id="vessel-altitude"></td>
+  <td id="target-altitude"></td>
+</tr>
+
+        <tr>
+  <th>Apoapsis</th>
+  <td id="vessel-apoapsis"></td>
+  <td id="target-apoapsis"></td>
+</tr>
+
+        <tr>
+  <th>Periapsis</th>
+  <td id="vessel-periapsis"></td>
+  <td id="target-periapsis"></td>
+</tr>
+
+        <tr>
+  <th>Time to Apoapsis</th>
+  <td id="vessel-time-to-apoapsis"></td>
+  <td id="target-time-to-apoapsis"></td>
+</tr>
+
+        <tr>
+  <th>Time to Periapsis</th>
+  <td id="vessel-time-to-periapsis"></td>
+  <td id="target-time-to-periapsis"></td>
+</tr>
+
+        <tr>
+  <th>Inclination</th>
+  <td id="vessel-inclination"></td>
+  <td id="target-inclination"></td>
+</tr>
+
+        <tr>
+  <th>Eccentricity</th>
+  <td id="vessel-eccentricity"></td>
+  <td id="target-eccentricity"></td>
+</tr>
+
+        <tr>
+  <th>Orbital Period</th>
+  <td id="vessel-orbital-period"></td>
+  <td id="target-orbital-period"></td>
+</tr>
+
+        <tr>
+  <th>True Anomaly</th>
+  <td id="vessel-true-anomaly"></td>
+  <td id="target-true-anomaly"></td>
+</tr>
+
+        <tr>
+  <th>Surface Velocity</th>
+  <td id="vessel-surface-velocity"></td>
+  <td id="target-surface-velocity"></td>
+</tr>
+
+        <tr>
+  <th>Vertical Velocity</th>
+  <td id="vessel-vertical-velocity"></td>
+  <td id="target-vertical-velocity"></td>
+</tr>
+
+        <tr>
+  <th>Orbital Velocity</th>
+  <td id="vessel-orbital-velocity"></td>
+  <td id="target-orbital-velocity"></td>
+</tr>
+
+        <tr>
+  <th>Relative Velocity</th>
+  <td id="vessel-relative-velocity"></td>
+  <td id="target-relative-velocity"></td>
+</tr>
+
+        <tr>
+  <th>G-Force</th>
+  <td id="vessel-g-force"></td>
+  <td id="target-g-force"></td>
+</tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div id="bottom-panel">
+  <div class="readout-display">
+    <h2>Hohmann Transfer Tool</h2>
+    <strong id="go-signal"></strong>
+    <table class="readout-table">
+      <tr>
+        <th>Vessel Altitude</th>
+        <td id="vessel-altitude"></td>
+      </tr>
+
+      <tr>
+        <th>Vessel Orbital Velocity</th>
+        <td id="vessel-orbital-velocity"></td>
+      </tr>
+
+      <tr>
+        <th>Vessel Periapsis</th>
+        <td id="vessel-periapsis"></td>
+      </tr>
+
+      <tr>
+        <th>Target Periapsis</th>
+        <td id="target-periapsis"></td>
+      </tr>
+
+      <tr>
+        <th>Delta-V</th>
+        <td id="delta-v"></td>
+      </tr>
+
+      <tr>
+        <th>Sweep Angle</th>
+        <td id="sweep-angle"></td>
+      </tr>
+
+      <tr>
+        <th>Phase Angle</th>
+        <td id="phase-angle"></td>
+      </tr>
+
+      <tr>
+        <th>Target's Current Phase Angle</th>
+        <td id="target-current-phase-angle"></td>
+      </tr>
+    </table>
+  </div>
+
+  <div id="maneuver_nodes" class="readout-display">
+    <h2>Maneuver Node Editor</h2>
+    <div>
+      <div id="node_list">
+        <div id="no_maneuver_nodes">No Nodes!</div>
+        <select id="maneuver_node"></select>
+        <ul id="node_selector"></ul>
+        <button id="add_node">Add Node</button>
+      </div>
+      <table id="node_editor">
+        <tr>
+          <th>Increment</th>
+          <td>
+            <select id="node_quick_increment">
+              <option>0.01</option>
+              <option>0.1</option>
+              <option>1</option>
+              <option selected="selected">10</option>
+              <option>100</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <th>UT</th>
+          <td>
+            <input id="node_ut" type="number">
+            <button id="node_ut_plus">+</button>
+            <button id="node_ut_minus">-</button>
+          </td>
+        </tr>
+        <tr>
+          <td id="ut_buttons" colspan="2">
+            <button id="node_ut_ap">AP</button>
+            <button id="node_ut_pe">PE</button>
+            <button id="node_ut_1k_plus">+1K</button>
+            <button id="node_ut_1k_minus">-1K</button>
+          </td>
+        </tr>
+        <tr>
+          <th>Prograde</th>
+          <td>
+            <input id="node_prograde" type="number">
+            <button id="node_prograde_plus">+</button>
+            <button id="node_prograde_minus">-</button>
+          </td>
+        </tr>
+        <tr>
+          <th>Normal</th>
+          <td>
+            <input id="node_normal" type="number">
+            <button id="node_normal_plus">+</button>
+            <button id="node_normal_minus">-</button>
+          </td>
+        </tr>
+        <tr>
+          <th>Radial</th>
+          <td>
+            <input id="node_radial" type="number">
+            <button id="node_radial_plus">+</button>
+            <button id="node_radial_minus">-</button>
+          </td>
+        </tr>
+        <tr>
+          <th>&Delta;v</th><td id="node_delta_v"></td>
+        </tr>
+      </table>
+      <table id="node_orbit_info"></table>
+    </div>
+  </div>
+</div>
+
+
+  </div>
+
+
+  <script>
+
+  $(document).observe("dom:loaded", function() {
+    window.settings = new Settings(window.location.hostname, window.location.port)
+    $('settings')['host'].value = settings.getHost()
+    $('settings')['port'].value = settings.getPort()
+
+    function updateTelemachusAndMKONLinks(){
+      var baseURL = "http://" + settings.getHost() + ":" + settings.getPort()
+      $('telemachus-console').down('a').href = baseURL + "/telemachus/console.html"
+      $('mkon').down('a').href = baseURL + "/telemachus/MKON/index.html"
+    }
+
+    updateTelemachusAndMKONLinks()
+
+    $('settings-link').observe('click', function(e){
+      e.preventDefault()
+      $('settings_overlay').addClassName('open')
+    })
+
+    $('settings').observe('submit', function(e){
+      e.preventDefault();
+      var form = e.target
+      window.settings.setHost(form['host'].value)
+      window.settings.setPort(form['port'].value)
+
+      window.datalink.updateConnection(
+        window.settings.getHost(),
+        window.settings.getPort()
+      )
+
+      updateTelemachusAndMKONLinks()
+
+      $('settings_overlay').removeClassName('open')
+    })
+
+    window.datalink = new Telemachus(settings.getHost(), settings.getPort())
+    window.titleBar = new TitleBar(datalink, 'title-bar')
+
+    $('nav_toggle').observe("click", function(e){
+      var nav = $$('nav')[0]
+      nav.toggleClassName('open')
+      if(nav.hasClassName('open')){
+        $('nav_toggle').down('a').update('&uarr; Close')
+      } else{
+        $('nav_toggle').down('a').update('&darr; Open')
+      }
+    })
+
+    
+  window.nodeEditor = new ManeuverNodeEditor(window.datalink,{
+    //control elements
+    maneuverNode: $('maneuver_node'),
+    quickIncrement: $('node_quick_increment'),
+    ut: $('node_ut'),
+    utPlus: $('node_ut_plus'),
+    utMinus: $('node_ut_minus'),
+    utAp: $('node_ut_ap'),
+    utPe: $('node_ut_pe'),
+    ut1KPlus: $('node_ut_1k_plus'),
+    ut1KMinus: $('node_ut_1k_minus'),
+    prograde: $('node_prograde'),
+    progradePlus: $('node_prograde_plus'),
+    progradeMinus: $('node_prograde_minus'),
+    normal: $('node_normal'),
+    normalPlus: $('node_normal_plus'),
+    normalMinus: $('node_normal_minus'),
+    radial: $('node_radial'),
+    radialPlus: $('node_radial_plus'),
+    radialMinus: $('node_radial_minus'),
+    nodeSelector: $('node_selector'),
+    addNode: $('add_node'),
+
+    //display elements
+    deltaV: $('node_delta_v'),
+    orbitInfoTable: $('node_orbit_info'),
+    noManeuverNodesMessage: $('no_maneuver_nodes'),
+  })
+
+  window.intercept = new HohmannIntercept(window.datalink)
+
+  document.observe('hohmann-intercept:update', function(){
+    var updateValue = function(id, value, updateFunction){
+      $(id).update(updateFunction(value))
+    }
+
+    if(!intercept.deltaV){
+      $('go-signal').update("NO TARGET SELECTED")
+      return
+    }
+
+    updateValue('vessel-altitude', intercept.vessel.altitude, DataFormatters.distanceString)
+
+    // $('vessel-altitude').update(numeral.format())
+    updateValue('vessel-orbital-velocity', intercept.vessel.orbitalVelocity, DataFormatters.velocityString)
+    updateValue('vessel-periapsis', intercept.vessel.periapsis, DataFormatters.distanceString)
+    updateValue('target-periapsis', intercept.targetBody.periapsis, DataFormatters.distanceString)
+    updateValue('delta-v', intercept.deltaV, DataFormatters.velocityString)
+    updateValue('sweep-angle', intercept.sweepAngle, DataFormatters.degreeString)
+    updateValue('phase-angle', intercept.phaseAngle, DataFormatters.degreeString)
+    updateValue('target-current-phase-angle', intercept.targetsCurrentPhaseAngle, DataFormatters.degreeString)
+
+    if(intercept.isGoForIntercept()){
+      $('go-signal').update("GO FOR MANUEVER")
+    }
+  })
+
+  window.navigationOrbitInfoTable = new NavigationOrbitInfoTable(window.datalink,{
+    vesselBody: "vessel-reference-body",
+    targetBody: "target-reference-body",
+
+    vesselAltitude: "vessel-altitude",
+
+    vesselApoapsis: "vessel-apoapsis",
+    targetApoapsis: "target-apoapsis",
+
+    vesselPeriapsis: "vessel-periapsis",
+    targetPeriapsis: "target-periapsis",
+
+    vesselTimeToApoapsis: "vessel-time-to-apoapsis",
+    targetTimeToApoapsis:  "target-time-to-apoapsis",
+
+    vesselTimeToPeriapsis: "vessel-time-to-periapsis",
+    targetTimeToPeriapsis: "target-time-to-periapsis",
+
+    vesselInclination: "vessel-inclination",
+    targetInclination: "target-inclination",
+
+    vesselEccentricity: "vessel-eccentricity",
+    targetEccentricity: "target-eccentricity",
+
+    vesselOrbitalPeriod: "vessel-orbital-period",
+    targetOrbitalPeriod: "target-orbital-period",
+
+    vesselTrueAnomaly: "vessel-true-anomaly",
+    targetTrueAnomaly: "target-true-anomaly",
+
+    vesselSurfaceVelocity: "vessel-surface-velocity",
+
+    vesselVerticalSpeed: "vessel-vertical-velocity",
+
+    vesselOrbitalVelocity: "vessel-orbital-velocity",
+
+    vesselRelativeVelocity: "vessel-relative-velocity",
+    targetRelativeVelocity: "target-relative-velocity",
+
+    vesselGForce: "vessel-g-force"
+  })
+
+
+  window.mapDatalink = new Telemachus(settings.getHost(), settings.getPort())
+  window.mapDatalink.rate = 2000
+  var orbitalPositionData = new OrbitalPositionData(window.mapDatalink)
+  window.positionDataFormatter = new PositionDataFormatter(orbitalPositionData, window.mapDatalink)
+
+  window.OrbitalMap = new OrbitalMap(positionDataFormatter, window.mapDatalink, "orbital-map")
+
+  })
+
+  </script>
+</body>
+</html>
