@@ -46,6 +46,8 @@ javascripts:
     - static/js/staging_info_table.js
     - static/js/maneuver_node_editor.js
 
+    - static/js/navigation_orbit_info_table.js
+    
     - static/js/ground_track_position_data_formatter.js
     - static/js/ground_track.js
     - static/js/ground_track_container.js
