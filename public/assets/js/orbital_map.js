@@ -58,6 +58,7 @@ var OrbitalMap = Class.create({
     this.container.appendChild( this.renderer.domElement )
 
     window.addEventListener('resize', function(){
+      this.renderer.setSize(1, 1)
       this.camera.aspect = this.container.clientWidth/this.container.clientHeight
       this.camera.updateProjectionMatrix()
       this.renderer.setSize(this.container.clientWidth, this.container.clientHeight)

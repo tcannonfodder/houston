@@ -10157,7 +10157,7 @@ var NavigationOrbitInfoTable = Class.create({
       this.fields.vesselRelativeVelocity.update(DataFormatters.velocityString(data['o.relativeVelocity']))
       this.fields.targetRelativeVelocity.update(DataFormatters.velocityString(data['tar.o.relativeVelocity']))
 
-      this.fields.vesselGForce.update(data['o.relativeVelocity'].toFixed(2))
+      this.fields.vesselGForce.update(data['v.geeForce'].toFixed(2))
     }.bind(this))
   },
 
@@ -13615,6 +13615,7 @@ var OrbitalMap = Class.create({
     this.container.appendChild( this.renderer.domElement )
 
     window.addEventListener('resize', function(){
+      this.renderer.setSize(1, 1)
       this.camera.aspect = this.container.clientWidth/this.container.clientHeight
       this.camera.updateProjectionMatrix()
       this.renderer.setSize(this.container.clientWidth, this.container.clientHeight)
