@@ -35,12 +35,21 @@
   font-family: sans-serif;
 }
 
+#navigation-orbit-info th{
+  font-weight: bold;
+}
+
 #navigation-orbit-info thead th{
-  text-align: center;
+  text-align: right;
+}
+
+#navigation-orbit-info tbody th{
+  padding-right: 10px;
 }
 
 #navigation-orbit-info td{
   padding-right: 5px;
+  font-weight: normal;
 }
 
 #bottom-panel{
@@ -121,6 +130,10 @@
 
 #node_orbit_info td, #node_orbit_info th{
   text-align: right;
+}
+
+#node_orbit_info td{
+  font-weight: normal;
 }
 
 #node_orbit_info th{
