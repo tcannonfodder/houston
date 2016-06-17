@@ -1,3 +1,8 @@
+#content{
+  display: flex;
+  flex-flow: column;
+}
+
 #top-panel{
   display: -webkit-box; /* OLD - iOS 6-, Safari 3.1-6 */
   display: -moz-box; /* OLD - Firefox 19- (buggy but mostly works) */
@@ -8,6 +13,7 @@
   margin-bottom: 10px;
   -webkit-justify-content: space-around; 
   justify-content: space-around; 
+  flex: 1 1 auto;
 }
 
 #orbital-map-container{
@@ -66,6 +72,7 @@
   display: flex;
   -webkit-flex-direction: row;
   flex-direction: row;
+  flex: 0 1 auto;
 }
 
 #bottom-panel > div{
