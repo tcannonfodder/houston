@@ -59,6 +59,7 @@ javascripts:
     - static/js/orbital_position_data.js
     - static/js/position_data_formatter.js
     - static/js/orbital_map.js
+    - static/js/resizeSensor.js
 
 stylesheets:
   app:
