@@ -14,6 +14,11 @@
   width:50%
 }
 
+#orbital-map:-webkit-full-screen{
+  width: 100%;
+  height: 100%;
+}
+
 #orbital-map-container{
   display: flex;
   flex-direction: column;
