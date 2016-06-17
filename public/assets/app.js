@@ -13622,7 +13622,9 @@ var OrbitalMap = Class.create({
     this.container.appendChild( this.renderer.domElement )
 
     new ResizeSensor(this.container, function() {
+      if(this.camera){
         this.resizeRenderer()
+      }
     }.bind(this));
   },
 
