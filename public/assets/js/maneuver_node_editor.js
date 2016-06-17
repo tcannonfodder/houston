@@ -164,7 +164,7 @@ var ManeuverNodeEditor = Class.create({
       },
       {
         label: "Semimajor Axis",
-        value: DataFormatters.degreeString(node["sma"])
+        value: DataFormatters.distanceString(node["sma"])
       },
       {
         label: "Longitude of Ascending Node",
