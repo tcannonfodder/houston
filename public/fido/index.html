@@ -40,65 +40,116 @@
 
 </head>
 <body>
+  <div id="open-navigation"><a href="#">&darr; Open</a></div>
   <nav>
-    <ul>
-      
-<li id="" class="">
-  <a href="../ground-track/index.html">
-    <img src="../assets/images/ground-track-preview.svg"/>
-    Ground Track
-  </a>
-</li>
+    <div id="close-navigation"><a href="#">&uarr; Close Navigation</a></div>
 
-      
+    <div id="overlay-grid">
+      <figure>
+        <figcaption>FIDO</figcaption>
+        <ul>
+          
 <li id="" class="">
   <a href="../ascension/index.html">
     <img src="../assets/images/ascension-preview.svg"/>
     Ascension
   </a>
 </li>
-
-      
+          
+<li id="" class="">
+  <a href="../navigation/index.html">
+    <img src="../assets/images/navigation-preview.svg"/>
+    Navigation
+  </a>
+</li>
+          
 <li id="" class="">
   <a href="../landing/index.html">
     <img src="../assets/images/landing-preview.svg"/>
     Landing
   </a>
 </li>
+          
+<li id="" class="">
+  <a href="../docking/index.html">
+    <img src="../assets/images/docking-preview.svg"/>
+    Docking
+  </a>
+</li>
+        </ul>
+      </figure>
 
-      
+      <figure>
+        <figcaption>BOOST/EECOM</figcaption>
+        <ul>
+          
 <li id="" class="">
   <a href="../boost/index.html">
     <img src="../assets/images/boost-preview.svg"/>
     BOOST/EECOM
   </a>
 </li>
+        </ul>
+      </figure>
 
-      
-<li id="" class="current">
-  <a href="../fido/index.html">
-    <img src="../assets/images/fido-preview.svg"/>
-    FIDO
-  </a>
-</li>
-
-      
-<li id="" class="">
-  <a href="../3dmap/index.html">
-    <img src="../assets/images/map-preview.svg"/>
-    Orbital Map
-  </a>
-</li>
-
-      
+      <figure>
+        <figcaption>SYSOPS</figcaption>
+        <ul>
+          
 <li id="" class="">
   <a href="../sysops/index.html">
     <img src="../assets/images/sysops-preview.svg"/>
     SYSOPS
   </a>
 </li>
+          
+<li id="" class="">
+  <a href="../3dmap/index.html">
+    <img src="../assets/images/map-preview.svg"/>
+    Orbital Map
+  </a>
+</li>
+        </ul>
+      </figure>
 
-      
+      <figure>
+        <figcaption>CAPCOM</figcaption>
+        <ul>
+          
+<li id="" class="">
+  <a href="../ground-track/index.html">
+    <img src="../assets/images/ground-track-preview.svg"/>
+    Ground Track
+  </a>
+</li>
+          
+<li id="" class="">
+  <a href="../3dmap/index.html">
+    <img src="../assets/images/map-preview.svg"/>
+    Orbital Map
+  </a>
+</li>
+        </ul>
+      </figure>
+
+      <figure>
+        <figcaption>TOOLS</figcaption>
+          <ul>
+            
+<li id="" class="">
+  <a href="../3dmap/index.html">
+    <img src="../assets/images/map-preview.svg"/>
+    Orbital Map
+  </a>
+</li>
+            
+<li id="" class="">
+  <a href="../staging-analysis/index.html">
+    <img src="../assets/images/staging-analysis-preview.svg"/>
+    Staging Analysis
+  </a>
+</li>
+            
 <li id="telemachus-console" class="">
   <a href="/telemachus/console.html">
     <img src="../assets/images/telemachus-preview.png"/>
@@ -106,7 +157,7 @@
   </a>
 </li>
 
-      
+            
 <li id="mkon" class="">
   <a href="/telemachus/MKON/index.html">
     <img src="../assets/images/mkon-preview.png"/>
@@ -114,15 +165,16 @@
   </a>
 </li>
 
-      
+            
 <li id="settings-link" class="">
   <a href="#settings">
     <img src="../assets/images/settings-preview.svg"/>
     Settings
   </a>
 </li>
-    </ul>
-    <div id="nav_toggle"><a href="#">&darr; Open</a></div>
+          </ul>
+      </figure>
+    </div>
   </nav>
 
   <section id="settings_overlay" >
@@ -362,15 +414,13 @@
     window.datalink = new Telemachus(settings.getHost(), settings.getPort())
     window.titleBar = new TitleBar(datalink, 'title-bar')
 
-    $('nav_toggle').observe("click", function(e){
+    var toggleNavigation = function(e){
       var nav = $$('nav')[0]
       nav.toggleClassName('open')
-      if(nav.hasClassName('open')){
-        $('nav_toggle').down('a').update('&uarr; Close')
-      } else{
-        $('nav_toggle').down('a').update('&darr; Open')
-      }
-    })
+    }
+
+    $('open-navigation').observe("click", toggleNavigation)
+    $('close-navigation').observe("click", toggleNavigation)
 
     
   window.navball = new Navball(window.datalink, 'navball', 'navball-heading')

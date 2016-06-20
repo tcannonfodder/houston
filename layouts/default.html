@@ -40,29 +40,57 @@
   <%= content_for(@item, :head) %>
 </head>
 <body>
+  <div id="open-navigation"><a href="#">&darr; Open</a></div>
   <nav>
-    <ul>
-      <%= render 'nav_item', :nav_item => 'ground-track', :nav_title => "Ground Track", :nav_url => '../ground-track/index.html' %>
+    <div id="close-navigation"><a href="#">&uarr; Close Navigation</a></div>
 
-      <%= render 'nav_item', :nav_item => 'ascension', :nav_title => "Ascension", :nav_url => '../ascension/index.html' %>
+    <div id="overlay-grid">
+      <figure>
+        <figcaption>FIDO</figcaption>
+        <ul>
+          <%= render 'nav_item', :nav_item => 'ascension', :nav_title => "Ascension", :nav_url => '../ascension/index.html' %>
+          <%= render 'nav_item', :nav_item => 'navigation', :nav_title => "Navigation", :nav_url => '../navigation/index.html' %>
+          <%= render 'nav_item', :nav_item => 'landing', :nav_title => "Landing", :nav_url => '../landing/index.html' %>
+          <%= render 'nav_item', :nav_item => 'docking', :nav_title => "Docking", :nav_url => '../docking/index.html' %>
+        </ul>
+      </figure>
 
-      <%= render 'nav_item', :nav_item => 'landing', :nav_title => "Landing", :nav_url => '../landing/index.html' %>
+      <figure>
+        <figcaption>BOOST/EECOM</figcaption>
+        <ul>
+          <%= render 'nav_item', :nav_item => 'boost', :nav_title => "BOOST/EECOM", :nav_url => '../boost/index.html' %>
+        </ul>
+      </figure>
 
-      <%= render 'nav_item', :nav_item => 'boost', :nav_title => "BOOST/EECOM", :nav_url => '../boost/index.html' %>
+      <figure>
+        <figcaption>SYSOPS</figcaption>
+        <ul>
+          <%= render 'nav_item', :nav_item => 'sysops', :nav_title => "SYSOPS", :nav_url => '../sysops/index.html' %>
+          <%= render 'nav_item', :nav_item => 'map', :nav_title => "Orbital Map", :nav_url => '../3dmap/index.html' %>
+        </ul>
+      </figure>
 
-      <%= render 'nav_item', :nav_item => 'fido', :nav_title => "FIDO", :nav_url => '../fido/index.html' %>
+      <figure>
+        <figcaption>CAPCOM</figcaption>
+        <ul>
+          <%= render 'nav_item', :nav_item => 'ground-track', :nav_title => "Ground Track", :nav_url => '../ground-track/index.html' %>
+          <%= render 'nav_item', :nav_item => 'map', :nav_title => "Orbital Map", :nav_url => '../3dmap/index.html' %>
+        </ul>
+      </figure>
 
-      <%= render 'nav_item', :nav_item => 'map', :nav_title => "Orbital Map", :nav_url => '../3dmap/index.html' %>
+      <figure>
+        <figcaption>TOOLS</figcaption>
+          <ul>
+            <%= render 'nav_item', :nav_item => 'map', :nav_title => "Orbital Map", :nav_url => '../3dmap/index.html' %>
+            <%= render 'nav_item', :nav_item => 'staging-analysis', :nav_title => "Staging Analysis", :nav_url => '../staging-analysis/index.html' %>
+            <%= render 'nav_item', :nav_title => "Telemachus Console", :nav_url => '/telemachus/console.html', :id => 'telemachus-console', :nav_item => "telemachus", :image_name => "telemachus-preview.png" %>
 
-      <%= render 'nav_item', :nav_item => 'sysops', :nav_title => "SYSOPS", :nav_url => '../sysops/index.html' %>
+            <%= render 'nav_item', :nav_title => "MKON", :nav_url => '/telemachus/MKON/index.html', :id => 'mkon', :nav_item => "mkon", :image_name => "mkon-preview.png" %>
 
-      <%= render 'nav_item', :nav_title => "Telemachus Console", :nav_url => '/telemachus/console.html', :id => 'telemachus-console', :nav_item => "telemachus", :image_name => "telemachus-preview.png" %>
-
-      <%= render 'nav_item', :nav_title => "MKON", :nav_url => '/telemachus/MKON/index.html', :id => 'mkon', :nav_item => "mkon", :image_name => "mkon-preview.png" %>
-
-      <%= render 'nav_item', :nav_title => "Settings", :nav_url => '#settings', :id => 'settings-link', :nav_item => "settings" %>
-    </ul>
-    <div id="nav_toggle"><a href="#">&darr; Open</a></div>
+            <%= render 'nav_item', :nav_title => "Settings", :nav_url => '#settings', :id => 'settings-link', :nav_item => "settings" %>
+          </ul>
+      </figure>
+    </div>
   </nav>
 
   <section id="settings_overlay" >
@@ -138,15 +166,13 @@
     window.datalink = new Telemachus(settings.getHost(), settings.getPort())
     window.titleBar = new TitleBar(datalink, 'title-bar')
 
-    $('nav_toggle').observe("click", function(e){
+    var toggleNavigation = function(e){
       var nav = $$('nav')[0]
       nav.toggleClassName('open')
-      if(nav.hasClassName('open')){
-        $('nav_toggle').down('a').update('&uarr; Close')
-      } else{
-        $('nav_toggle').down('a').update('&darr; Open')
-      }
-    })
+    }
+
+    $('open-navigation').observe("click", toggleNavigation)
+    $('close-navigation').observe("click", toggleNavigation)
 
     <%= content_for(@item, :dom_loaded) %>
   })

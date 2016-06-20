@@ -55,62 +55,85 @@ header,#content{
 }
 
 nav{
-  background-color: rgba(51,51,51, 1);
-  background-image: url('../images/title-noise.png');
+  position: fixed;
+  top: -100%;
+  left: 0;
+
+  height: 100%;
+  width: 100%;
+
+
+  z-index: 10;
+  background-color: rgba(0,0,0,0.80);
   font-family: 'AeroMatics Display Bold';
-  font-size: 25px;
-  text-shadow: 0px 2px 3px rgba(0,0,0,.8);
-  color: #d4d4d4;
-  box-shadow: inset 0px -1px 7px 0px rgba(0,0,0,0.50);
-}
 
-nav:not(.open){
-  height: 3px;
-}
+  /*transition: top 0.25s ease-in;*/
 
-nav a{
-  color: #d4d4d4;
-  text-decoration: none;
+  -webkit-transition: top 450ms cubic-bezier(0.215, 0.61, 0.355, 1);
+  transition:         top 450ms cubic-bezier(0.215, 0.61, 0.355, 1);
 }
 
 nav.open{
+  top: 0;
+  box-shadow: 0px 5px 7px 0px rgba(0,0,0,0.50);
 }
 
-nav ul {
-  display: none;
-  margin: 0px;
-  padding: 0px;
-  list-style-type:none;
-  white-space:nowrap;
-  overflow-x:auto;
+#close-navigation{
+  background: white;
+  text-align: center;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  font-size: 32px;
+  cursor: pointer;
 }
 
-nav.open ul{
-  display: block;
-  padding: 10px;
-  padding-bottom: 0px;
+nav figure, #close-navigation{
+  background: #9B9B9B;
+  background-image: url('../images/background-noise.png');
+  box-shadow: inset 0px -1px 7px 0px rgba(0,0,0,0.50);
 }
 
-nav.open ul li{
+nav figure{
   display: inline-block;
-  margin-right: 10px;
+  padding: 10px;
+  border-radius: 5px;
   text-align: center;
 }
 
-nav.open ul li img{
-  max-height: 100px;
-  display: block;
-  border: 2px solid #4A4A4A;
-  box-shadow: 0px 2px 3px rgba(0,0,0,.8);
-  border-radius: 3px;
-  margin: auto;
-  background: #9B9B9B;
-  background-image: url('../images/background-noise.png');
+nav figure figcaption{
+  margin-bottom: 10px;
+  font-size: 24px;
 }
 
-#nav_toggle{
-  font-size: 15px;
-  position: relative;
+nav figure ul{
+  margin: 0px;
+  padding: 0px;
+  list-style-type:none;
+  font-size: 20px;
+}
+
+nav figure ul li {
+  display: inline-block;
+  margin-right: 10px;
+}
+
+nav figure ul li:last-child{
+  margin-right: 0px;
+}
+
+nav img{
+  max-height: 100px;
+  display: block;
+}
+
+nav, nav a{
+  color: rgba(51,51,51, 1);
+  text-decoration: none;
+}
+
+#open-navigation{
+  font-size: 20px;
+  position: fixed;
   background-color: rgba(51,51,51, 1);
   background-image: url('../images/title-noise.png');
   width: 80px;
@@ -119,12 +142,17 @@ nav.open ul li img{
   border-radius: 8px;
   padding-bottom: 5px;
   padding-top: 10px;
-  bottom: 5px;
+  top: -5px;
+
+  font-family: 'AeroMatics Display Bold';
+  text-shadow: 0px 2px 3px rgba(0,0,0,.8);
+  color: #d4d4d4;
+  box-shadow: inset 0px -1px 7px 0px rgba(0,0,0,0.50);
 }
 
-nav.open #nav_toggle{
-  padding-top: 0px;
-  bottom:-15px;
+#open-navigation a{
+  color: #d4d4d4;
+  text-decoration: none;
 }
 
 #settings_overlay{
