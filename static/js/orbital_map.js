@@ -50,6 +50,13 @@ var OrbitalMap = Class.create({
     }
   },
 
+  resizeRenderer: function(){
+    this.renderer.setSize(1, 1)
+    this.camera.aspect = this.container.clientWidth/this.container.clientHeight
+    this.camera.updateProjectionMatrix()
+    this.renderer.setSize(this.container.clientWidth, this.container.clientHeight)
+  },
+
   buildSceneCameraAndRenderer: function(){
     this.renderer = new THREE.WebGLRenderer({antialias: true})
 
@@ -57,11 +64,11 @@ var OrbitalMap = Class.create({
     this.renderer.setClearColor('#3A1604')
     this.container.appendChild( this.renderer.domElement )
 
-    window.addEventListener('resize', function(){
-      this.camera.aspect = this.container.clientWidth/this.container.clientHeight
-      this.camera.updateProjectionMatrix()
-      this.renderer.setSize(this.container.clientWidth, this.container.clientHeight)
-    }.bind(this), false );
+    new ResizeSensor(this.container, function() {
+      if(this.camera){
+        this.resizeRenderer()
+      }
+    }.bind(this));
   },
 
   buildScene: function(){

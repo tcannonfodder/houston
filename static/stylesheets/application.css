@@ -26,6 +26,25 @@
   50.01% { opacity: 1 } 100% { opacity: 1 }
 }
 
+html,body {
+  height: 100%;
+  margin: 0
+}
+
+#station {
+  display: flex;
+  flex-flow: column;
+  height: 100%;
+}
+
+#title-bar{
+  flex: 0 1 auto;
+}
+
+#content{
+  flex: 1 1 auto;
+}
+
 body{
   background: #9B9B9B;
   background-image: url('../images/background-noise.png');
