@@ -61,6 +61,18 @@ javascripts:
     - static/js/orbital_map.js
     - static/js/resizeSensor.js
 
+  # docking
+
+    # - static/js/three.min.js
+    # - static/js/THREEx.FullScreen.js
+    # - static/js/orbit_controls.js
+    # - static/js/tween.min.js
+    - static/js/docking_position_data.js
+    - static/js/docking_map.js
+    # - static/js/position_data_formatter.js
+    # - static/js/orbital_map.js
+    # - static/js/resizeSensor.js
+
 stylesheets:
   app:
     - static/stylesheets/chartist.min.css
