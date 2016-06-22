@@ -16,7 +16,7 @@ var DockingMap = Class.create({
     this.sunBodyScaleFactor = 1
     this.maxLengthInThreeJS = 2000
     this.vehicleLength = 1
-    this.defaultZoomFactor = 20
+    this.defaultZoomFactor = 10
 
     this.referenceBodyGeometry = {}
 
@@ -93,7 +93,8 @@ var DockingMap = Class.create({
 
     this.currentVesselGeometry = cube
 
-    this.setPosition(cube, positionData.vesselCurrentPosition.truePosition)
+    // Use the vessel as the zero point in the map
+    this.setPosition(cube, [0,0,0])
     this.group.add(cube)
   },
 
@@ -114,7 +115,13 @@ var DockingMap = Class.create({
 
     this.targetGeometry = cube
 
-    this.setPosition(cube, positionData.targetCurrentPosition.truePosition)
+    var position = [
+      positionData.targetCurrentPosition.truePosition[0] - positionData.vesselCurrentPosition.truePosition[0],
+      positionData.targetCurrentPosition.truePosition[1] - positionData.vesselCurrentPosition.truePosition[1],
+      positionData.targetCurrentPosition.truePosition[2] - positionData.vesselCurrentPosition.truePosition[2]
+    ]
+
+    this.setPosition(cube, position)
     this.group.add(cube)
   },
 
@@ -158,16 +165,16 @@ var DockingMap = Class.create({
       this.controls.addEventListener( 'change', function(){this.renderer.render(this.scene, this.camera)}.bind(this) ); // add this only if there is no animation loop (requestAnimationFrame)
     }
 
-    // if(!this.cameraSet){
+    if(!this.cameraSet){
       this.controls.target = vector
       this.camera.position.set(cameraX, cameraY, cameraZ)
       this.camera.lookAt(vector)
       // this.controls.rotate.x = -Math.PI/2
-    //   this.cameraSet = true
-    // } else{
-    //   this.controls.target0 = vector.clone()
-    //   this.controls.position0 = new THREE.Vector3(cameraX, cameraY, cameraZ)
-    // }
+      this.cameraSet = true
+    } else{
+      this.controls.target0 = vector.clone()
+      this.controls.position0 = new THREE.Vector3(cameraX, cameraY, cameraZ)
+    }
 
     this.controls.maxDistance = Math.max(
       (Math.abs(boundingBox.min.x) + Math.abs(boundingBox.max.x)),
