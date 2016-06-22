@@ -78,8 +78,8 @@ var DockingPositionData = Class.create({
   truePositionForRelativePosition: function(relativePositionVector, frameOfReferenceVector){
     var transformedRelativePositionVector = [
       relativePositionVector[0],
-      relativePositionVector[1],
       relativePositionVector[2],
+      relativePositionVector[1],
     ]
 
     return math.add(frameOfReferenceVector, transformedRelativePositionVector)
