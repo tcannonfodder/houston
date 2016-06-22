@@ -117,7 +117,7 @@ var DockingMap = Class.create({
 
     var position = [
       positionData.targetCurrentPosition.truePosition[0] - positionData.vesselCurrentPosition.truePosition[0],
-      positionData.targetCurrentPosition.truePosition[1] - positionData.vesselCurrentPosition.truePosition[1],
+      positionData.vesselCurrentPosition.truePosition[1] - positionData.targetCurrentPosition.truePosition[1],
       positionData.targetCurrentPosition.truePosition[2] - positionData.vesselCurrentPosition.truePosition[2]
     ]
 
