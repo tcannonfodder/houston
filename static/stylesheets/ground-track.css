@@ -17,8 +17,8 @@
 #altitude-estimate .ct-label.ct-horizontal{
   -webkit-transform: rotate(45deg);
   transform: rotate(45deg);
-  margin-left: -20px;
-  margin-bottom: -100px;
+  -webkit-transform-origin: left;
+  transform-origin: left;
 }
 
 #ground-track-wrapper{
