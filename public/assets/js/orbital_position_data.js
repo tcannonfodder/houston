@@ -29,8 +29,8 @@ var OrbitalPositionData = Class.create({
     Object.extend(data, {
       "currentUniversalTime": this.adjustUniversalTime(data['t.universalTime']),
       "vesselBody": data['v.body'],
-      "vesselCurrentPosition": { "trueAnomaly" : null, "relativePosition": null },
-      "targetCurrentPosition": { "trueAnomaly" : null, "relativePosition": null },
+      "vesselCurrentPosition": { "relativePosition": null },
+      "targetCurrentPosition": { "relativePosition": null },
     })
     this.getPositionsAndRecalculate(data)
   },
@@ -63,7 +63,6 @@ var OrbitalPositionData = Class.create({
     this.datalink.sendMessage(requestParams, function(data){
       positionData["currentReferenceBodyRadius"] = data["currentReferenceBodyRadius"]
       positionData["currentReferenceBodyTruePosition"] = data["currentReferenceBodyTruePosition"]
-      positionData["vesselCurrentPosition"]["trueAnomaly"] = data["vesselCurrentPositionTrueAnomaly"]
 
       this.buildReferenceBodyPositionData(data, positionData)
       this.buildReferenceBodyMetadata(data, positionData)
@@ -123,7 +122,7 @@ var OrbitalPositionData = Class.create({
       var maneuverNode = maneuverNodes[i]
 
       /*
-      "apistring": "o.maneuverNodes.trueAnomalyAtUTForManeuverNodesOrbitPatch",
+      "apistring": "o.maneuverNodes.relativePositionAtUTForManeuverNodesOrbitPatch",
       "name": "For a maneuver node, The orbit patch's True Anomaly at Universal Time [int id, orbit patch index, universal time]",
       "units": "DEG",
       "plotable": true
