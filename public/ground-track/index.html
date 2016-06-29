@@ -116,10 +116,10 @@
         <figcaption>CAPCOM</figcaption>
         <ul>
           
-<li id="" class="current">
-  <a href="../ground-track/index.html">
-    <img src="../assets/images/ground-track-preview.svg"/>
-    Ground Track
+<li id="" class="">
+  <a href="../vessel-overview/index.html">
+    <img src="../assets/images/vessel-overview-preview.svg"/>
+    Vessel Overview
   </a>
 </li>
           
@@ -135,6 +135,13 @@
       <figure>
         <figcaption>TOOLS</figcaption>
           <ul>
+            
+<li id="" class="current">
+  <a href="../ground-track/index.html">
+    <img src="../assets/images/ground-track-preview.svg"/>
+    Ground Track
+  </a>
+</li>
             
 <li id="" class="">
   <a href="../3dmap/index.html">
@@ -209,149 +216,6 @@
       
 
 
-<div id="top-panel">
-  <div id="resources" class="readout-display">
-    <div class="resource-grid">
-      <div id="liquid-fuel" class="resource-readout">
-  <p>Liquid Fuel</p>
-
-  
-    <div>
-      <span class="label">Current Stage</span><br>
-      
-        <div class="totals">
-          <span id="liquid-fuel-current-stage-value">0</span>/<span id="liquid-fuel-current-stage-max">100</span>
-        </div>
-      
-      <progress id="liquid-fuel-current" value="0" max="0">0%</progress>
-    </div>
-  
-
-  <div>
-    
-      <span class="label">Total</span><br>
-    
-    
-      <div class="totals">
-        <span id="liquid-fuel-total-value">0</span>/<span id="liquid-fuel-total-max">100</span>
-      </div>
-    
-    <progress id="liquid-fuel-total" value="0" max="0">0%</progress>
-  </div>
-</div>
-
-      <div id="oxidizer" class="resource-readout">
-  <p>Oxidizer</p>
-
-  
-    <div>
-      <span class="label">Current Stage</span><br>
-      
-        <div class="totals">
-          <span id="oxidizer-current-stage-value">0</span>/<span id="oxidizer-current-stage-max">100</span>
-        </div>
-      
-      <progress id="oxidizer-current" value="0" max="0">0%</progress>
-    </div>
-  
-
-  <div>
-    
-      <span class="label">Total</span><br>
-    
-    
-      <div class="totals">
-        <span id="oxidizer-total-value">0</span>/<span id="oxidizer-total-max">100</span>
-      </div>
-    
-    <progress id="oxidizer-total" value="0" max="0">0%</progress>
-  </div>
-</div>
-
-      <div id="electric-charge" class="resource-readout">
-  <p>Electric Charge</p>
-
-  
-    <div>
-      <span class="label">Current Stage</span><br>
-      
-        <div class="totals">
-          <span id="electric-charge-current-stage-value">0</span>/<span id="electric-charge-current-stage-max">100</span>
-        </div>
-      
-      <progress id="electric-charge-current" value="0" max="0">0%</progress>
-    </div>
-  
-
-  <div>
-    
-      <span class="label">Total</span><br>
-    
-    
-      <div class="totals">
-        <span id="electric-charge-total-value">0</span>/<span id="electric-charge-total-max">100</span>
-      </div>
-    
-    <progress id="electric-charge-total" value="0" max="0">0%</progress>
-  </div>
-</div>
-
-      <div id="monopropellant" class="resource-readout">
-  <p>Monopropellant</p>
-
-  
-    <div>
-      <span class="label">Current Stage</span><br>
-      
-        <div class="totals">
-          <span id="monopropellant-current-stage-value">0</span>/<span id="monopropellant-current-stage-max">100</span>
-        </div>
-      
-      <progress id="monopropellant-current" value="0" max="0">0%</progress>
-    </div>
-  
-
-  <div>
-    
-      <span class="label">Total</span><br>
-    
-    
-      <div class="totals">
-        <span id="monopropellant-total-value">0</span>/<span id="monopropellant-total-max">100</span>
-      </div>
-    
-    <progress id="monopropellant-total" value="0" max="0">0%</progress>
-  </div>
-</div>
-    </div>
-
-    <div id="ablator-readout">
-      <div id="ablator" class="resource-readout">
-  <p>Ablator</p>
-
-  
-
-  <div>
-    
-    
-      <div class="totals">
-        <span id="ablator-total-value">0</span>/<span id="ablator-total-max">100</span>
-      </div>
-    
-    <progress id="ablator-total" value="0" max="0">0%</progress>
-  </div>
-</div>
-    </div>
-  </div>
-
-  <div id="button-panel">
-    <button id="rcs" disabled="disabled" class="status">RCS</button>
-    <button id="sas" disabled="disabled" class="status">SAS</button>
-  </div>
-
-  <table id="orbital-data" class="readout-display readout-table"></table>
-</div>
-
 <div id="ground-track-wrapper">
   <div id="gt-map" class="ground-track readout-display"></div>
   <div id="altitude-estimate" class="readout-display">
@@ -416,82 +280,6 @@
   window.datalink.rate = 1000
 
   window.groundTrackContainer = new GroundTrackContainer('gt-map', 'altitude-estimate-chart')
-  window.rcsButtonIndicator = new ButtonIndicator(datalink, 'rcs', 'v.rcsValue')
-  window.sasButtonIndicator = new ButtonIndicator(datalink, 'sas', 'v.sasValue')
-
-  window.liquidFuelMonitor = new ResourceMonitor(datalink, 'LiquidFuel', {
-    currentStageProgressBar: $('liquid-fuel-current'),
-    totalProgressBar: $('liquid-fuel-total'),
-    valuePrefix: 'liquid-fuel'
-  })
-
-  window.oxidizerMonitor = new ResourceMonitor(datalink, 'Oxidizer', {
-    currentStageProgressBar: $('oxidizer-current'),
-    totalProgressBar: $('oxidizer-total'),
-    valuePrefix: 'oxidizer'
-  })
-
-  window.electricChargeMonitor = new ResourceMonitor(datalink, 'ElectricCharge', {
-    currentStageProgressBar: $('electric-charge-current'),
-    totalProgressBar: $('electric-charge-total'),
-    valuePrefix: 'electric-charge'
-  })
-
-  window.monopropellantMonitor = new ResourceMonitor(datalink, 'Monopropellant', {
-    currentStageProgressBar: $('monopropellant-current'),
-    totalProgressBar: $('monopropellant-total'),
-    valuePrefix: 'monopropellant'
-  })
-
-  window.ablatorMonitor = new ResourceMonitor(datalink, 'Ablator', {
-    totalProgressBar: $('ablator-total'),
-    valuePrefix: 'ablator'
-  })
-
-
-
-  window.readoutTable = new ReadoutTable(datalink, 'orbital-data', [
-    {
-      label: "Altitude",
-      value: 'v.altitude',
-      formatter: function(value){ return DataFormatters.distanceString(value) }
-    },
-    {
-      label: "Apoapsis",
-      value: 'o.ApA',
-      formatter: function(value){ return DataFormatters.distanceString(value) }
-    },
-    {
-      label: "Periapsis",
-      value: 'o.PeA',
-      formatter: function(value){ return DataFormatters.distanceString(value) }
-    },
-    {
-      label: "Time to Apoapsis",
-      value: 'o.timeToAp',
-      formatter: function(value){ return "-" + TimeFormatters.durationString(value) }
-    },
-    {
-      label: "Time to Periapsis",
-      value: 'o.timeToPe',
-      formatter: function(value){ return "-" + TimeFormatters.durationString(value) }
-    },
-    {
-      label: "Inclination",
-      value: 'o.inclination',
-      formatter: function(value){ return DataFormatters.degreeString(value) }
-    },
-    {
-      label: "Eccentricity",
-      value: 'o.eccentricity',
-      formatter: function(value){ return value.toFixed(3) }
-    },
-    {
-      label: "Orbital Velocity",
-      value: 'v.orbitalVelocity',
-      formatter: function(value){ return DataFormatters.velocityString(value) }
-    },
-  ])
 
   })
 

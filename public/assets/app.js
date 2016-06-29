@@ -10460,7 +10460,7 @@ var GroundTrack = Class.create({
   renderOrbitPaths: function(markers, orbitPaths, lineOptions){
     //clear all the existing orbital path values
     for (var i = markers.length - 1; i >= 0; i--) {
-      markers.setLatLngs([])
+      markers[i].setLatLngs([])
     }
 
     for (var i = 0; i < orbitPaths.length; i++) {
@@ -10564,12 +10564,12 @@ var GroundTrack = Class.create({
 
       chartData.labels.push(label)
 
-      chartData.series[0].data.push(dataPoint.vessel)
-      chartData.series[1].data.push(formattedData.atmosphericRadius)
-      chartData.series[2].data.push(dataPoint.vesselManeuver)
+      chartData.series[0].data.push(dataPoint.vessel || null)
+      chartData.series[1].data.push(formattedData.atmosphericRadius || null)
+      chartData.series[2].data.push(dataPoint.vesselManeuver || null)
 
       if(formattedData.targetCurrentCoordinates){
-        chartData.series[3].data.push(dataPoint.target)
+        chartData.series[3].data.push(dataPoint.target || null)
       }
     }
 

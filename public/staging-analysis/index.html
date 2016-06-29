@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title></title>
+  <title>Staging Analysis</title>
   <script src="../assets/app.js"></script>
 
   
@@ -13,29 +13,31 @@
   <link rel="stylesheet" type="text/css" href="../assets/stylesheets/leafletksp.css" />
   <link rel="stylesheet" type="text/css" href="../assets/stylesheets/application.css" />
 
-  <link rel="apple-touch-icon-precomposed" sizes="57x57" href="../assets/icons///apple-touch-icon-57x57.png" />
-  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../assets/icons///apple-touch-icon-114x114.png" />
-  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../assets/icons///apple-touch-icon-72x72.png" />
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../assets/icons///apple-touch-icon-144x144.png" />
-  <link rel="apple-touch-icon-precomposed" sizes="60x60" href="../assets/icons///apple-touch-icon-60x60.png" />
-  <link rel="apple-touch-icon-precomposed" sizes="120x120" href="../assets/icons///apple-touch-icon-120x120.png" />
-  <link rel="apple-touch-icon-precomposed" sizes="76x76" href="../assets/icons///apple-touch-icon-76x76.png" />
-  <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../assets/icons///apple-touch-icon-152x152.png" />
-  <link rel="icon" type="image/png" href="../assets/icons///favicon-196x196.png" sizes="196x196" />
-  <link rel="icon" type="image/png" href="../assets/icons///favicon-96x96.png" sizes="96x96" />
-  <link rel="icon" type="image/png" href="../assets/icons///favicon-32x32.png" sizes="32x32" />
-  <link rel="icon" type="image/png" href="../assets/icons///favicon-16x16.png" sizes="16x16" />
-  <link rel="icon" type="image/png" href="../assets/icons///favicon-128.png" sizes="128x128" />
-  <meta name="application-name" content="../assets/icons/"/>
+  <link rel="apple-touch-icon-precomposed" sizes="57x57" href="../assets/icons//staging-analysis//apple-touch-icon-57x57.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../assets/icons//staging-analysis//apple-touch-icon-114x114.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../assets/icons//staging-analysis//apple-touch-icon-72x72.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../assets/icons//staging-analysis//apple-touch-icon-144x144.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="60x60" href="../assets/icons//staging-analysis//apple-touch-icon-60x60.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="120x120" href="../assets/icons//staging-analysis//apple-touch-icon-120x120.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="76x76" href="../assets/icons//staging-analysis//apple-touch-icon-76x76.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../assets/icons//staging-analysis//apple-touch-icon-152x152.png" />
+  <link rel="icon" type="image/png" href="../assets/icons//staging-analysis//favicon-196x196.png" sizes="196x196" />
+  <link rel="icon" type="image/png" href="../assets/icons//staging-analysis//favicon-96x96.png" sizes="96x96" />
+  <link rel="icon" type="image/png" href="../assets/icons//staging-analysis//favicon-32x32.png" sizes="32x32" />
+  <link rel="icon" type="image/png" href="../assets/icons//staging-analysis//favicon-16x16.png" sizes="16x16" />
+  <link rel="icon" type="image/png" href="../assets/icons//staging-analysis//favicon-128.png" sizes="128x128" />
+  <meta name="application-name" content="../assets/icons/Staging Analysis"/>
   <meta name="msapplication-TileColor" content="#FFFFFF" />
-  <meta name="msapplication-TileImage" content="../assets/icons///mstile-144x144.png" />
-  <meta name="msapplication-square70x70logo" content="../assets/icons///mstile-70x70.png" />
-  <meta name="msapplication-square150x150logo" content="../assets/icons///mstile-150x150.png" />
-  <meta name="msapplication-wide310x150logo" content="../assets/icons///mstile-310x150.png" />
-  <meta name="msapplication-square310x310logo" content="../assets/icons///mstile-310x310.png" />
+  <meta name="msapplication-TileImage" content="../assets/icons//staging-analysis//mstile-144x144.png" />
+  <meta name="msapplication-square70x70logo" content="../assets/icons//staging-analysis//mstile-70x70.png" />
+  <meta name="msapplication-square150x150logo" content="../assets/icons//staging-analysis//mstile-150x150.png" />
+  <meta name="msapplication-wide310x150logo" content="../assets/icons//staging-analysis//mstile-310x150.png" />
+  <meta name="msapplication-square310x310logo" content="../assets/icons//staging-analysis//mstile-310x310.png" />
 
 
   
+  <link rel="stylesheet" type="text/css" href="../assets/stylesheets/staging-analysis.css" />
+
 </head>
 <body>
   <div id="open-navigation"><a href="#">&darr; Open</a></div>
@@ -148,7 +150,7 @@
   </a>
 </li>
             
-<li id="" class="">
+<li id="" class="current">
   <a href="../staging-analysis/index.html">
     <img src="../assets/images/staging-analysis-preview.svg"/>
     Staging Analysis
@@ -203,7 +205,7 @@
         <span id="mission-time">T+12:34:14 MET</span>
       </div>
 
-      <h1></h1>
+      <h1>Staging Analysis</h1>
 
       <div id="world-clock" class="readout-display">
         Year 1, Day 1 00:23:13 UT
@@ -211,9 +213,33 @@
     </header>
 
     <div id="content">
-      <script>
-window.location.href="ascension/index.html"
-</script
+      
+
+
+<div id="top-panel">
+  <!-- <div> -->
+    <div class="readout-display">
+      <h2>Current Throttle Info</h2>
+      <table id="current-stage-atmo" class="readout-table">
+        <caption>Atmosphere</caption>
+      </table>
+
+      <table id="current-stage-vacuum" class="readout-table">
+        <caption>Vacuum</caption>
+      </table>
+    </div>
+
+  <!-- </div> -->
+
+  <div class="readout-display">
+    <h2>Staging Info</h2>
+    <div id="staging-info-table-wrapper">
+      <table id="staging-info-table" class="readout-table"></table>
+    </div>
+  </div>
+</div>
+
+
     </div>
   </div>
 
@@ -266,6 +292,10 @@ window.location.href="ascension/index.html"
     $('close-navigation').observe("click", toggleNavigation)
 
     
+  window.currentStageBurnInfo = new CurrentStageBurnInfo(datalink, 'current-stage-atmo','current-stage-vacuum')
+
+  window.stagingInfoTable = new StagingInfoTable(datalink, 'staging-info-table')
+
   })
 
   </script>
