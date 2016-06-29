@@ -50,7 +50,7 @@ var GroundTrack = Class.create({
   renderOrbitPaths: function(markers, orbitPaths, lineOptions){
     //clear all the existing orbital path values
     for (var i = markers.length - 1; i >= 0; i--) {
-      markers.setLatLngs([])
+      markers[i].setLatLngs([])
     }
 
     for (var i = 0; i < orbitPaths.length; i++) {
