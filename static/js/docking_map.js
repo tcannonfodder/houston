@@ -149,8 +149,8 @@ var DockingMap = Class.create({
 
     this.scene.add( axisHelper );
 
-    var targetVector = this.targetGeometry.position.clone()
-    targetVector.multiplyScalar(scaleFactor)
+    var targetVector = vector;
+    // targetVector.multiplyScalar(scaleFactor)
 
     var cameraX = vector.x + ((this.vehicleLength * this.defaultZoomFactor) * scaleFactor)
     var cameraY = vector.y + ((this.vehicleLength * this.defaultZoomFactor) * scaleFactor)
