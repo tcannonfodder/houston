@@ -1,0 +1,35 @@
+.ground-track{
+  height: 324px;
+  flex-grow: 1;
+  margin-top: 5px;
+}
+
+#altitude-estimate{
+  width: 50%;
+  margin-left: 10px;
+  padding-bottom: 20px;
+}
+
+#altitude-estimate-chart{
+  height: 230px;
+}
+
+#altitude-estimate .ct-label.ct-horizontal{
+  -webkit-transform: rotate(45deg);
+  transform: rotate(45deg);
+  -webkit-transform-origin: left;
+  transform-origin: left;
+}
+
+#ground-track-wrapper{
+  margin-top: 10px;
+
+  display: -webkit-box; /* OLD - iOS 6-, Safari 3.1-6 */
+  display: -moz-box; /* OLD - Firefox 19- (buggy but mostly works) */
+  display:-webkit-flex;
+  display:-webkit-flexbox;
+  display:-ms-flex;
+  display: flex;
+  -webkit-flex-direction: row;
+  flex-direction: row;
+}

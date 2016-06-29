@@ -1,0 +1,21 @@
+---
+title: Ground Track
+---
+
+<% content_for :head do %>
+  <link rel="stylesheet" type="text/css" href="../assets/stylesheets/ground-track.css" />
+<% end %>
+
+<div id="ground-track-wrapper">
+  <div id="gt-map" class="ground-track readout-display"></div>
+  <div id="altitude-estimate" class="readout-display">
+    <h2>Altitude Estimate</h2>
+    <div id="altitude-estimate-chart" class="ct-chart"></div>
+  </div>
+</div>
+
+<% content_for :dom_loaded do %>
+  window.datalink.rate = 1000
+
+  window.groundTrackContainer = new GroundTrackContainer('gt-map', 'altitude-estimate-chart')
+<% end %>
