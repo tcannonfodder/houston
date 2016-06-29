@@ -6,31 +6,6 @@ title: Ground Track
   <link rel="stylesheet" type="text/css" href="../assets/stylesheets/ground-track.css" />
 <% end %>
 
-<div id="top-panel">
-  <div id="resources" class="readout-display">
-    <div class="resource-grid">
-      <%= render 'resource_bar', :resource_name => "liquid-fuel", :resource_label => "Liquid Fuel", :current_stage => true, :show_totals => true %>
-
-      <%= render 'resource_bar', :resource_name => "oxidizer", :resource_label => "Oxidizer", :current_stage => true, :show_totals => true %>
-
-      <%= render 'resource_bar', :resource_name => "electric-charge", :resource_label => "Electric Charge", :current_stage => true, :show_totals => true %>
-
-      <%= render 'resource_bar', :resource_name => "monopropellant", :resource_label => "Monopropellant", :current_stage => true, :show_totals => true %>
-    </div>
-
-    <div id="ablator-readout">
-      <%= render 'resource_bar', :resource_name => "ablator", :resource_label => "Ablator", :show_totals => true %>
-    </div>
-  </div>
-
-  <div id="button-panel">
-    <%= render 'button', :button_id => "rcs", :button_label => "RCS" %>
-    <%= render 'button', :button_id => "sas", :button_label => "SAS" %>
-  </div>
-
-  <table id="orbital-data" class="readout-display readout-table"></table>
-</div>
-
 <div id="ground-track-wrapper">
   <div id="gt-map" class="ground-track readout-display"></div>
   <div id="altitude-estimate" class="readout-display">
@@ -43,80 +18,4 @@ title: Ground Track
   window.datalink.rate = 1000
 
   window.groundTrackContainer = new GroundTrackContainer('gt-map', 'altitude-estimate-chart')
-  window.rcsButtonIndicator = new ButtonIndicator(datalink, 'rcs', 'v.rcsValue')
-  window.sasButtonIndicator = new ButtonIndicator(datalink, 'sas', 'v.sasValue')
-
-  window.liquidFuelMonitor = new ResourceMonitor(datalink, 'LiquidFuel', {
-    currentStageProgressBar: $('liquid-fuel-current'),
-    totalProgressBar: $('liquid-fuel-total'),
-    valuePrefix: 'liquid-fuel'
-  })
-
-  window.oxidizerMonitor = new ResourceMonitor(datalink, 'Oxidizer', {
-    currentStageProgressBar: $('oxidizer-current'),
-    totalProgressBar: $('oxidizer-total'),
-    valuePrefix: 'oxidizer'
-  })
-
-  window.electricChargeMonitor = new ResourceMonitor(datalink, 'ElectricCharge', {
-    currentStageProgressBar: $('electric-charge-current'),
-    totalProgressBar: $('electric-charge-total'),
-    valuePrefix: 'electric-charge'
-  })
-
-  window.monopropellantMonitor = new ResourceMonitor(datalink, 'Monopropellant', {
-    currentStageProgressBar: $('monopropellant-current'),
-    totalProgressBar: $('monopropellant-total'),
-    valuePrefix: 'monopropellant'
-  })
-
-  window.ablatorMonitor = new ResourceMonitor(datalink, 'Ablator', {
-    totalProgressBar: $('ablator-total'),
-    valuePrefix: 'ablator'
-  })
-
-
-
-  window.readoutTable = new ReadoutTable(datalink, 'orbital-data', [
-    {
-      label: "Altitude",
-      value: 'v.altitude',
-      formatter: function(value){ return DataFormatters.distanceString(value) }
-    },
-    {
-      label: "Apoapsis",
-      value: 'o.ApA',
-      formatter: function(value){ return DataFormatters.distanceString(value) }
-    },
-    {
-      label: "Periapsis",
-      value: 'o.PeA',
-      formatter: function(value){ return DataFormatters.distanceString(value) }
-    },
-    {
-      label: "Time to Apoapsis",
-      value: 'o.timeToAp',
-      formatter: function(value){ return "-" + TimeFormatters.durationString(value) }
-    },
-    {
-      label: "Time to Periapsis",
-      value: 'o.timeToPe',
-      formatter: function(value){ return "-" + TimeFormatters.durationString(value) }
-    },
-    {
-      label: "Inclination",
-      value: 'o.inclination',
-      formatter: function(value){ return DataFormatters.degreeString(value) }
-    },
-    {
-      label: "Eccentricity",
-      value: 'o.eccentricity',
-      formatter: function(value){ return value.toFixed(3) }
-    },
-    {
-      label: "Orbital Velocity",
-      value: 'v.orbitalVelocity',
-      formatter: function(value){ return DataFormatters.velocityString(value) }
-    },
-  ])
 <% end %>
