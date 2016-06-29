@@ -1,0 +1,32 @@
+---
+title: Mission Wall
+---
+
+<% content_for :head do %>
+  <link rel="stylesheet" type="text/css" href="../assets/stylesheets/mission-wall.css" />
+<% end %>
+
+<div id="ground-track-wrapper">
+  <div id="gt-map" class="ground-track readout-display"></div>
+  <div id="altitude-estimate" class="readout-display">
+    <h2>Altitude Estimate</h2>
+    <div id="altitude-estimate-chart" class="ct-chart"></div>
+  </div>
+</div>
+
+<div id="orbital-map-container" class="readout-display">
+  <div id="orbital-map"></div>
+</div>
+
+<%= render 'orbital_map_shader' %>
+
+<% content_for :dom_loaded do %>
+  window.datalink.rate = 2000
+
+  window.groundTrackContainer = new GroundTrackContainer('gt-map', 'altitude-estimate-chart')
+
+  var orbitalPositionData = new OrbitalPositionData(window.datalink)
+  window.positionDataFormatter = new PositionDataFormatter(orbitalPositionData, window.datalink)
+
+  window.OrbitalMap = new OrbitalMap(positionDataFormatter, window.datalink, "orbital-map")
+<% end %>
