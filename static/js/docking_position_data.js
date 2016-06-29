@@ -51,10 +51,10 @@ var DockingPositionData = Class.create({
         requestParams["targetBodyTruePosition"] = 'b.o.truePositionAtUT[' + targetBody.id + ',' + positionData["currentUniversalTime"] + ']'
 
         requestParams["targetRelativePosition"] = "tar.o.relativePositionAtUTForOrbitPatch[" + 0 +","+ positionData["currentUniversalTime"] + "]"
+      } else{
+        var body = this.datalink.getOrbitalBodyInfo(positionData['tar.name'])
+        requestParams["targetTruePosition"] = 'b.o.truePositionAtUT[' + body.id + ',' + positionData["currentUniversalTime"] + ']'
       }
-    } else{
-      var body = this.datalink.getOrbitalBodyInfo(positionData['tar.name'])
-      requestParams["targetTruePosition"] = 'b.o.truePositionAtUT[' + body.id + ',' + positionData["currentUniversalTime"] + ']'
     }
 
     this.datalink.sendMessage(requestParams, function(data){
@@ -62,12 +62,14 @@ var DockingPositionData = Class.create({
         data["vesselRelativePosition"], data["vesselBodyTruePosition"]
       )
 
-      if(positionData['tar.o.orbitPatches']){
-        positionData["targetCurrentPosition"]["truePosition"] = this.truePositionForRelativePosition(
-          data["targetRelativePosition"], data["targetBodyTruePosition"]
-        )
-      } else{
-        positionData["targetCurrentPosition"]["truePosition"] = data["targetTruePosition"]
+      if(positionData['tar.type']){
+        if(positionData['tar.o.orbitPatches']){
+          positionData["targetCurrentPosition"]["truePosition"] = this.truePositionForRelativePosition(
+            data["targetRelativePosition"], data["targetBodyTruePosition"]
+          )
+        } else{
+          positionData["targetCurrentPosition"]["truePosition"] = data["targetTruePosition"]
+        }
       }
 
       this.mutexUnlock()
