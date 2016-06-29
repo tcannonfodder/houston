@@ -1,0 +1,76 @@
+---
+title: Docking
+---
+
+<% content_for :head do %>
+  <link rel="stylesheet" type="text/css" href="../assets/stylesheets/docking.css" />
+<% end %>
+
+<div id="top-panel">
+  <div id="docking-map-container" class="readout-display">
+    <div id="docking-map"></div>
+  </div>
+</div>
+
+<div id="bottom-panel">
+  <div class="readout-display">
+    <h2>Docking Info</h2>
+    <table id="docking-info" class="readout-table"></table>
+  </div>
+
+  <div id="navigation-throttle-and-buttons">
+    <div id="navigation-and-buttons" class="gauge">
+      <%= render 'navball' %>
+      <div id="button-panel">
+        <%= render 'button', :button_id => "rcs", :button_label => "RCS" %>
+        <%= render 'button', :button_id => "sas", :button_label => "SAS" %>
+      </div>
+    </div>
+    <div id="throttle-panel">
+      <%= render 'throttle' %>
+    </div>
+  </div>
+</div>
+
+
+<% content_for :dom_loaded do %>
+  window.mapDatalink = new Telemachus(settings.getHost(), settings.getPort())
+  window.mapDatalink.rate = 2000
+  var dockingPositionData = new DockingPositionData(window.mapDatalink)
+
+  window.DockingMap = new DockingMap(dockingPositionData, window.mapDatalink, "docking-map")
+
+  window.dockingInfoTable = new ReadoutTable(datalink, 'docking-info', [
+    {
+      label: "X Angle",
+      value: 'dock.ax',
+      formatter: function(value){ return DataFormatters.degreeString(value) }
+    },
+    {
+      label: "Y Angle",
+      value: 'dock.ay',
+      formatter: function(value){ return DataFormatters.degreeString(value) }
+    },
+    {
+      label: "Z Angle",
+      value: 'dock.az',
+      formatter: function(value){ return DataFormatters.degreeString(value) }
+    },
+    {
+      label: "X Distance",
+      value: 'dock.x',
+      formatter: function(value){ return DataFormatters.distanceString(value) }
+    },
+    {
+      label: "Y Distance",
+      value: 'dock.y',
+      formatter: function(value){ return DataFormatters.distanceString(value) }
+    }
+  ])
+
+  window.navball = new Navball(window.datalink, 'navball', 'navball-heading')
+  window.rcsButtonIndicator = new ButtonIndicator(datalink, 'rcs', 'v.rcsValue')
+  window.sasButtonIndicator = new ButtonIndicator(datalink, 'sas', 'v.sasValue')
+  window.throttleGauge = new ThrottleGauge(window.datalink, 'throttle')
+
+<% end %>
