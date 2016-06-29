@@ -1,0 +1,36 @@
+---
+title: Staging Analysis
+---
+
+<% content_for :head do %>
+  <link rel="stylesheet" type="text/css" href="../assets/stylesheets/staging-analysis.css" />
+<% end %>
+
+<div id="top-panel">
+  <!-- <div> -->
+    <div class="readout-display">
+      <h2>Current Throttle Info</h2>
+      <table id="current-stage-atmo" class="readout-table">
+        <caption>Atmosphere</caption>
+      </table>
+
+      <table id="current-stage-vacuum" class="readout-table">
+        <caption>Vacuum</caption>
+      </table>
+    </div>
+
+  <!-- </div> -->
+
+  <div class="readout-display">
+    <h2>Staging Info</h2>
+    <div id="staging-info-table-wrapper">
+      <table id="staging-info-table" class="readout-table"></table>
+    </div>
+  </div>
+</div>
+
+<% content_for :dom_loaded do %>
+  window.currentStageBurnInfo = new CurrentStageBurnInfo(datalink, 'current-stage-atmo','current-stage-vacuum')
+
+  window.stagingInfoTable = new StagingInfoTable(datalink, 'staging-info-table')
+<% end %>
