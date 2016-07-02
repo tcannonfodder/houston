@@ -7,16 +7,17 @@ var AtmosphericDensityGauge = Class.create({
   },
 
   update: function(data){
-    var maxDensity = 1.0;
+    var func = function(x){return Math.log(2.0 * x)}
 
-    var currentPercentage = (data['v.atmosphericDensity']/maxDensity) * 100
-
-    this.gauge.value = currentPercentage
-    this.gauge.max = 100
+    var max = func(100)
+    var value = func(data['v.atmosphericPressure'] * 100)
+    console.log(value)
+    this.gauge.value = value
+    this.gauge.max = max
   },
 
   initializeDatalink: function(){
-    this.datalink.subscribeToData(['v.atmosphericDensity'])
+    this.datalink.subscribeToData(['v.atmosphericPressure'])
 
     this.datalink.addReceiverFunction(this.update.bind(this))
   },

@@ -1,0 +1,33 @@
+---
+title: Test
+---
+
+<% content_for :head do %>
+  <link rel="stylesheet" type="text/css" href="../assets/stylesheets/ascension.css" />
+<% end %>
+
+<div id="navigation-and-atmospheric-density" class="gauge" style="width: 200px;">
+  <%= render 'atmospheric_density' %>
+</div>
+
+<table class="readout-display readout-table" >
+  <tr><th>Altitude</th><td id="altitude"></td></tr>
+  <tr><th>Atmospheric Pressure (atm)</th><td id="atmosphericPressure"></td></tr>
+  <tr><th>Atmospheric Pressure (Pa)</th><td id="atmosphericPressurePa"></td></tr>
+  <tr><th>Atmospheric Density </th><td id="atmosphericDensity"></td></tr>
+  <tr><th>Dynamic Pressure</th><td id="dynamicPressure"></td></tr>
+</table>
+
+<% content_for :dom_loaded do %>
+  window.atmosphericDensityGauge = new AtmosphericDensityGauge(window.datalink, 'atmospheric-density')
+
+  window.datalink.subscribeToData(['v.atmosphericPressure', 'v.atmosphericDensity', 'v.atmosphericPressurePa', 'v.dynamicPressure', 'v.altitude'])
+
+  window.datalink.addReceiverFunction(function(data){
+    $('altitude').update(data['v.altitude'].toFixed(3))
+    $('atmosphericPressure').update(data['v.atmosphericPressure'].toFixed(3))
+    $('atmosphericPressurePa').update(data['v.atmosphericPressurePa'].toFixed(3))
+    $('atmosphericDensity').update(data['v.atmosphericDensity'].toFixed(3))
+    $('dynamicPressure').update(data['v.dynamicPressure'].toFixed(3))
+  })
+<% end %>
