@@ -4,13 +4,12 @@ var AtmosphericDensityGauge = Class.create({
     this.gaugeID = gaugeID
     this.gauge = $(this.gaugeID)
     this.initializeDatalink()
+    this.func = function(x){return Math.log(2.0 * x)}
   },
 
   update: function(data){
-    var func = function(x){return Math.log(2.0 * x)}
-
-    var max = func(100)
-    var value = func(data['v.atmosphericPressure'] * 100)
+    var max = this.func(100)
+    var value = this.func(data['v.atmosphericPressure'] * 100)
     console.log(value)
     this.gauge.value = value
     this.gauge.max = max
