@@ -8335,3 +8335,309 @@ var ThrottleGauge = Class.create({
     this.datalink.addReceiverFunction(this.update.bind(this))
   },
 })
+/*
+ Graticule plugin for Leaflet powered maps.
+*/
+L.Graticule = L.GeoJSON.extend({
+
+    options: {
+        style: {
+            color: '#333',
+            weight: 1
+        },
+        interval: 20
+    },
+
+    initialize: function (options) {
+        L.Util.setOptions(this, options);
+        this._layers = {};
+
+        if (this.options.sphere) {
+            this.addData(this._getFrame());
+        } else {
+            this.addData(this._getGraticule());
+        }
+    },
+
+    _getFrame: function() {
+        return { "type": "Polygon",
+          "coordinates": [
+              this._getMeridian(-180).concat(this._getMeridian(180).reverse())
+          ]
+        };
+    },
+
+    _getGraticule: function () {
+        var features = [], interval = this.options.interval;
+
+        // Meridians
+        for (var lng = 0; lng <= 180; lng = lng + interval) {
+            features.push(this._getFeature(this._getMeridian(lng), {
+                "name": (lng) ? lng.toString() + "° E" : "Prime meridian"
+            }));
+            if (lng !== 0) {
+                features.push(this._getFeature(this._getMeridian(-lng), {
+                    "name": lng.toString() + "° W"
+                }));
+            }
+        }
+
+        // Parallels
+        for (var lat = 0; lat <= 90; lat = lat + interval) {
+            features.push(this._getFeature(this._getParallel(lat), {
+                "name": (lat) ? lat.toString() + "° N" : "Equator"
+            }));
+            if (lat !== 0) {
+                features.push(this._getFeature(this._getParallel(-lat), {
+                    "name": lat.toString() + "° S"
+                }));
+            }
+        }
+
+        return {
+            "type": "FeatureCollection",
+            "features": features
+        };
+    },
+
+    _getMeridian: function (lng) {
+        lng = this._lngFix(lng);
+        var coords = [];
+        for (var lat = -90; lat <= 90; lat++) {
+            coords.push([lng, lat]);
+        }
+        return coords;
+    },
+
+    _getParallel: function (lat) {
+        var coords = [];
+        for (var lng = -180; lng <= 180; lng++) {
+            coords.push([this._lngFix(lng), lat]);
+        }
+        return coords;
+    },
+
+    _getFeature: function (coords, prop) {
+        return {
+            "type": "Feature",
+            "geometry": {
+                "type": "LineString",
+                "coordinates": coords
+            },
+            "properties": prop
+        };
+    },
+
+    _lngFix: function (lng) {
+        if (lng >= 180) return 179.999999;
+        if (lng <= -180) return -179.999999;
+        return lng;
+    }
+
+});
+
+L.graticule = function (options) {
+    return new L.Graticule(options);
+};
+var PositionMap = Class.create({
+  initialize: function(datalink, mapId, options){
+    this.datalink = datalink
+    this.mapId = mapId
+    this.previousBody = "KERBIN"
+    this.options = Object.extend({
+      lockOnVessel: true
+    }, options)
+    this.initializeMap()
+    this.initializeDatalink()
+  },
+
+  update: function(data){
+    window.requestAnimationFrame(function(){
+      this.updateBodyIfNecessary(data)
+      this.setCoordinatesForMapObject(this.coordinates, data['v.lat'], data['v.long'])
+      if(this.options.lockOnVessel){
+        this.map.panTo([data['v.lat'], data['v.long']])
+      }
+    }.bind(this))
+  },
+
+  updateBodyIfNecessary: function(data){
+    var bodyName = data['v.body'].toUpperCase()
+    if(this.previousBody != bodyName){
+      newBody = L.KSP.CelestialBody[bodyName];
+      newBody.addTo(this.map);
+      this.previousBody = bodyName;
+    }
+  },
+
+  initializeMap: function(){
+    this.map = new L.KSP.Map(this.mapId, {
+      layers: [L.KSP.CelestialBody[this.previousBody.toUpperCase()]],
+      zoom: 'fit',
+      bodyControl: false,
+      layerControl: true,
+      scaleControl: true
+    })
+
+    this.map.fitWorld()
+
+    L.graticule().addTo(this.map)
+
+    var circleMarkerOptions = {
+      // fill: false,
+      color: '#FD7E23',
+      opacity: 1.0,
+      fillOpacity: 1.0,
+      radius: 5
+    }
+
+    this.coordinates = L.circleMarker([0, 0], circleMarkerOptions)
+    this.coordinates.addTo(this.map)
+  },
+
+  convertCoordinatesToMap: function(latitude, longitude){
+    return [latitude, longitude > 180 ? longitude - 360 : longitude]
+  },
+
+  setCoordinatesForMapObject: function(object, latitude, longitude){
+    var convertedCoordinates = this.convertCoordinatesToMap(latitude, longitude)
+    object.setLatLng([convertedCoordinates[0], convertedCoordinates[1]])
+  },
+
+  initializeDatalink: function(){
+    this.datalink.subscribeToData(['v.lat', 'v.long', 'v.body'])
+
+    this.datalink.addReceiverFunction(this.update.bind(this))
+  }
+})
+var OrbitingBodyInfoTable = Class.create({
+  initialize: function(datalink, tableId, options){
+    this.datalink = datalink
+    this.tableId = tableId
+    this.currentBody = null
+    this.currentBodyId = null
+
+    this.initializeTable()
+    this.initializeDatalink()
+  },
+
+  update: function(data){
+    if(this.bodyChanged(data)){
+      this.updateReadoutTableRows(data)
+    }
+  },
+
+  propertyForBody: function(property){
+    return "b." + property + "[" + this.currentBodyId + "]"
+  },
+
+  updateReadoutTableRows: function(data){
+    this.currentBody = data['v.body']
+    this.currentBodyId = this.datalink.getOrbitalBodyInfo(this.currentBody).id
+
+    var newTableRows = [
+      {
+        label: "Name",
+        value: this.propertyForBody('name'),
+        formatter: function(value){ return value }
+      },
+      {
+        label: "Radius",
+        value: this.propertyForBody('radius'),
+        formatter: function(value){ return DataFormatters.distanceString(value) }
+      },
+      {
+        label: "Atmosphere Contains O2?",
+        value: this.propertyForBody('atmosphereContainsOxygen'),
+        formatter: function(value){ return value }
+      },
+      {
+        label: "Sphere of Influence",
+        value: this.propertyForBody('soi'),
+        formatter: function(value){ return value }
+      },
+      {
+        label: "Max Atmospheric Density",
+        value: this.propertyForBody('maxAtmosphere'),
+        formatter: function(value){ return value }
+      },
+      {
+        label: "Tidally Locked?",
+        value: this.propertyForBody('tidallyLocked'),
+        formatter: function(value){ return value }
+      },
+      {
+        label: "GravitationalParameter",
+        value: this.propertyForBody('o.gravParameter'),
+        formatter: function(value){ return value }
+      },
+      {
+        label: "Body's Relative Velocity",
+        value: this.propertyForBody('o.relativeVelocity'),
+        formatter: function(value){ return DataFormatters.velocityString(value) }
+      },
+
+      {
+        label: "Apoapsis",
+        value: this.propertyForBody('o.ApA'),
+        formatter: function(value){ return DataFormatters.distanceString(value) }
+      },
+      {
+        label: "Periapsis",
+        value: this.propertyForBody('o.PeA'),
+        formatter: function(value){ return DataFormatters.distanceString(value) }
+      },
+      {
+        label: "Time to Apoapsis",
+        value: this.propertyForBody('o.timeToAp'),
+        formatter: function(value){ return "-" + TimeFormatters.durationString(value) }
+      },
+      {
+        label: "Time to Periapsis",
+        value: this.propertyForBody('o.timeToPe'),
+        formatter: function(value){ return "-" + TimeFormatters.durationString(value) }
+      },
+      {
+        label: "Inclination",
+        value: this.propertyForBody('o.inclination'),
+        formatter: function(value){ return DataFormatters.degreeString(value) }
+      },
+      {
+        label: "Eccentricity",
+        value: this.propertyForBody('o.eccentricity'),
+        formatter: function(value){ return value.toFixed(3) }
+      },
+      {
+        label: "Orbital Period",
+        value: this.propertyForBody('o.period'),
+        formatter: function(value){ return TimeFormatters.durationString(value) }
+      },
+      {
+        label: "True Anomaly",
+        value: this.propertyForBody('o.trueAnomaly'),
+        formatter: function(value){ return DataFormatters.degreeString(value) }
+      },
+    ]
+
+    var fieldsToSubscribeTo = newTableRows.map(function(newTableRow){
+      return newTableRow.value
+    })
+
+    this.datalink.subscribeToData(fieldsToSubscribeTo)
+
+    this.table.dataRows = newTableRows
+  },
+
+  bodyChanged: function(data){
+    return this.currentBody != data['v.body']
+  },
+
+  initializeTable: function(){
+    this.table = new ReadoutTable(datalink, this.tableId, [])
+  },
+
+  initializeDatalink: function(){
+    this.datalink.subscribeToData(['v.body'])
+    this.datalink.addReceiverFunction(this.update.bind(this))
+  }
+})

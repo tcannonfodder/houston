@@ -8335,3 +8335,466 @@ var ThrottleGauge = Class.create({
     this.datalink.addReceiverFunction(this.update.bind(this))
   },
 })
+var OrbitalMath = {
+  partsOfUniversalDateTime: function(time){
+    var parts = {}
+    if (time == null) {
+      time = 0;
+    }
+    parts.year = ((time / (365 * 24 * 3600)) | 0) + 1;
+    time %= 365 * 24 * 3600;
+    parts.day = ((time / (24 * 3600)) | 0) + 1;
+    time %= 24 * 3600;
+    parts.universalTime = time
+
+    parts.hour = (time / 3600) | 0;
+    time %= 3600;
+    parts.minutes = (time / 60) | 0;
+    parts.seconds = (time % 60 | 0).toFixed();
+
+    return parts
+  },
+
+  calculateGMSTInDegrees: function(universalDateTime){
+    var timeParts = partsOfUniversalDateTime(universalDateTime)
+    var G = 6.697374558
+    var dayFactor = 0.06570982441908
+    var timeFactor = 1.00273790935
+    return G + (dayFactor * timeParts.day) + (timeFactor * timeParts.hour)
+  },
+
+  eccentricAnomalyFromTrueAnomalyAndEcentricity: function(trueAnomaly, eccentricity){
+    return 2 * Math.atan(Math.sqrt((1-eccentricity)/(1+eccentricity)) * Math.tan(trueAnomaly/2))
+  },
+
+  meanMotionFromGravitationalParametersAndSemimajorAxis: function(gravitationalParameter, semiMajorAxis, orbitalPeriod){
+    // console.log("mu : " + gravitationalParameter + " SMA : " + semiMajorAxis)
+    // return orbitalPeriod * Math.sqrt(gravitationalParameter/(4 * Math.pow(Math.PI, 2) * Math.pow(semiMajorAxis, 3)))
+    return Math.sqrt(gravitationalParameter/Math.pow(semiMajorAxis, 3))
+  },
+
+  meanAnomalyFromEccentricAnomalyAndEccentricity: function(eccentricAnomaly, eccentricity){
+    return eccentricAnomaly - eccentricity * Math.sin(eccentricAnomaly)
+  },
+
+  meanAnomalyAtTimeAndMeanMotion: function(meanMotion, startTime, endTime, originalMeanAnomaly){
+    var deltaT = endTime - startTime
+    return originalMeanAnomaly + meanMotion * deltaT
+  },
+
+  estimateEccentricAnomalyFromMeanAnomalyAndEccentricity: function(meanAnomaly, eccentricity){
+    var error = 100
+    var eccentricAnomaly1 = meanAnomaly
+
+    while(error > 0.00000000001){
+      var newEccentricAnomaly = meanAnomaly + (eccentricity * Math.sin(eccentricAnomaly1))
+      error = Math.abs(newEccentricAnomaly - eccentricAnomaly1)
+      eccentricAnomaly1 = newEccentricAnomaly
+    }
+    return eccentricAnomaly1
+  },
+
+  trueAnomalyFromEccentricAnomalyAndEccentricity: function(eccentricAnomaly, eccentricity, meanAnomaly){
+    // var factor1 = Math.sqrt(1.0 - Math.pow(eccentricity, 2)) * Math.sin(eccentricAnomaly)
+    // var factor2 = 1 - eccentricity * Math.cos(eccentricAnomaly)
+
+    // if(longitudeOfAscendingNodeInDegrees > 90 && longitudeOfAscendingNodeInDegrees <= 360){
+    //   var inversion = Math.toRadians(360)
+    // } else{
+      // var inversion = 0
+    // }
+
+    var x = Math.sqrt(1 - eccentricity) * Math.cos(eccentricAnomaly/2)
+    var y = Math.sqrt(1 + eccentricity) * Math.sin(eccentricAnomaly/2)
+
+    return 2 * Math.atan2(y,x)
+
+    // return Math.asin(factor1/factor2)
+  },
+
+  findSemiLatusRectum: function(semiMajorAxis, eccentricity){
+    // var x = semiMajorAxis * (1 - Math.pow(eccentricity, 2))
+    // console.log("semi latus rectum: " + x)
+
+    var apoapsis = 320565.458678732
+    var periapsis = 102454.341836878
+
+    return (2 * apoapsis * periapsis ) / (apoapsis + periapsis)
+    // return x
+  },
+
+  findPolarEquationOfConic: function(semiMajorAxis, eccentricity, trueAnomaly){
+    var p = this.findSemiLatusRectum(semiMajorAxis, eccentricity)
+    // console.log("p: " + p)
+    // console.log("factor: " + (1 + eccentricity * Math.cos(trueAnomaly)))
+    return p/(1 + eccentricity * Math.cos(trueAnomaly))
+  },
+
+  positionVectorInPQWFrame: function(semiMajorAxis, eccentricity, trueAnomaly){
+    var r = this.findPolarEquationOfConic(semiMajorAxis, eccentricity, trueAnomaly)
+    var vector = {}
+    vector.p = r * Math.cos(trueAnomaly)
+    vector.q = r * Math.sin(trueAnomaly)
+    vector.w = 0
+    // console.log("trueAnomaly: " + trueAnomaly)
+    // console.log("r: " + r)
+    // console.log(JSON.stringify(vector))
+    return vector
+  },
+
+  velocityVectorInPQWFrame: function(semiMajorAxis, eccentricity, trueAnomaly, gravitationalParameter){
+    var p = findSemiLatusRectum(semiMajorAxis, eccentricity)
+    var factor = Math.sqrt(gravitationalParameter/p)
+    var vector = {}
+    vector.p = -Math.sin(trueAnomaly)
+    vector.q = eccentricity + Math.cos(trueAnomaly)
+    vector.w = 0
+    return vector
+  },
+
+  transformVector: function(matrix, vector){
+    var vectorKeys = Object.keys(vector)
+    var newVector = {}
+    //iterate through the rows of the matrix
+    for (var i = 0; i < matrix.length; i++) {
+      var row = matrix[i]
+      var derivativeVector = vectorKeys[i]
+      //iterate through the columns
+      for (var j = 0; j < vectorKeys.length; j++) {
+        var currentKey = vectorKeys[j]
+        if(!newVector[derivativeVector]){ newVector[derivativeVector] = 0 }
+        newVector[derivativeVector] += vector[currentKey] * row[j]
+      }
+    }
+    return newVector
+  },
+
+  // Thank god for: https://en.wikipedia.org/wiki/Perifocal_coordinate_system
+  transformPositionPQWVectorToIJKFrame: function(vector, inclination, longitudeOfAscendingNode, argumentOfPeriapsis){
+    var vectorIJK = {}
+    var omega = longitudeOfAscendingNode
+    var w = argumentOfPeriapsis
+    var i = inclination
+
+    //Column, row order. First level is columns, each column has N rows
+    var transformationMatrix = [
+      [
+        // 1 1
+        Math.cos(omega) * Math.cos(w) - Math.sin(omega) * Math.sin(w) * Math.cos(i),
+        // 1 2
+        -Math.cos(omega) * Math.sin(w) - Math.sin(omega)* Math.cos(w) * Math.cos(i),
+        // 1 2
+        Math.sin(omega) * Math.sin(i)
+      ],
+      [
+        // 2 1
+        Math.sin(omega) * Math.cos(w) + Math.cos(omega) * Math.sin(w) * Math.cos(i),
+        // 2 2
+        -Math.sin(omega) * Math.sin(w) + Math.cos(omega) * Math.cos(w) * Math.cos(i),
+        // 2 3
+        -Math.cos(omega) * Math.sin(i),
+      ],
+      [
+        // 3 1
+        Math.sin(w) * Math.sin(i),
+        // 3 2
+        Math.cos(w) * Math.sin(i),
+        // 3 3
+        Math.cos(i)
+      ]
+    ]
+
+    var transformedPQW = this.transformVector(transformationMatrix, vector)
+    vectorIJK.i = transformedPQW.p
+    vectorIJK.j = transformedPQW.q
+    vectorIJK.k = transformedPQW.w
+
+    return vectorIJK
+  },
+
+  findLatitudeOfPositionUnitVector: function(vector){
+    var x = Math.sqrt(Math.pow(vector.i, 2) + Math.pow(vector.j, 2))
+    var z = vector.k
+
+    return Math.atan(z/x)
+  },
+
+  angularFrequencyOfBody: function(period){
+    return (2 * Math.PI)/period
+  },
+
+  calculateGMSTInRadiansForOrigin: function(vector, longitude){
+    var theta = Math.atan(vector.j/vector.i)
+    return theta - longitude
+  },
+
+  findLongitudeOfPositonUnitVector: function(vector, angularVelocityOfPlanet, startTime, endTime, GMSTInRadians){
+    var deltaT = endTime - startTime
+    var quadrant = vector.j > 0 ? 1 : -1
+    var theta = Math.atan(vector.j/vector.i)
+    return theta - GMSTInRadians - (angularVelocityOfPlanet * deltaT)
+  },
+
+  TWR: function(thrust, totalMass, surfaceGravity){
+    return (thrust)/(totalMass * surfaceGravity)
+  },
+
+  MaxTWR: function(maxAcceleration, surfaceGravity){
+    return maxAcceleration/surfaceGravity
+  },
+
+  secondsToUseFuelAtCurrentThrust: function(massOfFuel, thrust, isp){
+    if(thrust <= 0 || isp <= 0){ return -1}
+    return (massOfFuel)/((thrust/isp) * (1/9.81))
+  },
+
+  // returns in tons
+  weightOfFuelUsedDuringBurn: function(thrust, isp, deltaT){
+    return (thrust/isp) * (1/9.81) * deltaT;
+  },
+
+  deltaVForBurn: function(thrust, startMass, endMass, deltaT){
+    if(deltaT > 0 && startMass > endMass && startMass > 0 && endMass > 0){
+      return thrust * deltaT / (startMass - endMass) * Math.log(startMass/endMass)
+    } else {
+      return 0.0
+    }
+  }
+}
+var CurrentStageBurnInfo = Class.create({
+  initialize: function(datalink, atmoTableID, vacuumTableID){
+    this.datalink = datalink
+    this.atmoTableID = atmoTableID
+    this.vacuumTableID = vacuumTableID
+
+    this.atmoDataTable = new DataTable(this.atmoTableID, [])
+    this.vacuumDataTable = new DataTable(this.vacuumTableID, [])
+
+    this.currentStageAtmo = null
+    this.currentStageVacuum = null
+    this.currentBody = null
+    this.initializeDatalink()
+  },
+
+  update: function(data){
+    // don't do anything if we don't have any staging info
+    if(!data['mj.stagingInfo']){return }
+
+    //update the body as necessary
+    if(this.currentBody == null || this.currentBody.name != data['v.body']){
+      this.currentBody = this.datalink.getOrbitalBodyInfo(data['v.body'])
+    }
+
+    // Calculate the info for the current stage in Atmo
+    if(data['mj.stagingInfo']["atmo"]){
+      //The current stage is always the last stage
+      this.currentStageAtmo = this.calculateStageInfo(
+        data['mj.stagingInfo']['atmo'].last(), data
+      )
+    }
+
+    // Calculate the info for the current stage in a Vaccuum
+    if(data['mj.stagingInfo']["vacuum"]){
+      //The current stage is always the last stage
+      this.currentStageVacuum = this.calculateStageInfo(
+        data['mj.stagingInfo']['vacuum'].last(), data
+      )
+    }
+
+    // Now update the tables
+    this.atmoDataTable.dataRows = this.dataRowsForStage(
+      this.currentStageAtmo, data
+    )
+
+    this.vacuumDataTable.dataRows = this.dataRowsForStage(
+      this.currentStageVacuum, data
+    )
+
+    this.atmoDataTable.update()
+    this.vacuumDataTable.update()
+  },
+
+  subscribeToBodyData: function(data){
+    this.currentBody = this.datalink.getOrbitalBodyInfo(data['v.body'])
+    this.datalink.subscribeToData([
+      'b.o.gravParameter[' + this.currentBody.id + ']'
+    ])
+  },
+
+  calculateStageInfo: function(stage, data){
+    stage["currentThrust"] = stage["startThrust"] * data['f.throttle']
+    stage["currentTWR"] = OrbitalMath.TWR(stage["currentThrust"],
+      stage["startMass"], this.currentBody.surfaceGravity
+    )
+
+    stage["timeUntilEmpty"] = OrbitalMath.secondsToUseFuelAtCurrentThrust(
+      stage["resourceMass"], stage["currentThrust"], stage["isp"]
+    )
+
+    return stage
+  },
+
+  dataRowsForStage: function(stage, data){
+    var timeUntilEmpty = stage["timeUntilEmpty"] <= 0 ? "NA" : DataFormatters.timeString(stage["timeUntilEmpty"])
+    return [
+      {
+        label: "Current Thrust",
+        value: DataFormatters.newtonsString(stage["currentThrust"]) + " (" + DataFormatters.percentageString(data['f.throttle']) + ")"
+      },
+      {
+        label: "TWR",
+        value: DataFormatters.plainNumberString(stage["currentTWR"])
+      },
+      {
+        label: "Remaining Fuel",
+        value: DataFormatters.tonnageString(stage["resourceMass"])
+      },
+      {
+        label: "Time until empty",
+        value: timeUntilEmpty
+      }
+    ]
+  },
+
+  initializeDatalink: function(){
+    this.datalink.subscribeToData(['mj.stagingInfo', 'f.throttle', 'v.body'])
+
+    this.datalink.addReceiverFunction(this.update.bind(this))
+  },
+})
+var StagingInfoTable = Class.create({
+  initialize: function(datalink, stagingInfoTableID){
+    this.datalink = datalink
+    this.stagingInfoTableID = stagingInfoTableID
+
+    this.stagingInfoTable = $(this.stagingInfoTableID)
+    this.stagingInfoTableHeader = null
+    this.stagingInfoTableBody = null
+
+    this.currentBody = null
+
+    this.initializeTable()
+    this.initializeDatalink()
+  },
+
+  update: function(data){
+    if(!data['mj.stagingInfo']){
+      this.stagingInfoTableBody.update("")
+      return
+    }
+
+    //update the body as necessary
+    if(this.currentBody == null || this.currentBody.name != data['v.body']){
+      this.currentBody = this.datalink.getOrbitalBodyInfo(data['v.body'])
+    }
+
+    var stagingInfo = data['mj.stagingInfo']
+    var stages = stagingInfo['atmo'].length
+    if(stages <= 0){ return }
+
+    var documentFragment = document.createDocumentFragment()
+    for (var i = 0; i < stages; i++) {
+      var stageAtmo = stagingInfo["atmo"][i]
+      var stageVacuum = stagingInfo["vacuum"][i]
+
+      var row = document.createElement("tr")
+
+      var thrust = Math.min(stageAtmo["startThrust"],
+        stageVacuum["startThrust"]
+      )
+
+      var TWR = OrbitalMath.TWR(thrust, stageAtmo["startMass"],
+        this.currentBody.surfaceGravity
+      )
+
+      if(isNaN(TWR)){ TWR = 0.00 }
+
+      var maxAccel = Math.min(stageAtmo["maxAccel"],stageVacuum["maxAccel"])
+
+      var MaxTWR = OrbitalMath.MaxTWR(maxAccel,
+        this.currentBody.surfaceGravity
+      )
+
+      if(isNaN(MaxTWR)){ MaxTWR = 0.00 }
+
+      var ISP = Math.min(stageAtmo["isp"],stageVacuum["isp"])
+
+      var atmoDeltaV = stageAtmo["deltaV"]
+      var vacuumDeltaV = stageVacuum["deltaV"]
+
+      var time = Math.min(stageAtmo["deltaTime"],stageVacuum["deltaTime"])
+
+      this.addColumnToRow(row, i) //stage
+      //start mass
+      this.addColumnToRow(row, DataFormatters.tonnageString(stageAtmo["startMass"]))
+      //end mass
+      this.addColumnToRow(row, DataFormatters.tonnageString(stageAtmo["endMass"]))
+
+      //staged mass
+      this.addColumnToRow(row, DataFormatters.tonnageString(stageAtmo["stagedMass"]))
+
+      //burned mass
+      this.addColumnToRow(row, DataFormatters.tonnageString(stageAtmo["resourceMass"]))
+
+      //TWR
+      this.addColumnToRow(row, DataFormatters.plainNumberString(TWR))
+
+      //Max TWR
+      this.addColumnToRow(row, DataFormatters.plainNumberString(MaxTWR))
+
+      //ISP
+      this.addColumnToRow(row, DataFormatters.plainNumberString(ISP))
+
+      //atmo delta v
+      this.addColumnToRow(row, DataFormatters.velocityString(atmoDeltaV))
+
+      //vacuum delta v
+      this.addColumnToRow(row, DataFormatters.velocityString(vacuumDeltaV))
+
+      // time
+      this.addColumnToRow(row, DataFormatters.timeString(time))
+
+      documentFragment.appendChild(row)
+    }
+
+    window.requestAnimationFrame(function(){
+      this.stagingInfoTableBody.innerHTML = ""
+      this.stagingInfoTableBody.appendChild(documentFragment)
+    }.bind(this))
+  },
+
+  addColumnToRow: function(row, columnValue){
+    row.appendChild(document.createElement("td").update(columnValue))
+  },
+
+  initializeTable: function(){
+    var documentFragment = document.createDocumentFragment()
+    this.stagingInfoTableHeader = document.createElement("thead")
+    var headerRow = this.stagingInfoTableHeader.appendChild(document.createElement("tr"))
+
+    var columns = ["Stage", "Start Mass", "End Mass", "Staged Mass",
+      "Burned Mass", "TWR", "Max TWR", "ISP", "Atmo &Delta;V", "Vac &Delta;V",
+      "Time"
+    ]
+
+    for (var i = 0; i < columns.length; i++) {
+      var name = columns[i]
+      var element = document.createElement("th")
+      element.update(name)
+      headerRow.appendChild(element)
+    };
+
+    this.stagingInfoTableBody = document.createElement("tbody")
+
+    documentFragment.appendChild(this.stagingInfoTableHeader)
+    documentFragment.appendChild(this.stagingInfoTableBody)
+
+    this.stagingInfoTable.appendChild(documentFragment)
+  },
+
+  initializeDatalink: function(){
+    this.datalink.subscribeToData(['mj.stagingInfo', 'v.body'])
+
+    this.datalink.addReceiverFunction(this.update.bind(this))
+  },
+})
