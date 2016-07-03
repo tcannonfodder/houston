@@ -10,10 +10,21 @@
   justify-content: space-around; 
 }
 
-#position-map{
+.map-container{
   height: 300px;
   width: 500px;
   margin-bottom: 10px;
+}
+
+.map{
+  height: 300px;
+}
+
+.no-map-indicator{
+  text-align: center;
+  vertical-align: bottom;
+  margin: 75px;
+  font-size: 30px;
 }
 
 #custom-actions{

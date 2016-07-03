@@ -6,10 +6,21 @@
   flex: 1 1 auto;
 }
 
-.ground-track{
+.map-container{
   height: 324px;
   flex-grow: 1;
   margin-top: 5px;
+}
+
+.map{
+  height: 324px;
+}
+
+.no-map-indicator{
+  text-align: center;
+  vertical-align: bottom;
+  margin: 75px;
+  font-size: 30px;
 }
 
 #altitude-estimate{

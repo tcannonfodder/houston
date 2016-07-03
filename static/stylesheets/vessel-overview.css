@@ -1,7 +1,18 @@
-.ground-track{
+.map-container{
   height: 324px;
   width: 50%;
   margin-top: 5px;
+}
+
+.map{
+  height: 324px;
+}
+
+.no-map-indicator{
+  text-align: center;
+  vertical-align: bottom;
+  margin: 75px;
+  font-size: 30px;
 }
 
 #altitude-estimate{

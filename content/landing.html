@@ -7,7 +7,7 @@ title: Landing Module
 <% end %>
 
 <div id="top-panel">
-  <div id="gt-map" class="map readout-display"></div>
+  <%= render 'map', :id => 'gt-map' %>
 
   <div id="navigation-and-atmospheric-density" class="gauge">
     <%= render 'navball' %>
