@@ -218,7 +218,10 @@ var PositionDataFormatter = Class.create({
 
   findProjectedPositionOfReferenceBody: function(rootReferenceBody, body, universalTime){
     var distancePoints = this.findDistanceVectorBetweenBodiesAtTime(rootReferenceBody, body, universalTime)
-    var distanceVector = math.add(distancePoints[1], math.multiply(-1, distancePoints[0]))
+    var distanceVector = Math.matrixAdd(
+      distancePoints[1],
+      Math.scaleMatrix(-1, distancePoints[0])
+    )
     return distanceVector
   },
 
@@ -229,7 +232,7 @@ var PositionDataFormatter = Class.create({
       relativePositionVector[1],
     ]
 
-    return math.add(frameOfReferenceVector, transformedRelativePositionVector)
+    return Math.matrixAdd(frameOfReferenceVector, transformedRelativePositionVector)
   },
 
   findTruePositionClosestToRelativeTime: function(universalTime, positionData){
