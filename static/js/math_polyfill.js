@@ -29,3 +29,27 @@ Math.cosh = Math.cosh || function(x) {
 Math.sinh = Math.sinh || function(x) {
   return (Math.exp(x) - Math.exp(-x)) / 2;
 };
+
+Math.matrixAdd = Math.matrixAdd || function(){
+  var arrays= arguments, results= [],
+  count= arrays[0].length, L= arrays.length,
+  sum, next= 0, i;
+  while(next<count){
+      sum= 0, i= 0;
+      while(i<L){
+          sum+= Number(arrays[i++][next]);
+      }
+      results[next++]= sum;
+  }
+  return results;
+};
+
+Math.scaleMatrix = Math.scaleMatrix || function(factor, matrix){
+  var result = [], count = matrix.length, next=0;
+  while(next < count){
+    result[next] = factor * matrix[next]
+    next++
+  }
+
+  return result
+};

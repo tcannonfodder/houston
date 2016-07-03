@@ -8,7 +8,6 @@ javascripts:
   asset_bundles:
     - &app_core
       # Vendor
-      - static/js/math.js
       - static/js/math_polyfill.js
       - static/js/numeral.min.js
 
