@@ -8,16 +8,21 @@ task :default => [:compile]
 
 desc "Compile the site"
 task :compile do
-  puts `nanoc compile`
+  puts `COMPRESS_ASSETS=true nanoc compile`
+end
+
+desc "Clean any compiled assets"
+task :clean do
+  puts `rm -R public/ houston/`
 end
 
 desc "Test the output"
-task :test => [:clean, :remove_output_dir, :compile] do
+task :test => [:clean, :compile] do
   require 'html/proofer'
   HTML::Proofer.new("./public").run
 end
 
 desc "Build a release version"
-task :release do
+task :release => [:clean, :compile] do
   puts `cp -R public/ houston/`
 end
