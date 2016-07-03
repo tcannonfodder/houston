@@ -559,8 +559,11 @@ button#brake.on{
 }
 
 progress.atmospheric_density::-webkit-progress-value, progress.throttle::-webkit-progress-value{
+  position: relative;
+  top: 40%;
   background: none;
-  border-right: 5px solid red
+  border-right: 5px solid red;
+  height: 60%;
 }
 
 .throttle,progress.throttle::-webkit-progress-bar{

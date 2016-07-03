@@ -9177,19 +9177,19 @@ var AtmosphericDensityGauge = Class.create({
     this.gaugeID = gaugeID
     this.gauge = $(this.gaugeID)
     this.initializeDatalink()
+    this.func = function(x){return Math.log(2.0 * x)}
   },
 
   update: function(data){
-    var maxDensity = 1.0;
-
-    var currentPercentage = (data['v.atmosphericDensity']/maxDensity) * 100
-
-    this.gauge.value = currentPercentage
-    this.gauge.max = 100
+    var max = this.func(100)
+    var value = this.func(data['v.atmosphericPressure'] * 100)
+    console.log(value)
+    this.gauge.value = value
+    this.gauge.max = max
   },
 
   initializeDatalink: function(){
-    this.datalink.subscribeToData(['v.atmosphericDensity'])
+    this.datalink.subscribeToData(['v.atmosphericPressure'])
 
     this.datalink.addReceiverFunction(this.update.bind(this))
   },
@@ -12912,14 +12912,22 @@ var OrbitalPositionData = Class.create({
         // get the start and the end universal times for the patch
         var startUT = this.adjustUniversalTime(orbitPatch["startUT"])
         var endUT = this.adjustUniversalTime(orbitPatch["endUT"])
+        var period = this.adjustUniversalTime(orbitPatch["period"])
+        var endTransition = this.adjustUniversalTime(orbitPatch["patchEndTransition"])
 
         //ask for the true position for the current body right now and the radius
         var referenceBody = this.datalink.getOrbitalBodyInfo(orbitPatch["referenceBody"])
+        var expectedUT = startUT + period
 
-        var timeInterval = (endUT-startUT)/this.options.numberOfSegments
+        if(expectedUT < endUT && endTransition == "MANEUVER"){
+          var timeInterval = (expectedUT - startUT)/this.options.numberOfSegments
+        } else{
+          var timeInterval = (endUT-startUT)/this.options.numberOfSegments
+        }
+
         var UTForInterval = null
         for(var k = 0; k < this.options.numberOfSegments; k++){
-          UTForInterval = this.adjustUniversalTime(startUT  + (timeInterval * k))
+          UTForInterval = this.adjustUniversalTime((UTForInterval || startUT) + timeInterval)
           if(UTForInterval > endUT){
             UTForInterval = endUT
           }
@@ -13081,6 +13089,10 @@ var PositionDataFormatter = Class.create({
       var info = positionData.referenceBodies[name]
       var type = "currentPosition"
 
+      if(name == "Sun"){
+        continue;
+      }
+
       if(positionData["tar.type"] == "CelestialBody" && positionData["tar.name"] == name){
         type = "targetBodyCurrentPosition"
       }
@@ -13223,9 +13235,9 @@ var PositionDataFormatter = Class.create({
         type: "maneuverNode", parentType: "vessel", parentName: "current vessel"
       }, { linkedPatchType: "maneuverNode" })
 
-      for (var i = 0; i < maneuverNode.orbitPatches.length; i++) {
-        var orbitPatch = maneuverNode.orbitPatches[i]
-        if(orbitPatch.rootReferenceBody != this.rootReferenceBodyName){
+      for (var j = 0; j < maneuverNode.orbitPatches.length; j++) {
+        var orbitPatch = maneuverNode.orbitPatches[j]
+        if(orbitPatch.referenceBody != this.rootReferenceBodyName){
           var referenceBody = positionData.referenceBodies[orbitPatch.referenceBody]
           var sortedUniversalTimes = this.sortedUniversalTimes(orbitPatch.positionData)
           var middleUniversalTime = sortedUniversalTimes[Math.floor((sortedUniversalTimes.length-1)/2.0)]
