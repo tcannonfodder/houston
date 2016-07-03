@@ -1,6 +1,6 @@
 embed_static: on
 package_assets: off
-compress_assets: on
+compress_assets: off
 # asset_root: ../
 
 
