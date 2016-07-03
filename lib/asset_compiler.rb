@@ -49,48 +49,19 @@ module AssetCompiler
 
   def self.compile_javascript_set(name)
     raise ArgumentError, "no sourcetree for #{name}" unless javascript_sourcetrees.has_key?(name)
-    javascript_sourcetrees[name].flatten!.uniq!
+    javascript_sourcetrees[name].flatten.uniq!
 
     return if name == "asset_bundles"
     if production?
       FileUtils.mkdir_p(@@config["destination_path"])
 
-      puts "concating #{name}"
-      uncompressed_filename = File.join(@@config["destination_path"], "#{name}.js")
+      files_to_compress = [javascript_sourcetrees[name]].flatten.join(' ')
+      output_file = File.join(@@config["destination_path"], "#{name}.js")
+      command = "time uglifyjs"
+      cmd = "#{command} #{files_to_compress} -o #{output_file}"
 
-      js = concatenate(javascript_sourcetrees[name])
-
-      puts "compressing #{name}"
-      if compress_assets?
-        js = ::Uglifier.compile(js, compressor_options)
-      end
-
-      filename = File.join(@@config["destination_path"], "#{name}.js")
-      File.write(filename, js)
-
-      # Concatenate new file based on old assets
-      #`cat #{javascript_sourcetrees[name].join(' ')} > #{File.join(@@config["destination_path"], "#{name}.js")}`
-
-      # puts "compressing"
-      # compressed_filename = File.join(@@config["destination_path"], "#{name}.js")
-      # compressed_file_contents = File.write(::Uglifier.compile(File.read(uncompressed_filename)), compressed_filename)
-      # puts "done compressing"
-
-      # File.write(File.join(@@config["destination_path"], "#{name}.js"), compressed_file_contents)
-
-      # javascript_sourcetrees[name].each do |file_path|
-      #   begin
-      #     file_contents = ::YUI::JavaScriptCompressor.new.compress()
-      #   rescue YUI::Compressor::RuntimeError => e
-      #     puts "compilation error on #{file_path}"
-      #     raise e
-      #     file_contents = File.read(file_path)
-      #   end
-
-      #   file << file_contents
-      # end
-
-      # file.close
+      puts cmd
+      puts `#{cmd}`
     else
       puts @@config["destination_path"]
       FileUtils.mkdir_p(@@config["destination_path"])
