@@ -12,6 +12,10 @@ AssetCompiler.load_config(
   "environment" => "production"
 )
 
+if ENV['COMPRESS_ASSETS']
+  AssetCompiler.compress_assets!
+end
+
 def include_javascripts(name)
   AssetCompiler.include_javascripts(name)
 end
