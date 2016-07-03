@@ -51,6 +51,7 @@ module AssetCompiler
     raise ArgumentError, "no sourcetree for #{name}" unless javascript_sourcetrees.has_key?(name)
     javascript_sourcetrees[name].flatten!.uniq!
 
+    return if name == "asset_bundles"
     if production?
       FileUtils.mkdir_p(@@config["destination_path"])
 
