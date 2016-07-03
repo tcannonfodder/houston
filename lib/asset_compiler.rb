@@ -14,6 +14,10 @@ module AssetCompiler
     @@config = YAML.load(ERB.new(File.read(config_file)).result).merge(options)
   end
 
+  def compress_assets!
+    @@config["compress_assets"] = true
+  end
+
   def self.production?
     @@config["environment"] == "production"
   end
