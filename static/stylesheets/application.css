@@ -26,6 +26,10 @@
   50.01% { opacity: 1 } 100% { opacity: 1 }
 }
 
+.hidden{
+  display: none;
+}
+
 html,body {
   height: 100%;
   margin: 0
