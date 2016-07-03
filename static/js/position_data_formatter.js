@@ -43,10 +43,6 @@ var PositionDataFormatter = Class.create({
       var info = positionData.referenceBodies[name]
       var type = "currentPosition"
 
-      if(name == "Sun"){
-        continue;
-      }
-
       if(positionData["tar.type"] == "CelestialBody" && positionData["tar.name"] == name){
         type = "targetBodyCurrentPosition"
       }
