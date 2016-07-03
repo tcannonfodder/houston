@@ -1,21 +1,28 @@
 var PositionMap = Class.create({
-  initialize: function(datalink, mapId, options){
+  initialize: function(datalink, mapId, noMapIndicatorId, options){
     this.datalink = datalink
     this.mapId = mapId
+    this.noMapIndicatorId = noMapIndicatorId || (mapId + '-no-map')
     this.previousBody = "KERBIN"
     this.options = Object.extend({
       lockOnVessel: true
     }, options)
     this.initializeMap()
+    this.initializeNoMapIndicator()
     this.initializeDatalink()
   },
 
   update: function(data){
     window.requestAnimationFrame(function(){
-      this.updateBodyIfNecessary(data)
-      this.setCoordinatesForMapObject(this.coordinates, data['v.lat'], data['v.long'])
-      if(this.options.lockOnVessel){
-        this.map.panTo([data['v.lat'], data['v.long']])
+      if(this.isMapAvailable(data)){
+        this.showMap()
+        this.updateBodyIfNecessary(data)
+        this.setCoordinatesForMapObject(this.coordinates, data['v.lat'], data['v.long'])
+        if(this.options.lockOnVessel){
+          this.map.panTo([data['v.lat'], data['v.long']])
+        }
+      } else{
+        this.hideMap()
       }
     }.bind(this))
   },
@@ -61,6 +68,24 @@ var PositionMap = Class.create({
   setCoordinatesForMapObject: function(object, latitude, longitude){
     var convertedCoordinates = this.convertCoordinatesToMap(latitude, longitude)
     object.setLatLng([convertedCoordinates[0], convertedCoordinates[1]])
+  },
+
+  isMapAvailable: function(data){
+    return data['v.body'].toUpperCase() != "SUN"
+  },
+
+  hideMap: function(){
+    $(this.mapId).hide()
+    this.noMapIndicator.removeClassName("hidden")
+  },
+
+  showMap: function(){
+    $(this.mapId).show()
+    this.noMapIndicator.addClassName("hidden")
+  },
+
+  initializeNoMapIndicator: function(){
+    this.noMapIndicator = $(this.noMapIndicatorId)
   },
 
   initializeDatalink: function(){
