@@ -26,6 +26,10 @@
   50.01% { opacity: 1 } 100% { opacity: 1 }
 }
 
+.hidden{
+  display: none;
+}
+
 html,body {
   height: 100%;
   margin: 0
@@ -76,6 +80,7 @@ nav{
 nav.open{
   top: 0;
   box-shadow: 0px 5px 7px 0px rgba(0,0,0,0.50);
+  z-index: 1001;
 }
 
 #close-navigation{

@@ -11,13 +11,24 @@
 }
 
 
-#gt-map{
+#gt-map-container{
   margin-right: auto;
-  width: 350px;
+  width: 500px;
 }
 
-#navigation-and-atmospheric-density, #gt-map{
+#navigation-and-atmospheric-density, #gt-map-container{
   max-height: 280px;
+}
+
+.map{
+  height: 200px;
+}
+
+.no-map-indicator{
+  text-align: center;
+  vertical-align: bottom;
+  margin: 75px;
+  font-size: 30px;
 }
 
 #navigation-and-atmospheric-density .atmospheric-density-wrapper{

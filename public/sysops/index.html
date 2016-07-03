@@ -36,7 +36,7 @@
 
 
   
-  <link rel="stylesheet" type="text/css" href="../assets/stylesheets/science.css" />
+  <link rel="stylesheet" type="text/css" href="../assets/stylesheets/sysops.css" />
 
 </head>
 <body>
@@ -225,7 +225,10 @@
 
 <div id="top-panel">
   <div id="map-and-sensors">
-    <div id="position-map" class="map readout-display"></div>
+    <div id="position-map-container" class="map-container readout-display">
+  <div id="position-map" class="map"></div>
+  <div id="position-map-no-map" class="no-map-indicator hidden">NO MAP</div>
+</div>
 
     <div class="readout-display">
       <h2>Sensor Info</h2>
