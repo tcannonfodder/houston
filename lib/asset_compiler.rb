@@ -49,6 +49,7 @@ module AssetCompiler
 
   def self.compile_javascript_set(name)
     raise ArgumentError, "no sourcetree for #{name}" unless javascript_sourcetrees.has_key?(name)
+    javascript_sourcetrees[name].flatten!.uniq!
 
     if production?
       FileUtils.mkdir_p(@@config["destination_path"])
