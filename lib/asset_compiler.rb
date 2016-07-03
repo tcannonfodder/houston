@@ -55,13 +55,22 @@ module AssetCompiler
     if production?
       FileUtils.mkdir_p(@@config["destination_path"])
 
-      files_to_compress = [javascript_sourcetrees[name]].flatten.join(' ')
-      output_file = File.join(@@config["destination_path"], "#{name}.js")
-      command = "time uglifyjs --screw-ie8 --no-copyright"
-      cmd = "#{command} #{files_to_compress} -o #{output_file}"
+      if compress_assets?
+        files_to_compress = [javascript_sourcetrees[name]].flatten.join(' ')
+        output_file = File.join(@@config["destination_path"], "#{name}.js")
+        command = "time uglifyjs --screw-ie8 --no-copyright"
+        cmd = "#{command} #{files_to_compress} -o #{output_file}"
 
-      puts cmd
-      puts `#{cmd}`
+        puts cmd
+        puts `#{cmd}`
+      else
+        puts "concating #{name}"
+        uncompressed_filename = File.join(@@config["destination_path"], "#{name}.js")
+
+        js = concatenate(javascript_sourcetrees[name])
+        filename = File.join(@@config["destination_path"], "#{name}.js")
+        File.write(filename, js)
+      end
     else
       puts @@config["destination_path"]
       FileUtils.mkdir_p(@@config["destination_path"])
