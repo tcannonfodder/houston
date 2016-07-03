@@ -57,7 +57,7 @@ module AssetCompiler
 
       files_to_compress = [javascript_sourcetrees[name]].flatten.join(' ')
       output_file = File.join(@@config["destination_path"], "#{name}.js")
-      command = "time uglifyjs"
+      command = "time uglifyjs --screw-ie8 --no-copyright"
       cmd = "#{command} #{files_to_compress} -o #{output_file}"
 
       puts cmd
