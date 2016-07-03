@@ -49,14 +49,14 @@ module AssetCompiler
 
   def self.compile_javascript_set(name)
     raise ArgumentError, "no sourcetree for #{name}" unless javascript_sourcetrees.has_key?(name)
-    javascript_sourcetrees[name].flatten.uniq!
+    source_files = javascript_sourcetrees[name].flatten.uniq
 
     return if name == "asset_bundles"
     if production?
       FileUtils.mkdir_p(@@config["destination_path"])
 
       if compress_assets?
-        files_to_compress = [javascript_sourcetrees[name]].flatten.join(' ')
+        files_to_compress = source_files.flatten.join(' ')
         output_file = File.join(@@config["destination_path"], "#{name}.js")
         command = "time uglifyjs --screw-ie8 --no-copyright"
         cmd = "#{command} #{files_to_compress} -o #{output_file}"
@@ -67,14 +67,14 @@ module AssetCompiler
         puts "concating #{name}"
         uncompressed_filename = File.join(@@config["destination_path"], "#{name}.js")
 
-        js = concatenate(javascript_sourcetrees[name])
+        js = concatenate(source_files)
         filename = File.join(@@config["destination_path"], "#{name}.js")
         File.write(filename, js)
       end
     else
       puts @@config["destination_path"]
       FileUtils.mkdir_p(@@config["destination_path"])
-      FileUtils.cp javascript_sourcetrees[name], @@config["destination_path"]
+      FileUtils.cp source_files, @@config["destination_path"]
     end
   end
 
