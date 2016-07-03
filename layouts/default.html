@@ -2,11 +2,11 @@
 <html>
 <head>
   <title><%= @item[:title] %></title>
-  <%= include_javascripts :app %>
-
-  <% asset_name = "@item.identifier.chop[1..-1]" %>
+  <% asset_name = @item.identifier.chop[1..-1] %>
   <% if has_javascript_sourcetree? asset_name %>
     <%= include_javascripts asset_name %>
+  <% else %>
+    <%= include_javascripts :app %>
   <% end %>
 
   <script src="../assets/js/action_button.js"></script>
