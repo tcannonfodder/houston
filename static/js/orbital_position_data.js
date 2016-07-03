@@ -136,14 +136,22 @@ var OrbitalPositionData = Class.create({
         // get the start and the end universal times for the patch
         var startUT = this.adjustUniversalTime(orbitPatch["startUT"])
         var endUT = this.adjustUniversalTime(orbitPatch["endUT"])
+        var period = this.adjustUniversalTime(orbitPatch["period"])
+        var endTransition = this.adjustUniversalTime(orbitPatch["patchEndTransition"])
 
         //ask for the true position for the current body right now and the radius
         var referenceBody = this.datalink.getOrbitalBodyInfo(orbitPatch["referenceBody"])
+        var expectedUT = startUT + period
 
-        var timeInterval = (endUT-startUT)/this.options.numberOfSegments
+        if(expectedUT < endUT && endTransition == "MANEUVER"){
+          var timeInterval = (expectedUT - startUT)/this.options.numberOfSegments
+        } else{
+          var timeInterval = (endUT-startUT)/this.options.numberOfSegments
+        }
+
         var UTForInterval = null
         for(var k = 0; k < this.options.numberOfSegments; k++){
-          UTForInterval = this.adjustUniversalTime(startUT  + (timeInterval * k))
+          UTForInterval = this.adjustUniversalTime((UTForInterval || startUT) + timeInterval)
           if(UTForInterval > endUT){
             UTForInterval = endUT
           }

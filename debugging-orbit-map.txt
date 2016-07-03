@@ -1,0 +1,48 @@
+# Crazy Maneuver Nodes
+
+## Real Orbit Patch
+
+> rawOrbitPatches[0].endUT - rawOrbitPatches[0].startUT
+< 3580.851229225751
+
+## 1st Maneuver Node
+
+> rawOrbitPatches[0].endUT - rawOrbitPatches[0].startUT
+< 182526.41231595003
+
+### Maneuver Node data from KSP:
+
+Object = $4
+ApA: 882255.3290405413
+PeA: 288103.4995454587
+argumentOfPeriapsis: 195.22914997340868
+closestEncounterBody: null
+eccentricAnomaly: 0.2506590235747195
+eccentricity: 0.2506590235747195
+endUT: 424081.873967836
+epoch: 241555.461651886
+inclination: 1.9407977737784257
+lan: 136.6774211210854
+maae: 1.2445255244019628
+patchEndTransition: "MANEUVER"
+period: 4313.901886992442
+referenceBody: "Kerbin"
+semiLatusRectum: 1110714.655574815
+semiMinorAxis: 1147343.0807482172
+sma: 1185179.414293
+startUT: 241555.461651886
+Object Prototype
+
+
+
+# Normal Orbit
+
+## Real Orbit Patch
+
+> rawOrbitPatches[0].endUT - rawOrbitPatches[0].startUT
+< 1947.1099033288192 = $2
+
+## Maneuver Node
+
+> rawOrbitPatches[0].endUT - rawOrbitPatches[0].startUT
+< 1356.8644594133366 = $3

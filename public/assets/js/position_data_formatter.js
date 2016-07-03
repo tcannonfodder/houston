@@ -43,6 +43,10 @@ var PositionDataFormatter = Class.create({
       var info = positionData.referenceBodies[name]
       var type = "currentPosition"
 
+      if(name == "Sun"){
+        continue;
+      }
+
       if(positionData["tar.type"] == "CelestialBody" && positionData["tar.name"] == name){
         type = "targetBodyCurrentPosition"
       }
@@ -185,9 +189,9 @@ var PositionDataFormatter = Class.create({
         type: "maneuverNode", parentType: "vessel", parentName: "current vessel"
       }, { linkedPatchType: "maneuverNode" })
 
-      for (var i = 0; i < maneuverNode.orbitPatches.length; i++) {
-        var orbitPatch = maneuverNode.orbitPatches[i]
-        if(orbitPatch.rootReferenceBody != this.rootReferenceBodyName){
+      for (var j = 0; j < maneuverNode.orbitPatches.length; j++) {
+        var orbitPatch = maneuverNode.orbitPatches[j]
+        if(orbitPatch.referenceBody != this.rootReferenceBodyName){
           var referenceBody = positionData.referenceBodies[orbitPatch.referenceBody]
           var sortedUniversalTimes = this.sortedUniversalTimes(orbitPatch.positionData)
           var middleUniversalTime = sortedUniversalTimes[Math.floor((sortedUniversalTimes.length-1)/2.0)]
