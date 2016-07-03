@@ -10,7 +10,8 @@ var AtmosphericDensityGauge = Class.create({
   update: function(data){
     var max = this.func(100)
     var value = this.func(data['v.atmosphericPressure'] * 100)
-    console.log(value)
+    if(!isFinite(value)){ value = 0 }
+
     this.gauge.value = value
     this.gauge.max = max
   },

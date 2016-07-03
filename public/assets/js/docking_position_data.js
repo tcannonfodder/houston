@@ -84,7 +84,7 @@ var DockingPositionData = Class.create({
       relativePositionVector[1],
     ]
 
-    return math.add(frameOfReferenceVector, transformedRelativePositionVector)
+    return Math.matrixAdd(frameOfReferenceVector, transformedRelativePositionVector)
   },
 
   adjustUniversalTime: function(ut){
