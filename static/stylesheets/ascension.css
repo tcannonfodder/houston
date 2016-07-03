@@ -27,11 +27,21 @@
   height: 20px;
 }
 
+.map-container{
+  height: 200px;
+  padding: 3px;
+  margin-top: 5px;
+}
+
 .map{
   height: 200px;
-  width: 350px;
-  margin-top: 5px;
-  padding: 3px;
+}
+
+.no-map-indicator{
+  text-align: center;
+  vertical-align: bottom;
+  margin: 75px;
+  font-size: 30px;
 }
 
 #resources{
