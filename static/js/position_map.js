@@ -1,8 +1,8 @@
 var PositionMap = Class.create({
-  initialize: function(datalink, mapId, noMapIndicatorId, options){
+  initialize: function(datalink, mapId, options){
     this.datalink = datalink
     this.mapId = mapId
-    this.noMapIndicatorId = noMapIndicatorId || (mapId + '-no-map')
+    this.noMapIndicatorId = (mapId + '-no-map')
     this.previousBody = "KERBIN"
     this.options = Object.extend({
       lockOnVessel: true
