@@ -93,6 +93,30 @@ html, body, #content{
   margin-right: 5px;
 }
 
+.camera .camera-list-button-wrapper{
+  text-align: right;
+}
+
+.camera button#show-camera-list{
+  margin-top: 5px;
+  padding: 3px;
+
+  font-family: 'AeroMatics Display Bold';
+  font-size: 17px;
+
+  cursor: pointer;
+  border: 0px solid #000000;
+  /*color: hsl(0,0%,90%);*/
+
+  color: hsla(0,0%,20%,1);
+  text-shadow: hsla(0,0%,40%,.5) 0 -1px 0, hsla(0,0%,100%,.6) 0 1px 1px;
+
+  /*background: #4A4A4A;*/
+  border: 3px solid #4A4A4A;
+  box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.50);
+  border-radius: 3px;
+}
+
 .camera .readout-display{
   min-width: 300px;
   min-height: 350px;
