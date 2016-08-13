@@ -113,6 +113,7 @@ javascripts:
     - *position_map
     - *navball
     - *altitude_tracker
+    - *camera_feed
 
   boost:
     - *app_core
@@ -120,6 +121,10 @@ javascripts:
     - *current_stage_burn_info
     - *burn_planner
     - *staging_info_table
+
+  camera:
+    - *app_core
+    - *camera_feed
 
   docking:
     - *app_core
@@ -136,11 +141,13 @@ javascripts:
     - *ground_track
     - *navball
     - *altitude_tracker
+    - *camera_feed
 
   mission-wall:
     - *app_core
     - *ground_track
     - *3d_map
+    - *camera_feed
 
   navigation:
     - *app_core
@@ -162,6 +169,7 @@ javascripts:
   vessel-overview:
     - *app_core
     - *ground_track
+    - *camera_feed
 
   app:
     - *app_core
