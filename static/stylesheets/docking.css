@@ -92,3 +92,72 @@ html, body, #content{
   margin-left: 5px;
   margin-right: 5px;
 }
+
+.camera .readout-display{
+  min-width: 300px;
+  min-height: 350px;
+  position: relative;
+  overflow: hidden;
+}
+
+.camera .readout-display h2{
+  margin-bottom: 5px;
+  margin-top: 0px;
+}
+
+.camera .readout-display ul{
+  list-style: none;
+  padding: 0px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+.camera .readout-display ul li{
+  margin-bottom: 5px;
+}
+
+.camera .readout-display ul button{
+  width: 100%;
+  cursor: pointer;
+}
+
+.camera .readout-display ul button.selected, .camera .readout-display ul button:active{
+  color: #642607;
+  background-color: #FD7E23;
+}
+
+.camera .camera-selector{
+  height: 100%;
+  overflow-y: scroll;
+}
+
+.camera .camera-selector:not(.hidden) ~ .camera-display {
+  /*display: none;*/
+}
+
+.camera .camera-display img{
+  width: 300px;
+  height: 300px;
+  border: 2px solid #FD7E23;
+  border-radius: 3px;
+}
+
+.camera .camera-selector{
+  background-color: #3A1604;
+  position: absolute;
+  right: 0;
+  left: 0;
+  margin-left: 5px;
+  margin-right: 5px;
+
+  transform: translateY(0%);
+
+  -webkit-transition: all 600ms cubic-bezier(0.785, 0.135, 0.15, 0.86);
+  transition:         all 600ms cubic-bezier(0.785, 0.135, 0.15, 0.86);
+}
+
+.camera .camera-selector.hidden{
+  display: inherit;
+  transform: translateY(110%);
+  -webkit-transform: translateY(110%);
+}

@@ -101,6 +101,9 @@ javascripts:
     - &maneuver_node_editor
       - static/js/maneuver_node_editor.js
 
+    - &camera_feed
+      - static/js/camera_feed.js
+
   3dmap:
     - *app_core
     - *3d_map
@@ -122,6 +125,7 @@ javascripts:
     - *app_core
     - *navball
     - *docking_map
+    - *camera_feed
 
   ground-track:
     - *app_core
