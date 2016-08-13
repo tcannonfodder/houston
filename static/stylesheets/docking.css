@@ -119,7 +119,7 @@ html, body, #content{
 
 .camera .readout-display{
   min-width: 300px;
-  min-height: 350px;
+  min-height: 300px;
   position: relative;
   overflow: hidden;
 }
