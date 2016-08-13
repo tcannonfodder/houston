@@ -121,11 +121,6 @@ var Telemachus = Class.create({
   },
 
   getCameraList: function(callback){
-    var newData = [{"name":"RPMCamera-ExtCam8","type":"RasterPropMonitor","url":"../assets/images/camera-test.jpeg"},{"name":"RPMCamera-ExtCam2","type":"RasterPropMonitor","url":"../assets/images/camera-test.jpeg"},{"name":"RPMCamera-ExtCam4","type":"RasterPropMonitor","url":"../assets/images/camera-test.jpeg"},{"name":"RPMCamera-ExtCam1","type":"RasterPropMonitor","url":"../assets/images/camera-test.jpeg"},{"name":"RPMCamera-ExtCam5","type":"RasterPropMonitor","url":"../assets/images/camera-test.jpeg"},{"name":"RPMCamera-ExtCam3","type":"RasterPropMonitor","url":"../assets/images/camera-test.jpeg"},{"name":"RPMCamera-ExtCam6","type":"RasterPropMonitor","url":"../assets/images/camera-test.jpeg"},{"name":"RPMCamera-ExtCam7","type":"RasterPropMonitor","url":"../assets/images/camera-test.jpeg"},{"name":"TelemachusFlightCamera","type":"FlightCamera","url":"../assets/images/camera-test.jpeg"}]
-    var oldData = [{"name":"RPMCamera-ExtCam8","type":"RasterPropMonitor","url":"http://10.211.55.5:8085/telemachus/cameras/RPMCamera-ExtCam8"},{"name":"RPMCamera-ExtCam2","type":"RasterPropMonitor","url":"http://10.211.55.5:8085/telemachus/cameras/RPMCamera-ExtCam2"},{"name":"RPMCamera-ExtCam4","type":"RasterPropMonitor","url":"http://10.211.55.5:8085/telemachus/cameras/RPMCamera-ExtCam4"},{"name":"RPMCamera-ExtCam1","type":"RasterPropMonitor","url":"http://10.211.55.5:8085/telemachus/cameras/RPMCamera-ExtCam1"},{"name":"RPMCamera-ExtCam5","type":"RasterPropMonitor","url":"http://10.211.55.5:8085/telemachus/cameras/RPMCamera-ExtCam5"},{"name":"RPMCamera-ExtCam3","type":"RasterPropMonitor","url":"http://10.211.55.5:8085/telemachus/cameras/RPMCamera-ExtCam3"},{"name":"RPMCamera-ExtCam6","type":"RasterPropMonitor","url":"http://10.211.55.5:8085/telemachus/cameras/RPMCamera-ExtCam6"},{"name":"RPMCamera-ExtCam7","type":"RasterPropMonitor","url":"http://10.211.55.5:8085/telemachus/cameras/RPMCamera-ExtCam7"},{"name":"TelemachusFlightCamera","type":"FlightCamera","url":"http://10.211.55.5:8085/telemachus/cameras/TelemachusFlightCamera"}]
-    callback(newData)
-    return
-
     new Ajax.Request(this.cameraURL(), {
       method: "get",
       // parameters: params,
