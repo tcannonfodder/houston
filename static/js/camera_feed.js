@@ -35,7 +35,7 @@ var CameraFeed = Class.create({
       }
     }.bind(this))
 
-    this.options.showCameraList.observe('click', this.showCameraList.bind(this))
+    this.options.showCameraList.observe('click', this.toggleCameraList.bind(this))
   },
 
   hasSelectedCamera: function(){
@@ -61,6 +61,10 @@ var CameraFeed = Class.create({
 
   showCameraList: function(){
     this.options.cameraListContainer.removeClassName('hidden')
+  },
+
+  toggleCameraList: function(){
+    this.options.cameraListContainer.toggleClassName('hidden')
   },
 
   updateCameraList: function(data){
