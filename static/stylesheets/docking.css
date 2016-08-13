@@ -119,6 +119,7 @@ html, body, #content{
 .camera .readout-display ul button{
   width: 100%;
   cursor: pointer;
+  font-weight: bold;
 }
 
 .camera .readout-display ul button.selected, .camera .readout-display ul button:active{
