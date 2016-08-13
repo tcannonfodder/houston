@@ -13,3 +13,7 @@
   width: 500px;
   height: 500px;
 }
+
+.scanlines:after {
+  background-size: 100% 3px;
+}
