@@ -135,7 +135,8 @@ html, body, #content{
   /*display: none;*/
 }
 
-.camera .camera-display img{
+.camera .camera-image-wrapper{
+  display: inline-block;
   width: 300px;
   height: 300px;
   border: 2px solid #FD7E23;
@@ -149,6 +150,7 @@ html, body, #content{
   left: 0;
   margin-left: 5px;
   margin-right: 5px;
+  z-index: 3;
 
   transform: translateY(0%);
 
@@ -160,4 +162,60 @@ html, body, #content{
   display: inherit;
   transform: translateY(110%);
   -webkit-transform: translateY(110%);
+}
+
+.scanlines {
+  position: relative;
+  overflow: hidden;
+}
+.scanlines:before, .scanlines:after {
+  display: block;
+  pointer-events: none;
+  content: '';
+  position: absolute;
+}
+.scanlines:before {
+  width: 100%;
+  height: 2px;
+  z-index: 1;
+  background: rgba(0, 0, 0, 0.3);
+  opacity: 0.75;
+  -webkit-animation: scanline 6s linear infinite;
+          animation: scanline 6s linear infinite;
+}
+.scanlines:after {
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1;
+  background: -webkit-linear-gradient(top, transparent 50%, rgba(0, 0, 0, 0.3) 51%);
+  background: linear-gradient(to bottom, transparent 50%, rgba(0, 0, 0, 0.3) 51%);
+  background-size: 100% 4px;
+  -webkit-animation: none;
+          animation: none;
+}
+
+/* ANIMATE UNIQUE SCANLINE */
+@-webkit-keyframes scanline {
+  0% {
+    -webkit-transform: translate3d(0, 200000%, 0);
+            transform: translate3d(0, 200000%, 0);
+  }
+}
+@keyframes scanline {
+  0% {
+    -webkit-transform: translate3d(0, 200000%, 0);
+            transform: translate3d(0, 200000%, 0);
+  }
+}
+@-webkit-keyframes scanlines {
+  0% {
+    background-position: 0 50%;
+  }
+}
+@keyframes scanlines {
+  0% {
+    background-position: 0 50%;
+  }
 }
