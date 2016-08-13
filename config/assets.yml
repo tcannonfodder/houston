@@ -170,6 +170,7 @@ stylesheets:
   app:
     - static/stylesheets/chartist.min.css
     - static/stylesheets/leafletksp.css
+    - static/stylesheets/camera.css
     - static/stylesheets/application.css
   3dmap:
     - static/stylesheets/3dmap.css
