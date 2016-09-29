@@ -10523,7 +10523,7 @@ var CameraFeed = Class.create({
   initializeImageRefresh: function(){
     setInterval(function(){
       if(!this.hasSelectedCamera()){ return }
-      this.options.cameraImage.src = this.options.cameraImage.getAttribute('data-base-url') + "?" + Math.floor((Math.random() * 100) + 1)
+      this.options.cameraImage.src = this.options.cameraImage.getAttribute('data-base-url') + "?" + (Date.now() + Math.floor((Math.random() * 100) + 1))
     }.bind(this), 1000);
   },
 
